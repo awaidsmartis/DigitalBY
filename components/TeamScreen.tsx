@@ -6,6 +6,7 @@ import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
 import { ChevronLeft, Linkedin, X } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
+import BottomLeftControls from './BottomLeftControls'
 
 interface TeamScreenProps {
   onBack: () => void
@@ -29,8 +30,9 @@ export default function TeamScreen({ onBack }: TeamScreenProps) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
-      className="relative w-full h-screen overflow-y-auto bg-gradient-to-br from-slate-900 via-slate-950 to-black text-white px-6 py-12"
+      className="relative w-full h-screen overflow-y-auto bg-digitalby text-white px-6 py-12"
     >
+      <BottomLeftControls />
       {/* Back button */}
       <motion.button
         initial={{ opacity: 0, x: -20 }}
@@ -45,7 +47,10 @@ export default function TeamScreen({ onBack }: TeamScreenProps) {
         <div className="text-center mb-12">
           <p className="text-primary font-semibold tracking-wide">OUR TEAM</p>
           <h1 className="text-5xl md:text-6xl font-black mt-3">Meet the people behind DigitalBY</h1>
-          <p className="text-slate-400 mt-4 text-lg">Tap a card to read more</p>
+          <p className="text-slate-400 mt-4 text-lg">
+            <span className="lg:hidden">Tap a card to read more</span>
+            <span className="hidden lg:inline">Click a card to read more</span>
+          </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -89,7 +94,10 @@ export default function TeamScreen({ onBack }: TeamScreenProps) {
                 {/* Hint */}
                 <div className="px-6 py-5">
                   <p className="text-slate-300 text-sm leading-relaxed line-clamp-2">{m.bio}</p>
-                  <p className="text-slate-500 text-xs mt-3">Tap to view full bio</p>
+                  <p className="text-slate-500 text-xs mt-3">
+                    <span className="lg:hidden">Tap to view full bio</span>
+                    <span className="hidden lg:inline">Click to view full bio</span>
+                  </p>
                 </div>
               </motion.button>
             </motion.div>
@@ -166,7 +174,7 @@ export default function TeamScreen({ onBack }: TeamScreenProps) {
                         href={selected.linkedinUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-primary text-white font-black shadow-xl shadow-primary/25 hover:bg-orange-600 hover:shadow-primary/35 transition"
+                        className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-primary text-white font-black shadow-xl shadow-primary/25 hover-primary hover:shadow-primary/35 transition"
                       >
                         <Linkedin size={18} />
                         LinkedIn

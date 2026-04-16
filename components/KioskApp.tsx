@@ -94,7 +94,7 @@ export default function KioskApp() {
   }
 
   return (
-    <div className="w-full h-screen overflow-hidden bg-black">
+    <div className="w-full h-screen overflow-hidden">
       <AnimatePresence mode="wait">
         {state === 'welcome' && (
           <WelcomeScreen key="welcome" onExplore={handleExplore} />

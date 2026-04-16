@@ -4,6 +4,7 @@ import { eventInfo } from '@/lib/event'
 import { motion } from 'framer-motion'
 import { ArrowRight, ChevronLeft, ExternalLink, Gift, Users, Wrench } from 'lucide-react'
 import Image from 'next/image'
+import BottomLeftControls from './BottomLeftControls'
 
 interface AboutScreenProps {
   onBack: () => void
@@ -25,9 +26,10 @@ export default function AboutScreen({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.6 }}
-      className="relative w-full h-screen overflow-hidden bg-gradient-to-br from-slate-900 via-slate-950 to-black text-white"
+      transition={{ duration: 0.25 }}
+      className="relative w-full h-screen overflow-hidden bg-digitalby text-white"
     >
+      <BottomLeftControls />
       {/* Ambient background (no hero image) */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Watermark: booth number */}
@@ -121,7 +123,7 @@ export default function AboutScreen({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-10 max-w-2xl">
               <button
                 onClick={onGoProducts}
-                className="flex items-center justify-center gap-3 px-7 py-4 rounded-2xl bg-primary text-white font-black shadow-2xl shadow-primary/25 hover:bg-orange-600 hover:shadow-primary/40 transition-all"
+                className="flex items-center justify-center gap-3 px-7 py-4 rounded-2xl bg-primary text-white font-black shadow-2xl shadow-primary/25 hover-primary hover:shadow-primary/40 transition-all"
               >
                 <ArrowRight size={20} />
                 Explore Products
@@ -160,8 +162,8 @@ export default function AboutScreen({
             >
               Visit Smart-IS.com <ExternalLink size={16} />
             </a>
-            <div className="text-slate-600">•</div>
-            <div className="text-slate-400">Kiosk mode • Tablet optimized</div>
+            <div className="text-slate-600 lg:hidden">•</div>
+            <div className="text-slate-400 lg:hidden">Kiosk mode • Tablet optimized</div>
           </div>
         </motion.div>
       </div>

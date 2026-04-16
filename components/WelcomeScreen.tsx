@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import { ChevronRight } from 'lucide-react'
 import Image from 'next/image'
-import ColorThemeSwitcher from './ColorThemeSwitcher'
+import BottomLeftControls from './BottomLeftControls'
 
 interface WelcomeScreenProps {
   onExplore: () => void
@@ -18,10 +18,7 @@ export default function WelcomeScreen({ onExplore }: WelcomeScreenProps) {
       transition={{ duration: 0.8 }}
       className="relative w-full h-screen bg-digitalby flex flex-col items-center justify-center overflow-hidden"
     >
-      {/* Theme switcher */}
-      <div className="absolute top-8 right-8 z-20">
-        <ColorThemeSwitcher />
-      </div>
+      <BottomLeftControls />
       {/* Ambient background animation */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div
@@ -101,7 +98,8 @@ export default function WelcomeScreen({ onExplore }: WelcomeScreenProps) {
           onClick={onExplore}
           className="inline-flex items-center gap-3 px-10 py-4 bg-primary text-white text-lg font-bold rounded-2xl shadow-2xl shadow-primary/40 hover-primary hover:shadow-primary/60 transition-all duration-300 cursor-pointer group"
         >
-          Tap to Explore
+          <span className="lg:hidden">Tap to Explore</span>
+          <span className="hidden lg:inline">Click to Explore</span>
           <motion.div
             animate={{ x: [0, 8, 0] }}
             transition={{ duration: 1.5, repeat: Infinity }}
@@ -110,14 +108,7 @@ export default function WelcomeScreen({ onExplore }: WelcomeScreenProps) {
           </motion.div>
         </motion.button>
 
-        {/* Scroll hint */}
-        <motion.p
-          animate={{ opacity: [0.5, 1, 0.5] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="text-sm text-slate-500 mt-12"
-        >
-          Interact with the screen to continue
-        </motion.p>
+        {/* Removed hint text per desktop/tablet requirements */}
       </div>
     </motion.div>
   )

@@ -1,6 +1,7 @@
+import ColorThemeBootstrap from '@/components/ColorThemeBootstrap'
+import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
-import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 
 const geist = Geist({ subsets: ["latin"], variable: '--font-sans' });
@@ -53,6 +54,7 @@ export default function RootLayout({
         className={`${geist.variable} ${geistMono.variable} font-sans antialiased overflow-hidden`}
         suppressHydrationWarning
       >
+        <ColorThemeBootstrap />
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

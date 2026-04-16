@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight, X } from 'lucide-react'
 import Image from 'next/image'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import BottomLeftControls from './BottomLeftControls'
 
 interface ProductsCarouselProps {
   products: Product[]
@@ -58,7 +59,7 @@ export default function ProductsCarousel({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
-      className="relative w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-950 to-black flex flex-col px-6 py-12"
+      className="relative w-full min-h-screen bg-digitalby flex flex-col px-6 py-12"
     >
       {/* Header */}
       <div className="flex justify-between items-center mb-10">
@@ -75,20 +76,25 @@ export default function ProductsCarousel({
         <div className="text-center flex-1">
           <h1 className="text-4xl md:text-5xl font-black text-white">Products</h1>
           <p className="text-slate-400 text-sm mt-1">
-            Swipe or use arrows • Tap a card for details • {products.length} total
+            <span className="lg:hidden">Swipe or use arrows • Tap a card for details • {products.length} total</span>
+            <span className="hidden lg:inline">Scroll or use arrows • Click a card for details • {products.length} total</span>
           </p>
         </div>
 
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          onClick={onBack}
-          className="p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300 backdrop-blur-sm"
-          aria-label="Close"
-        >
-          <X size={24} />
-        </motion.button>
+        <div className="flex items-center justify-end gap-3">
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={onBack}
+            className="p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300 backdrop-blur-sm"
+            aria-label="Close"
+          >
+            <X size={24} />
+          </motion.button>
+        </div>
       </div>
+
+      <BottomLeftControls />
 
       {/* Carousel */}
       <div className="relative flex-1 flex flex-col justify-center">
@@ -152,7 +158,10 @@ export default function ProductsCarousel({
                         <p className="text-white/85 text-sm line-clamp-2 text-center">{product.shortDescription}</p>
 
                         <div className="mt-5 flex items-center justify-between">
-                          <div className="text-slate-300 text-xs">Tap to open</div>
+                          <div className="text-slate-300 text-xs">
+                            <span className="lg:hidden">Tap to open</span>
+                            <span className="hidden lg:inline">Click to open</span>
+                          </div>
                           <div className="text-white/70 text-xs">
                             {index + 1} / {products.length}
                           </div>
@@ -171,7 +180,7 @@ export default function ProductsCarousel({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               onClick={scrollPrev}
-              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-6 p-3 rounded-full bg-primary text-white hover:bg-orange-600 transition-all duration-300 shadow-lg z-10"
+              className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-6 p-3 rounded-full bg-primary text-white hover-primary transition-all duration-300 shadow-lg z-10"
               aria-label="Scroll left"
             >
               <ChevronLeft size={32} />
@@ -182,7 +191,7 @@ export default function ProductsCarousel({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               onClick={scrollNext}
-              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-6 p-3 rounded-full bg-primary text-white hover:bg-orange-600 transition-all duration-300 shadow-lg z-10"
+              className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-6 p-3 rounded-full bg-primary text-white hover-primary transition-all duration-300 shadow-lg z-10"
               aria-label="Scroll right"
             >
               <ChevronRight size={32} />
@@ -213,7 +222,8 @@ export default function ProductsCarousel({
           transition={{ duration: 2, repeat: Infinity }}
           className="text-center text-slate-400 text-sm mt-8"
         >
-          Swipe to browse • Tap any card to view full details
+          <span className="lg:hidden">Swipe to browse • Tap any card to view full details</span>
+          <span className="hidden lg:inline">Scroll to browse • Click any card to view full details</span>
         </motion.p>
       </div>
     </motion.div>

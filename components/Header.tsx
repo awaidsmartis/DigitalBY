@@ -15,7 +15,7 @@ export default function Header() {
         <div className="flex justify-between items-center max-w-7xl mx-auto">
           {/* Logo - Smart IS */}
           <Link href="/" className="flex items-center gap-3 group hover:opacity-80 transition-opacity">
-            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-orange-600 shadow-md">
+            <div className="flex items-center justify-center w-10 h-10 rounded-lg bg-primary shadow-md">
               <span className="text-white font-black text-lg">//</span>
             </div>
             <div>
@@ -46,7 +46,7 @@ export default function Header() {
               href="https://www.smart-is.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="px-5 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover:bg-orange-700 transition-all duration-300 hover:shadow-lg hover:shadow-primary/30"
+              className="px-5 py-2 bg-primary text-white text-sm font-semibold rounded-lg hover-primary transition-all duration-300 hover:shadow-lg hover:shadow-primary/30"
             >
               Website
             </a>

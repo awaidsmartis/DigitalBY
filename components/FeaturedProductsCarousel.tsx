@@ -94,7 +94,7 @@ export default function FeaturedProductsCarousel({ products }: FeaturedProductsC
                 <div className="flex items-center gap-4 pt-4">
                   <Link
                     href={`/products/${products[current].id}`}
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-semibold rounded-lg hover:bg-orange-700 transition-all duration-300 hover:shadow-lg hover:shadow-primary/30"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-white font-semibold rounded-lg hover-primary transition-all duration-300 hover:shadow-lg hover:shadow-primary/30"
                   >
                     Learn More
                     <ChevronRight className="w-4 h-4" />

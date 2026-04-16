@@ -16,6 +16,7 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import { useEffect, useMemo, useRef, useState } from 'react'
+import BottomLeftControls from './BottomLeftControls'
 
 interface ProductDetailProps {
   product: Product
@@ -112,14 +113,18 @@ export default function ProductDetail({
         custom={direction}
         variants={slideVariants}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        className="fixed inset-0 bg-gradient-to-br from-slate-900 via-slate-950 to-black z-50"
+        className="fixed inset-0 bg-digitalby z-50"
       >
+        <BottomLeftControls />
+
         {/* Close Button */}
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={onClose}
-          className="absolute top-8 right-8 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300 backdrop-blur-sm z-10"
+          className="absolute top-8 right-8 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300 backdrop-blur-sm z-20"
+          aria-label="Close"
+          type="button"
         >
           <X size={28} />
         </motion.button>
@@ -130,7 +135,7 @@ export default function ProductDetail({
             whileHover={{ scale: 1.1, x: -5 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => navigate(currentIndex - 1)}
-            className="absolute left-8 top-1/2 -translate-y-1/2 p-3 rounded-full bg-primary text-white hover:bg-orange-600 transition-all duration-300 shadow-lg z-10"
+            className="absolute left-8 top-1/2 -translate-y-1/2 p-3 rounded-full bg-primary text-white hover-primary transition-all duration-300 shadow-lg z-10"
           >
             <ChevronLeft size={32} />
           </motion.button>
@@ -140,7 +145,7 @@ export default function ProductDetail({
             whileHover={{ scale: 1.1, x: 5 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => navigate(currentIndex + 1)}
-            className="absolute right-8 top-1/2 -translate-y-1/2 p-3 rounded-full bg-primary text-white hover:bg-orange-600 transition-all duration-300 shadow-lg z-10"
+            className="absolute right-8 top-1/2 -translate-y-1/2 p-3 rounded-full bg-primary text-white hover-primary transition-all duration-300 shadow-lg z-10"
           >
             <ChevronRight size={32} />
           </motion.button>
@@ -221,7 +226,7 @@ export default function ProductDetail({
                             <Image src={m.src} alt={product.name} fill className="object-cover" />
                           ) : (
                             <div className="absolute inset-0 flex items-center justify-center">
-                              <div className="w-full h-full bg-gradient-to-br from-primary/25 to-orange-600/10" />
+                              <div className="w-full h-full bg-gradient-to-br from-primary/25 to-primary/5" />
                               <div className="absolute inline-flex items-center gap-2 px-3 py-2 rounded-full bg-black/50 border border-white/10 text-white text-xs font-semibold">
                                 <Play size={14} />
                                 {m.title ?? 'Video'}
@@ -314,7 +319,7 @@ export default function ProductDetail({
                           href={product.references[0].url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-primary text-white font-bold hover:bg-orange-600 transition"
+                          className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-primary text-white font-bold hover-primary transition"
                         >
                           <ExternalLink size={18} />
                           Open {product.references[0].label}

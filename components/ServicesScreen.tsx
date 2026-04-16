@@ -6,6 +6,7 @@ import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
 import { ChevronLeft, LayoutGrid } from 'lucide-react'
 import Image from 'next/image'
 import { useMemo, useRef, useState } from 'react'
+import BottomLeftControls from './BottomLeftControls'
 
 interface ServicesScreenProps {
   onBack: () => void
@@ -37,9 +38,10 @@ export default function ServicesScreen({ onBack }: ServicesScreenProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.6 }}
-      className="relative w-full h-screen overflow-y-auto bg-gradient-to-br from-slate-900 via-slate-950 to-black text-white px-6 py-12"
+      transition={{ duration: 0.25 }}
+      className="relative w-full h-screen overflow-y-auto bg-digitalby text-white px-6 py-12"
     >
+      <BottomLeftControls />
       {/* Back button (fixed so it stays visible while scrolling) */}
       <motion.button
         initial={{ opacity: 0, x: -20 }}
@@ -55,9 +57,14 @@ export default function ServicesScreen({ onBack }: ServicesScreenProps) {
           <p className="text-primary font-semibold tracking-wide">WHAT CAN WE OFFER</p>
           <h1 className="text-5xl md:text-6xl font-black mt-3">Blue Yonder Services</h1>
           <p className="text-slate-400 mt-4 text-lg">
-            {mode === 'grid'
-              ? 'Tap a service to explore details'
-              : 'Browse services and review capabilities'}
+            {mode === 'grid' ? (
+              <>
+                <span className="lg:hidden">Tap a service to explore details</span>
+                <span className="hidden lg:inline">Click a service to explore details</span>
+              </>
+            ) : (
+              'Browse services and review capabilities'
+            )}
           </p>
         </div>
 
@@ -103,7 +110,10 @@ export default function ServicesScreen({ onBack }: ServicesScreenProps) {
                       <div className="mt-5 text-slate-300 text-sm line-clamp-3">
                         {service.bullets.slice(0, 3).join(' • ')}
                       </div>
-                      <div className="mt-5 text-slate-500 text-xs">Tap to open</div>
+                      <div className="mt-5 text-slate-500 text-xs">
+                        <span className="lg:hidden">Tap to open</span>
+                        <span className="hidden lg:inline">Click to open</span>
+                      </div>
                     </motion.button>
                   ))}
                 </div>

@@ -4,6 +4,7 @@ import { giveaway } from '@/lib/giveaway'
 import { motion } from 'framer-motion'
 import { ChevronLeft, ExternalLink, QrCode } from 'lucide-react'
 import Image from 'next/image'
+import BottomLeftControls from './BottomLeftControls'
 
 interface GiveawayScreenProps {
   onBack: () => void
@@ -15,9 +16,10 @@ export default function GiveawayScreen({ onBack }: GiveawayScreenProps) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.6 }}
-      className="relative w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-950 to-black text-white px-6 py-12"
+      transition={{ duration: 0.25 }}
+      className="relative w-full min-h-screen bg-digitalby text-white px-6 py-12"
     >
+      <BottomLeftControls />
       {/* Back button */}
       <motion.button
         initial={{ opacity: 0, x: -20 }}
@@ -61,7 +63,7 @@ export default function GiveawayScreen({ onBack }: GiveawayScreenProps) {
                 href={giveaway.formUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-6 inline-flex items-center gap-2 px-6 py-4 rounded-2xl bg-gradient-to-r from-primary to-orange-600 text-white font-bold shadow-2xl shadow-primary/30 hover:shadow-primary/50 transition-all"
+                className="mt-6 inline-flex items-center gap-2 px-6 py-4 rounded-2xl bg-primary text-white font-bold shadow-2xl shadow-primary/30 hover-primary hover:shadow-primary/50 transition-all"
               >
                 Open Giveaway Form <ExternalLink size={18} />
               </a>

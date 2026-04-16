@@ -1,15 +1,13 @@
-'use client'
-
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
-import { useColorTheme, type ColorThemeId } from '@/hooks/useColorTheme'
-import { Paintbrush } from 'lucide-react'
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { useColorTheme, type ColorThemeId } from '@/hooks/useColorTheme';
+import { Paintbrush } from 'lucide-react';
 
 const THEMES: { id: ColorThemeId; name: string; hint: string }[] = [
   { id: 'orange', name: 'Orange', hint: 'Current brand' },
@@ -28,11 +26,11 @@ export default function ColorThemeSwitcher() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <button
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/10 text-white backdrop-blur-sm transition"
+          className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 text-white backdrop-blur-sm transition"
           aria-label="Change theme"
         >
           <Paintbrush size={16} />
-          Theme
+          <span className="sr-only">Theme ({theme})</span>
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="bg-slate-950/95 border-white/10 text-white">
@@ -43,9 +41,9 @@ export default function ColorThemeSwitcher() {
             key={t.id}
             onSelect={(e) => {
               // Radix DropdownMenu uses onSelect; onClick may not fire reliably.
-              e.preventDefault()
               setTheme(t.id)
             }}
+            onClick={() => setTheme(t.id)}
             className={
               'cursor-pointer focus:bg-white/10 focus:text-white ' +
               (t.id === theme ? 'text-white' : 'text-slate-300')

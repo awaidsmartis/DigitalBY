@@ -11,7 +11,7 @@ export default function LandingHero({ onExplore }: LandingHeroProps) {
   return (
     <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-white">
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white via-white to-orange-50/30 pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-br from-white via-white to-primary/10 pointer-events-none" />
       
       {/* Decorative elements */}
       <motion.div
@@ -45,7 +45,7 @@ export default function LandingHero({ onExplore }: LandingHeroProps) {
           className="text-6xl md:text-7xl font-bold text-secondary mb-6 leading-tight"
         >
           Transform Your <br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-orange-600">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary/60">
             Warehouse Operations
           </span>
         </motion.h1>
@@ -64,7 +64,7 @@ export default function LandingHero({ onExplore }: LandingHeroProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.3 }}
           onClick={onExplore}
-          className="inline-flex items-center gap-3 px-8 py-4 bg-primary text-white font-semibold rounded-xl hover:bg-orange-700 transition-all duration-300 hover:shadow-xl hover:shadow-primary/30 group"
+          className="inline-flex items-center gap-3 px-8 py-4 bg-primary text-white font-semibold rounded-xl hover-primary transition-all duration-300 hover:shadow-xl hover:shadow-primary/30 group"
         >
           Explore Products
           <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />

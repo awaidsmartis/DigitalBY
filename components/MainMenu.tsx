@@ -1,7 +1,7 @@
 'use client'
 import { motion } from 'framer-motion'
 import { ChevronLeft, Gift, Package, Users, Wrench } from 'lucide-react'
-import ColorThemeSwitcher from './ColorThemeSwitcher'
+import BottomLeftControls from './BottomLeftControls'
 
 interface MainMenuProps {
   onSelectCategory: (category: string) => void
@@ -13,7 +13,7 @@ const menuItems = [
     id: 'products',
     label: 'Products',
     icon: Package,
-    color: 'from-primary to-orange-600',
+    color: 'from-primary to-primary/60',
     description: 'Explore our solutions'
   },
   {
@@ -46,11 +46,9 @@ export default function MainMenu({ onSelectCategory, onBack }: MainMenuProps) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
-      className="relative w-full min-h-screen bg-gradient-to-br from-slate-900 via-slate-950 to-black flex flex-col items-center justify-center px-6 py-12"
+      className="relative w-full min-h-screen bg-digitalby flex flex-col items-center justify-center px-6 py-12"
     >
-      <div className="absolute top-8 right-8 z-20">
-        <ColorThemeSwitcher />
-      </div>
+      <BottomLeftControls />
       {/* Back button */}
       <motion.button
         initial={{ opacity: 0, x: -20 }}
@@ -75,7 +73,7 @@ export default function MainMenu({ onSelectCategory, onBack }: MainMenuProps) {
       </motion.div>
 
       {/* Menu Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl w-full mb-12">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8 max-w-5xl w-full mb-12">
         {menuItems.map((item, index) => {
           const Icon = item.icon
           return (
@@ -98,7 +96,7 @@ export default function MainMenu({ onSelectCategory, onBack }: MainMenuProps) {
               />
 
               {/* Content */}
-              <div className="relative z-10 p-12 h-56 flex flex-col items-center justify-center text-center">
+              <div className="relative z-10 p-10 lg:p-12 h-56 lg:h-60 flex flex-col items-center justify-center text-center">
                 <motion.div
                   animate={{ y: [0, -5, 0] }}
                   transition={{ duration: 2, repeat: Infinity }}
@@ -124,7 +122,8 @@ export default function MainMenu({ onSelectCategory, onBack }: MainMenuProps) {
         transition={{ duration: 2, repeat: Infinity }}
         className="text-slate-500 text-sm"
       >
-        Tap a category to explore
+        <span className="lg:hidden">Tap a category to explore</span>
+        <span className="hidden lg:inline">Click a category to explore</span>
       </motion.p>
     </motion.div>
   )
