@@ -103,6 +103,14 @@ export default function ProductDetail({
     }),
   }
 
+  const hostnameFor = (url: string) => {
+    try {
+      return new URL(url).hostname
+    } catch {
+      return url
+    }
+  }
+
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -122,7 +130,7 @@ export default function ProductDetail({
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={onClose}
-          className="absolute top-8 right-8 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300 backdrop-blur-sm z-20"
+          className="absolute top-4 right-4 sm:top-8 sm:right-8 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300 backdrop-blur-sm z-20"
           aria-label="Close"
           type="button"
         >
@@ -308,105 +316,119 @@ export default function ProductDetail({
                 </TabsList>
 
                 <TabsContent value="overview" className="mt-4">
-                  <ScrollArea className="h-[420px] lg:h-[calc(100vh-320px)] pr-4">
-                    <p className="text-slate-200 text-xl font-semibold mb-4">{product.shortDescription}</p>
-                    <p className="text-lg text-slate-300 leading-relaxed">{product.description}</p>
+                  <ScrollArea className="h-[calc(100vh-380px)] sm:h-[420px] lg:h-[calc(100vh-320px)] pr-4">
+                    <div className="pb-16">
+                      <p className="text-slate-200 text-xl font-semibold mb-4">{product.shortDescription}</p>
+                      <p className="text-lg text-slate-300 leading-relaxed">{product.description}</p>
 
-                    {product.references?.[0]?.url && (
-                      <div className="mt-8 rounded-3xl border border-white/10 bg-white/5 p-6">
-                        <div className="text-sm text-slate-400 mb-2">Quick link</div>
-                        <a
-                          href={product.references[0].url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-primary text-white font-bold hover-primary transition"
-                        >
-                          <ExternalLink size={18} />
-                          Open {product.references[0].label}
-                        </a>
-                      </div>
-                    )}
+                      {product.references?.[0]?.url && (
+                        <div className="mt-8 rounded-3xl border border-white/10 bg-white/5 p-6">
+                          <div className="text-sm text-slate-400 mb-2">Quick link</div>
+                          <a
+                            href={product.references[0].url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-primary text-white font-bold hover-primary transition"
+                          >
+                            <ExternalLink size={18} />
+                            Open {product.references[0].label}
+                          </a>
+                        </div>
+                      )}
+                    </div>
                   </ScrollArea>
                 </TabsContent>
 
                 <TabsContent value="value" className="mt-4">
-                  <ScrollArea className="h-[420px] lg:h-[calc(100vh-320px)] pr-4">
-                    <h3 className="text-2xl font-black text-white mb-4">Value Proposition</h3>
-                    <div className="space-y-3">
-                      {(product.valueProposition ?? []).map((v, idx) => (
-                        <motion.div
-                          key={idx}
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.05 * idx }}
-                          className="flex items-start gap-3"
-                        >
-                          <div className="mt-2 w-2 h-2 rounded-full bg-primary flex-shrink-0" />
-                          <p className="text-slate-200">{v}</p>
-                        </motion.div>
-                      ))}
+                  <ScrollArea className="h-[calc(100vh-380px)] sm:h-[420px] lg:h-[calc(100vh-320px)] pr-4">
+                    <div className="pb-16">
+                      <h3 className="text-2xl font-black text-white mb-4">Value Proposition</h3>
+                      <div className="space-y-3">
+                        {(product.valueProposition ?? []).map((v, idx) => (
+                          <motion.div
+                            key={idx}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.05 * idx }}
+                            className="flex items-start gap-3"
+                          >
+                            <div className="mt-2 w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+                            <p className="text-slate-200">{v}</p>
+                          </motion.div>
+                        ))}
+                      </div>
                     </div>
                   </ScrollArea>
                 </TabsContent>
 
                 <TabsContent value="features" className="mt-4">
-                  <ScrollArea className="h-[420px] lg:h-[calc(100vh-320px)] pr-4">
-                    <h3 className="text-2xl font-black text-white mb-4">Features</h3>
-                    <div className="space-y-3">
-                      {(product.features ?? []).map((f, idx) => (
-                        <motion.div
-                          key={idx}
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.03 * idx }}
-                          className="flex items-start gap-3"
-                        >
-                          <Zap size={18} className="text-primary flex-shrink-0 mt-0.5" />
-                          <p className="text-slate-200">{f}</p>
-                        </motion.div>
-                      ))}
+                  <ScrollArea className="h-[calc(100vh-380px)] sm:h-[420px] lg:h-[calc(100vh-320px)] pr-4">
+                    <div className="pb-16">
+                      <h3 className="text-2xl font-black text-white mb-4">Features</h3>
+                      <div className="space-y-3">
+                        {(product.features ?? []).map((f, idx) => (
+                          <motion.div
+                            key={idx}
+                            initial={{ opacity: 0, x: -10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            transition={{ delay: 0.03 * idx }}
+                            className="flex items-start gap-3"
+                          >
+                            <Zap size={18} className="text-primary flex-shrink-0 mt-0.5" />
+                            <p className="text-slate-200">{f}</p>
+                          </motion.div>
+                        ))}
+                      </div>
                     </div>
                   </ScrollArea>
                 </TabsContent>
 
                 <TabsContent value="refs" className="mt-4">
-                  <ScrollArea className="h-[420px] lg:h-[calc(100vh-320px)] pr-4">
-                    <h3 className="text-2xl font-black text-white mb-4">References</h3>
-                    {product.references?.length ? (
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {product.references.map((r) => (
-                          <a
-                            key={r.label}
-                            href={r.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="group rounded-3xl bg-white/5 hover:bg-white/10 border border-white/10 p-6 transition"
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center">
-                                <LinkIcon size={18} className="text-primary" />
-                              </div>
-                              <div>
-                                <div className="text-white font-bold group-hover:text-primary transition-colors">
-                                  {r.label}
+                  <ScrollArea className="h-[calc(100vh-380px)] sm:h-[420px] lg:h-[calc(100vh-320px)] pr-4">
+                    <div className="pb-16">
+                      <h3 className="text-2xl font-black text-white mb-4">References</h3>
+                      {product.references?.length ? (
+                        <div className="grid grid-cols-1 gap-4">
+                          {product.references.map((r) => (
+                            <a
+                              key={r.label}
+                              href={r.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="group relative rounded-3xl bg-white/5 hover:bg-white/10 border border-white/10 p-6 transition"
+                            >
+                              {/* External icon pinned so it never squeezes the content */}
+                              <ExternalLink
+                                size={16}
+                                className="absolute top-5 right-5 text-slate-400 group-hover:text-white transition"
+                              />
+
+                              <div className="flex items-center gap-3 pr-10">
+                                <div className="size-11 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center shrink-0">
+                                  <LinkIcon size={18} className="text-primary" />
                                 </div>
-                                <div className="text-slate-400 text-xs break-all">{r.url}</div>
+                                <div className="min-w-0 flex-1">
+                                  <div className="text-white font-bold group-hover:text-primary transition-colors leading-snug">
+                                    {r.label}
+                                  </div>
+                                  {/* Show only the hostname to avoid messy long URLs on tablet */}
+                                  <div className="text-slate-400 text-xs truncate">{hostnameFor(r.url)}</div>
+                                </div>
                               </div>
-                              <ExternalLink size={16} className="ml-auto text-slate-400 group-hover:text-white transition" />
-                            </div>
-                          </a>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-slate-400">No references available.</p>
-                    )}
+                            </a>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-slate-400">No references available.</p>
+                      )}
+                    </div>
                   </ScrollArea>
                 </TabsContent>
               </Tabs>
             </div>
 
             {/* Product Counter */}
-            <p className="text-slate-500 text-sm mt-4">
+            <p className="text-slate-500 text-sm mt-4 pb-24 lg:pb-0 text-right">
               {currentIndex + 1} of {allProducts.length}
             </p>
             </motion.div>

@@ -105,14 +105,14 @@ export default function ProductsCarousel({
                 return (
                   <div
                     key={product.id}
-                    className="flex-[0_0_86%] sm:flex-[0_0_62%] md:flex-[0_0_46%] lg:flex-[0_0_36%] px-3 [@media(orientation:portrait)]:flex-[0_0_82%]"
+                    className="flex-[0_0_94%] sm:flex-[0_0_74%] md:flex-[0_0_58%] lg:flex-[0_0_44%] px-3 [@media(orientation:portrait)]:flex-[0_0_82%]"
                   >
                     <motion.button
                       animate={{ scale: isActive ? 1 : 0.96, opacity: isActive ? 1 : 0.65 }}
                       transition={{ type: 'spring', stiffness: 260, damping: 28 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => onSelectProduct(product)}
-                      className="w-full h-[360px] sm:h-[340px] rounded-[28px] overflow-hidden group cursor-pointer relative border border-white/10 bg-white/5 shadow-2xl shadow-black/25 [@media(orientation:portrait)]:h-[400px]"
+                      className="w-full h-[410px] sm:h-[380px] rounded-[28px] overflow-hidden group cursor-pointer relative border border-white/10 bg-white/5 shadow-2xl shadow-black/25 [@media(orientation:portrait)]:h-[400px] [@media(orientation:portrait)_and_(max-width:820px)]:h-[420px]"
                     >
                       {/* Ambient background (no screenshot image) */}
                       <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-primary/10" />
@@ -149,18 +149,18 @@ export default function ProductsCarousel({
                         </div>
 
                         {/* Text area */}
-                        <div className="text-center flex flex-col">
+                        <div className="text-center flex flex-col mt-auto">
                           <div>
-                            <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white leading-snug line-clamp-2 [@media(orientation:portrait)]:text-3xl">
+                            <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white leading-snug line-clamp-2 [@media(orientation:portrait)_and_(max-width:820px)]:text-2xl">
                               {product.name}
                             </h3>
-                            <p className="mt-2 text-white/85 text-xs sm:text-sm line-clamp-2 [@media(orientation:portrait)]:text-sm">
+                            <p className="mt-2 text-white/85 text-xs sm:text-sm line-clamp-2 [@media(orientation:portrait)]:text-sm [@media(orientation:portrait)_and_(min-width:768px)]:line-clamp-1">
                               {product.shortDescription}
                             </p>
                           </div>
 
                           {/* Footer always visible */}
-                          <div className="mt-5 flex items-center justify-between">
+                          <div className="mt-5 flex items-center justify-between [@media(orientation:portrait)]:mt-4">
                             <div className="text-slate-300 text-xs">
                               <span className="lg:hidden">Tap to open</span>
                               <span className="hidden lg:inline">Click to open</span>
