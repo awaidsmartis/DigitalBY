@@ -26,10 +26,12 @@ export default function DesktopSliderMenu({ className }: { className?: string })
 
         <SheetContent
           side="left"
-          className="w-[320px] bg-slate-950/95 border-white/10 text-white p-0"
+          className="w-[320px] bg-digitalby border-white/10 text-white p-0"
         >
           <SheetHeader className="px-6 py-6 border-b border-white/10">
-            <SheetTitle className="text-white font-black tracking-tight">DigitalBY</SheetTitle>
+            <SheetTitle className="text-white font-black tracking-tight">
+              <span className="text-primary">Digital</span>BY
+            </SheetTitle>
           </SheetHeader>
 
           <nav className="p-4">

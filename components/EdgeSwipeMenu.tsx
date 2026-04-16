@@ -49,10 +49,12 @@ export default function EdgeSwipeMenu({ className }: { className?: string }) {
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent
           side="left"
-          className="w-[300px] bg-slate-950/95 border-white/10 text-white p-0"
+          className="w-[300px] bg-digitalby border-white/10 text-white p-0"
         >
           <SheetHeader className="px-6 py-6 border-b border-white/10">
-            <SheetTitle className="text-white font-black tracking-tight">DigitalBY</SheetTitle>
+            <SheetTitle className="text-white font-black tracking-tight">
+              <span className="text-primary">Digital</span>BY
+            </SheetTitle>
           </SheetHeader>
 
           <nav className="p-4">
