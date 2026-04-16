@@ -1,4 +1,5 @@
 'use client'
+
 import { motion } from 'framer-motion'
 import { ChevronLeft, Gift, Package, Users, Wrench } from 'lucide-react'
 import BottomLeftControls from './BottomLeftControls'
@@ -14,28 +15,28 @@ const menuItems = [
     label: 'Products',
     icon: Package,
     color: 'from-primary to-primary/60',
-    description: 'Explore our solutions'
+    description: 'Explore our solutions',
   },
   {
     id: 'services',
     label: 'Services',
     icon: Wrench,
     color: 'from-blue-500 to-cyan-500',
-    description: 'Implementation & support'
+    description: 'Implementation & support',
   },
   {
     id: 'team',
     label: 'Our Team',
     icon: Users,
     color: 'from-purple-500 to-pink-500',
-    description: 'Meet the people'
+    description: 'Meet the people',
   },
   {
     id: 'giveaway',
     label: 'Giveaway',
     icon: Gift,
     color: 'from-emerald-500 to-teal-500',
-    description: 'Scan & participate'
+    description: 'Scan & participate',
   },
 ]
 
@@ -49,12 +50,15 @@ export default function MainMenu({ onSelectCategory, onBack }: MainMenuProps) {
       className="relative w-full min-h-screen bg-digitalby flex flex-col items-center justify-center px-6 py-12"
     >
       <BottomLeftControls />
+
       {/* Back button */}
       <motion.button
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         onClick={onBack}
         className="absolute top-8 left-8 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300 backdrop-blur-sm z-20"
+        aria-label="Back"
+        type="button"
       >
         <ChevronLeft size={24} />
       </motion.button>
@@ -66,9 +70,7 @@ export default function MainMenu({ onSelectCategory, onBack }: MainMenuProps) {
         transition={{ delay: 0.2 }}
         className="text-center mb-16"
       >
-        <h2 className="text-5xl md:text-6xl font-black text-white mb-3">
-          What interests you?
-        </h2>
+        <h2 className="text-5xl md:text-6xl font-black text-white mb-3">What interests you?</h2>
         <p className="text-slate-400 text-xl">Select a category to explore</p>
       </motion.div>
 
@@ -86,10 +88,13 @@ export default function MainMenu({ onSelectCategory, onBack }: MainMenuProps) {
               whileTap={{ scale: 0.95 }}
               onClick={() => onSelectCategory(item.id)}
               className="relative group overflow-hidden rounded-3xl"
+              type="button"
             >
               {/* Gradient Background */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-80 group-hover:opacity-100 transition-opacity duration-300`} />
-              
+              <div
+                className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-80 group-hover:opacity-100 transition-opacity duration-300`}
+              />
+
               {/* Glow effect */}
               <motion.div
                 className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-0 group-hover:opacity-20 blur-2xl transition-all duration-300`}
@@ -104,12 +109,8 @@ export default function MainMenu({ onSelectCategory, onBack }: MainMenuProps) {
                 >
                   <Icon size={56} className="text-white" />
                 </motion.div>
-                <h3 className="text-3xl font-bold text-white mb-2">
-                  {item.label}
-                </h3>
-                <p className="text-white/80 text-sm">
-                  {item.description}
-                </p>
+                <h3 className="text-3xl font-bold text-white mb-2">{item.label}</h3>
+                <p className="text-white/80 text-sm">{item.description}</p>
               </div>
             </motion.button>
           )
