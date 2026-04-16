@@ -1,32 +1,55 @@
 'use client'
 
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { cn } from '@/lib/utils'
-import { Menu } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { NAV_ITEMS } from './nav-items'
 
-export default function DesktopSliderMenu({ className }: { className?: string }) {
+/**
+ * Mobile/Tablet: opens the slide menu via edge-swipe (no visible icon).
+ *
+ * We keep the swipe-capture area very small to avoid interfering with
+ * carousels and horizontal gestures inside the page.
+ */
+export default function EdgeSwipeMenu({ className }: { className?: string }) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
 
-  return (
-    <div className={cn('hidden lg:block', className)}>
-      <Sheet open={open} onOpenChange={setOpen}>
-        <SheetTrigger asChild>
-          <button
-            className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 text-white backdrop-blur-sm transition"
-            aria-label="Open menu"
-            type="button"
-          >
-            <Menu size={16} />
-          </button>
-        </SheetTrigger>
+  const startX = useRef<number | null>(null)
+  const startedOnEdge = useRef(false)
 
+  return (
+    <>
+      {/* Invisible swipe zone (mobile/tablet only) */}
+      <div
+        className={cn('fixed inset-y-0 left-0 w-5 z-40 lg:hidden', className)}
+        onTouchStart={(e) => {
+          const x = e.touches[0]?.clientX ?? 0
+          startedOnEdge.current = x <= 24
+          startX.current = x
+        }}
+        onTouchMove={(e) => {
+          if (!startedOnEdge.current) return
+          const x = e.touches[0]?.clientX ?? 0
+          const dx = startX.current == null ? 0 : x - startX.current
+          // open after a small drag to the right
+          if (dx > 70) {
+            setOpen(true)
+            startedOnEdge.current = false
+            startX.current = null
+          }
+        }}
+        onTouchEnd={() => {
+          startedOnEdge.current = false
+          startX.current = null
+        }}
+      />
+
+      <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent
           side="left"
-          className="w-[320px] bg-slate-950/95 border-white/10 text-white p-0"
+          className="w-[300px] bg-slate-950/95 border-white/10 text-white p-0"
         >
           <SheetHeader className="px-6 py-6 border-b border-white/10">
             <SheetTitle className="text-white font-black tracking-tight">DigitalBY</SheetTitle>
@@ -57,6 +80,6 @@ export default function DesktopSliderMenu({ className }: { className?: string })
           </nav>
         </SheetContent>
       </Sheet>
-    </div>
+    </>
   )
 }

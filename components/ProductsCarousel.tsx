@@ -80,7 +80,6 @@ export default function ProductsCarousel({
             <span className="hidden lg:inline">Scroll or use arrows • Click a card for details • {products.length} total</span>
           </p>
         </div>
-
         <div className="flex items-center justify-end gap-3">
           <motion.button
             whileHover={{ scale: 1.1 }}
@@ -157,7 +156,7 @@ export default function ProductsCarousel({
                         </h3>
                         <p className="text-white/85 text-sm line-clamp-2 text-center">{product.shortDescription}</p>
 
-                        <div className="mt-5 flex items-center justify-between">
+                      <div className="mt-5 flex items-center justify-between">
                           <div className="text-slate-300 text-xs">
                             <span className="lg:hidden">Tap to open</span>
                             <span className="hidden lg:inline">Click to open</span>
@@ -199,8 +198,8 @@ export default function ProductsCarousel({
           )}
         </div>
 
-        {/* Dots */}
-        <div className="mt-6 flex items-center justify-center gap-2">
+        {/* Dots (hide on desktop) */}
+        <div className="mt-6 flex items-center justify-center gap-2 lg:hidden">
           {dots.map((_, idx) => {
             const active = idx === selectedIndex
             return (
