@@ -1,5 +1,6 @@
 'use client'
 
+import LoadingScreen from '@/components/LoadingScreen'
 import ProductDetail from '@/components/ProductDetail'
 import { useProducts } from '@/hooks/useProducts'
 import { useParams, useRouter } from 'next/navigation'
@@ -11,11 +12,7 @@ export default function ProductDetailRouteClient() {
   const { state, productById } = useProducts()
 
   if (state.status === 'loading') {
-    return (
-      <div className="w-full min-h-screen bg-digitalby text-white flex items-center justify-center">
-        Loading product…
-      </div>
-    )
+    return <LoadingScreen label="Loading product" />
   }
 
   if (state.status === 'error') {
