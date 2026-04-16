@@ -1,0 +1,285 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: #ffffff;
+  --foreground: #003366;
+  --card: #fafbfc;
+  --card-foreground: #003366;
+  --popover: #ffffff;
+  --popover-foreground: #003366;
+  --primary: #FF5722;
+  --primary-foreground: #ffffff;
+  --secondary: #003366;
+  --secondary-foreground: #ffffff;
+  --muted: #e8ecf1;
+  --muted-foreground: #667085;
+  --accent: #FF5722;
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #e8ecf1;
+  --input: #f5f7fa;
+  --ring: #FF5722;
+  --chart-1: #FF5722;
+  --chart-2: #003366;
+  --chart-3: #ff7043;
+  --chart-4: #004d99;
+  --chart-5: #ff9100;
+  --radius: 0.75rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #003366;
+  --sidebar-primary: #FF5722;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #FF5722;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #e8ecf1;
+  --sidebar-ring: #FF5722;
+}
+
+.dark {
+  --background: #0f172a;
+  --foreground: #f5f7fa;
+  --card: #1a2332;
+  --card-foreground: #f5f7fa;
+  --popover: #1a2332;
+  --popover-foreground: #f5f7fa;
+  --primary-foreground: #0f172a;
+  --secondary: #90caf9;
+  --secondary-foreground: #0f172a;
+  --muted: #2a3a4d;
+  --muted-foreground: #a6b0c3;
+  --accent-foreground: #0f172a;
+  --destructive: #f87171;
+  --destructive-foreground: #0f172a;
+  --border: #2a3a4d;
+  --input: #1a2332;
+  --chart-1: #FF5722;
+  --chart-2: #90caf9;
+  --chart-3: #ff7043;
+  --chart-4: #42a5f5;
+  --chart-5: #ff9100;
+  --sidebar: #1a2332;
+  --sidebar-foreground: #f5f7fa;
+  --sidebar-primary: #FF5722;
+  --sidebar-primary-foreground: #0f172a;
+  --sidebar-accent: #FF5722;
+  --sidebar-accent-foreground: #0f172a;
+  --sidebar-border: #2a3a4d;
+  --sidebar-ring: #FF5722;
+}
+
+/*
+  Color theme overrides (primary/accent/ring).
+
+  IMPORTANT: this block is intentionally *after* the `.dark { ... }` block so
+  it overrides the default dark-mode primary color too.
+*/
+html[data-color-theme='orange'] {
+  --primary: #FF5722;
+  --accent: #FF5722;
+  --ring: #FF5722;
+  --sidebar-primary: #FF5722;
+  --sidebar-accent: #FF5722;
+  --sidebar-ring: #FF5722;
+  --chart-1: #FF5722;
+}
+
+html[data-color-theme='blue'] {
+  --primary: #2563EB;
+  --accent: #2563EB;
+  --ring: #2563EB;
+  --sidebar-primary: #2563EB;
+  --sidebar-accent: #2563EB;
+  --sidebar-ring: #2563EB;
+  --chart-1: #2563EB;
+}
+
+html[data-color-theme='emerald'] {
+  --primary: #10B981;
+  --accent: #10B981;
+  --ring: #10B981;
+  --sidebar-primary: #10B981;
+  --sidebar-accent: #10B981;
+  --sidebar-ring: #10B981;
+  --chart-1: #10B981;
+}
+
+html[data-color-theme='purple'] {
+  --primary: #7C3AED;
+  --accent: #7C3AED;
+  --ring: #7C3AED;
+  --sidebar-primary: #7C3AED;
+  --sidebar-accent: #7C3AED;
+  --sidebar-ring: #7C3AED;
+  --chart-1: #7C3AED;
+}
+
+@theme inline {
+  --font-sans: 'Geist', 'Geist Fallback';
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply h-screen w-screen overflow-hidden;
+  }
+  body {
+    @apply bg-black text-foreground h-screen w-screen overflow-hidden;
+  }
+}
+
+@layer utilities {
+  /* Theme-aware background helpers */
+  .bg-digitalby {
+    background:
+      radial-gradient(1200px circle at 15% 20%, color-mix(in oklab, var(--primary) 22%, transparent), transparent 55%),
+      radial-gradient(900px circle at 85% 10%, color-mix(in oklab, var(--primary) 16%, transparent), transparent 55%),
+      linear-gradient(135deg, #0b1020 0%, #070a12 50%, #000 100%);
+  }
+
+  .hover-primary {
+    transition: background-color 200ms ease, box-shadow 200ms ease, filter 200ms ease;
+  }
+  .hover-primary:hover {
+    filter: brightness(1.06);
+  }
+}
+
+@layer utilities {
+  /* hide/soften horizontal scrollbars for the kiosk carousel */
+  .digitalby-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+  }
+
+  .digitalby-scroll::-webkit-scrollbar {
+    height: 10px;
+  }
+
+  .digitalby-scroll::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .digitalby-scroll::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.22);
+    border-radius: 999px;
+  }
+
+  .digitalby-scroll::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.35);
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes slideInRight {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes pulse-glow {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.8;
+    }
+  }
+  .animate-fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+  }
+
+  .animate-fade-in-down {
+    animation: fadeInDown 0.6s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.5s ease-out;
+  }
+
+  .animate-slide-in-right {
+    animation: slideInRight 0.6s ease-out;
+  }
+
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+}

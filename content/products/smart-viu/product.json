@@ -1,0 +1,63 @@
+{
+  "id": "smart-viu",
+  "name": "Smart Viu",
+  "category": "Blue Yonder",
+  "shortDescription": "Data Anywhere, Anytime",
+  "description": "Smart Viu tackles the challenge of meeting user demands for data in BY-WMS by offering a single deployable object capable of displaying multiple data outputs. This eliminates the need for creating numerous custom Page Builder screens, streamlining development, and reducing change management complexities. With Smart Viu, organizations can develop various data layouts without adding new screens, while still supporting Master/Detail layouts and actions on selected data. Overall, Smart Viu enhances usability and efficiency, ensuring users have access to the information they need without overwhelming screen development and management.",
+  "valueProposition": [
+    "One screen to end the need for any more screen development.",
+    "Color coded grid based on user driven rules.",
+    "Chart renderings."
+  ],
+  "features": [
+    "One-screen deployment, with the ability to display any dataset.",
+    "Ability to configure and perform actions on the selected data.",
+    "Ability to render data as Master/ Child in a Multi-Tab layout.",
+    "Ability to render data as charts.",
+    "Embedded security layer to control which data outputs can be viewed by which users.",
+    "Smart Chat widget"
+  ],
+  "logo": "/assets/images/products-icons/SmartViu.png",
+  "image": "/assets/images/products/images/SmartViu/SmartViu-1.png",
+  "media": [
+    {
+      "type": "video",
+      "src": "https://autoupdate.oracular.com/smartis/smartviu/SmartViuMarketing.mp4",
+      "title": "Marketing"
+    },
+    {
+      "type": "video",
+      "src": "https://autoupdate.oracular.com/smartis/smartviu/SmartViu.mp4",
+      "title": "Demo"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/SmartViu/SmartViu-1.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/SmartViu/SmartViu-2.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/SmartViu/SmartViu-3.png"
+    }
+  ],
+  "references": [
+    {
+      "label": "Product Page",
+      "url": "https://www.smart-is.com/what-we-do/smart-product/smart-viu/",
+      "kind": "product-page"
+    },
+    {
+      "label": "Documentation",
+      "url": "https://oracularis.github.io/smartviu/#/./readme",
+      "kind": "documentation"
+    }
+  ],
+  "price": "Contact for pricing",
+  "specs": {},
+  "isNew": false,
+  "rating": 4.7,
+  "reviews": 44
+}

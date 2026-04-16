@@ -1,0 +1,45 @@
+{
+  "id": "smart-training-portal",
+  "name": "Smart Training Portal",
+  "category": "Microsoft",
+  "shortDescription": "Trained Smarter",
+  "description": "Smart Training Portal is envisioned to simplify user training by covering almost all scenarios of the BY WMS Application. This allows admins to set up training scenarios of the selected process as a new use case which is a super flexible and adaptable solution for any enterprise.",
+  "valueProposition": [
+    "A public web page where user will provide User ID and select the process for training.",
+    "Ability to Create User in BY and Assign Training to him. Based on assigned training process create required data in BY.",
+    "Users will get a pdf file or link to pdf file which will contain required information like User ID , password, training data and link to server etc.",
+    "Ability to purge training data for user once he has completed the training.",
+    "Users will get a PDF report containing their training data and summary."
+  ],
+  "features": [
+    "Training Data Creation & Maintenance",
+    "Process the training on BY system",
+    "Web-based and easily accessible app",
+    "Utilize Sample WMS data for user training",
+    "GUI-based maintenance of training process use cases"
+  ],
+  "logo": "/assets/images/products-icons/SMP.png",
+  "image": "/assets/images/products/images/TrainingPortal/TrainingPortal-1.png",
+  "media": [
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/TrainingPortal/TrainingPortal-1.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/TrainingPortal/TrainingPortal-2.png"
+    }
+  ],
+  "references": [
+    {
+      "label": "Product Page",
+      "url": "https://www.smart-is.com/what-we-do/smart-product/smart-training-portal/",
+      "kind": "product-page"
+    }
+  ],
+  "price": "Contact for pricing",
+  "specs": {},
+  "isNew": false,
+  "rating": 4.6,
+  "reviews": 39
+}

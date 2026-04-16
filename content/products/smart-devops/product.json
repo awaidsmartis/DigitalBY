@@ -1,0 +1,67 @@
+{
+  "id": "smart-devops",
+  "name": "Smart DevOps",
+  "category": "Blue Yonder",
+  "shortDescription": "Simplified Deployments",
+  "description": "In enterprise systems like BY WMS, managing development and configuration changes effectively is essential for ensuring stability and operational efficiency. Smart DevOps is a purpose-built application that simplifies and formalizes the change management process by tracking both code and data changes, enabling a controlled rollout process, and supporting modern DevOps practices.",
+  "valueProposition": [
+    "One comprehensive toolset and methodology.",
+    "Works with industry standard tools like JIRA, GIT, etc.",
+    "Supports REFS development.",
+    "All Development activities and configurations are tracked",
+    "Rollout Builder builds the rollout in standard BY methodology for easy deployment."
+  ],
+  "features": [
+    "Track all changes in the BY-WMS environment.",
+    "Hide the complexity of the BY Data model from the developer or the functional user making the change.",
+    "Repeatable process, to reduce manual export errors from a user",
+    "End to end management from making the change to managing the data extraction to committing to a repository to building a rollout."
+  ],
+  "logo": "/assets/images/products-icons/Devops.png",
+  "image": "/assets/images/products/images/Devops/Devops-1.png",
+  "media": [
+    {
+      "type": "video",
+      "src": "https://autoupdate.oracular.com/smartis/devops/DevopsMarketing.mp4",
+      "title": "Marketing"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/Devops/Devops-1.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/Devops/Devops-2.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/Devops/Devops-3.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/Devops/Devops-4.png"
+    }
+  ],
+  "references": [
+    {
+      "label": "DevOps (Explanation)",
+      "url": "https://v0-devops-cycle-explanation.vercel.app/",
+      "kind": "other"
+    },
+    {
+      "label": "Product Page",
+      "url": "https://www.smart-is.com/what-we-do/smart-product/smart-devops/",
+      "kind": "product-page"
+    },
+    {
+      "label": "Digital Brochure",
+      "url": "https://www.smart-is.com/wp-content/uploads/2024/05/Smart-Devops.pdf",
+      "kind": "pdf"
+    }
+  ],
+  "price": "Contact for pricing",
+  "specs": {},
+  "isNew": true,
+  "rating": 4.8,
+  "reviews": 58
+}

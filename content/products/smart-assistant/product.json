@@ -1,0 +1,68 @@
+{
+  "id": "smart-assistant",
+  "name": "Smart Assistant",
+  "category": "Microsoft",
+  "shortDescription": "AI Chat Portal",
+  "description": "Smart Assistant, an innovative web application crafted to put the power of personalized virtual assistants in your hands. Users can easily input instructions and provide relevant documentation to enhance the assistant's knowledge base, ensuring it delivers precise and contextually relevant responses. Whether you need assistance with scheduling, data analysis, customer support, or any other task, Smart Assistant is equipped to handle it all.",
+  "valueProposition": [
+    "Enhances productivity in fast-paced business environments by providing efficient task management and prompt information retrieval through a virtual assistant.",
+    "Empowers businesses with tailored virtual assistants, offering personalized assistance tailored to their unique need.",
+    "Enables effective knowledge management by allowing documentation uploads and instruction definitions, enhancing virtual assistant capabilities and accuracy for businesse.",
+    "Elevates customer experience with its conversational interface, delivering prompt, accurate assistance to drive real-time engagement and enhance customer satisfaction for businesses.",
+    "Businesses gain a competitive edge with Smart Assistant, leveraging advanced technology to streamline operations, enhance productivity, and deliver superior customer service, staying ahead in today's dynamic digital landscape"
+  ],
+  "features": [
+    "Customization: Smart Assistant allows users to tailor their virtual assistant by defining specific instructions and uploading relevant documentation to ensure accurate and personalized responses.",
+    "Information Retrieval: The assistant efficiently handles diverse information retrieval tasks, such as document analysis and query resolution, to help users find answers quickly and accurately.",
+    "Conversational Interface: Smart Assistant provides a natural conversational experience, enhancing user interaction and ensuring seamless communication with the virtual assistant.",
+    "Documentation Integration: Users can upload relevant documents for the assistant to reference, enabling it to provide accurate responses based on the available information.",
+    "Streamlined Productivity: By aiding in task management, swiftly retrieving information, and facilitating smooth communication, Smart Assistant empowers users to work more efficiently and effectively."
+  ],
+  "logo": "/assets/images/products-icons/SmartAssistant.png",
+  "image": "/assets/images/products/images/SmartAssistant/SmartAssistant-1.png",
+  "media": [
+    {
+      "type": "video",
+      "src": "https://autoupdate.oracular.com/smartis/smartassistant/SmartAssistantDemo.mp4",
+      "title": "Demo"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/SmartAssistant/SmartAssistant-1.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/SmartAssistant/SmartAssistant-2.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/SmartAssistant/SmartAsisstant-3.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/SmartAssistant/SmartAssistant-4.png"
+    }
+  ],
+  "references": [
+    {
+      "label": "Qr Codes",
+      "url": "https://autoupdate.oracular.com/smartis/smartassistant/Assistant-Demo-QR-Codes.pdf",
+      "kind": "pdf"
+    },
+    {
+      "label": "Smart Assistant",
+      "url": "https://v0-smart-assistant-design.vercel.app/",
+      "kind": "other"
+    },
+    {
+      "label": "Product Page",
+      "url": "https://www.smart-is.com/what-we-do/smart-product/smart-assistant/",
+      "kind": "product-page"
+    }
+  ],
+  "price": "Contact for pricing",
+  "specs": {},
+  "isNew": true,
+  "rating": 4.8,
+  "reviews": 67
+}

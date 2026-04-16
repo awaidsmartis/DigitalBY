@@ -1,0 +1,52 @@
+{
+  "id": "smart-dda-converter",
+  "name": "Smart DDA Converter",
+  "category": "Blue Yonder",
+  "shortDescription": "Why Reinvent the Wheel?",
+  "description": "The DDA Converter is designed for all Blue Yonder (BY) customers undergoing upgrades, seeking to effortlessly migrate DDAs to the new Web-GUI platform. With the BY 2017+, the Web UI does not allow for the simplicity and rich functionality of the DDAs. Our team embracing the challenge, provided an option for converting the DDAs developed in Fat Client to be ported as a Native Web UI screen.",
+  "valueProposition": [
+    "The Conversion process is straight forward and quick.",
+    "Flexible to your warehouse needs.",
+    "User can easily switch between Fat Client & web screens.",
+    "Testing and training time is reduced."
+  ],
+  "features": [
+    "Upgrade all the existing DDAs to the Web, utilizing the DDA Converter.",
+    "The same look and feel are now available in the Web GUI.",
+    "Post-Upgrade, or a new implementation",
+    "Develop a new DDA in the Fat Client.",
+    "Once the DDA is fully tested in the Fat Client, you can employ the Smart DDA Web Converter to convert the DDA.",
+    "Once conversion is successful, the DDA is available in the target environment."
+  ],
+  "logo": "/assets/images/products-icons/SmartDDA.png",
+  "image": "/assets/images/products-icons/SmartDDA.png",
+  "media": [
+    {
+      "type": "video",
+      "src": "https://autoupdate.oracular.com/smartis/DDAMarketing.mp4",
+      "title": "Marketing"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products-icons/SmartDDA.png",
+      "alt": "Smart DDA Converter"
+    }
+  ],
+  "references": [
+    {
+      "label": "Product Page",
+      "url": "https://www.smart-is.com/what-we-do/smart-product/dda",
+      "kind": "product-page"
+    },
+    {
+      "label": "Digital Brochure",
+      "url": "https://www.smart-is.com/wp-content/uploads/2024/05/DDA-converter.pdf",
+      "kind": "pdf"
+    }
+  ],
+  "price": "Contact for pricing",
+  "specs": {},
+  "isNew": false,
+  "rating": 4.5,
+  "reviews": 28
+}

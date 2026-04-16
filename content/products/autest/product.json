@@ -1,0 +1,77 @@
+{
+  "id": "autest",
+  "name": "AuTest",
+  "category": "Blue Yonder",
+  "shortDescription": "Automated Testing Done Right",
+  "description": "Introducing Smart AuTest, the Automated Testing Solution that allows JDA/Blue Yonder (BY) users to automate their tests with full control. From stress testing to integration testing to performance testing, AuTest will prepare you for anything and everything that is in your warehouse implementation scope.",
+  "valueProposition": [
+    "Ability to perform Web-GUI, RF and MOCA based test cases, in any combination.",
+    "Ability to perform Directed Work based test cases.",
+    "Can perform all tests including single, group and stress tests.",
+    "Comes prepackaged with your day-to-day tests.",
+    "Requires fewer people working on the same task.",
+    "Highly reusable and scalable",
+    "No server footprint is required.",
+    "Frees up time for users.",
+    "Allows for quick JDA/BY solutions.",
+    "Faster client support"
+  ],
+  "features": [
+    "Provides a flexible and feature rich testing platform.",
+    "Utilizes JDA/BY components and customizations along with the application component to create, manage and run automated tests.",
+    "Can run any test scenario whether it is on the Web, GUI, or the RF.",
+    "AuTest is unique in the current testing landscape where no server components need to be installed.",
+    "Cloud based test cases that can be executed by providing a URL to the target WMS."
+  ],
+  "logo": "/assets/images/products-icons/Autest.png",
+  "image": "/assets/images/products/images/AuTest/Autest-1.png",
+  "media": [
+    {
+      "type": "video",
+      "src": "https://autoupdate.oracular.com/smartis/autest/AutestMarketing.mp4",
+      "title": "Marketing"
+    },
+    {
+      "type": "video",
+      "src": "https://autoupdate.oracular.com/smartis/autest/AutestDemo.mp4",
+      "title": "Demo"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/AuTest/Autest-1.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/AuTest/Autest-2.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/AuTest/Autest-3.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/AuTest/Autest-4.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/AuTest/Autest-5.png"
+    }
+  ],
+  "references": [
+    {
+      "label": "Product Page",
+      "url": "https://www.smart-is.com/what-we-do/smart-product/autest/",
+      "kind": "product-page"
+    },
+    {
+      "label": "Documentation",
+      "url": "https://oracularis.github.io/autest",
+      "kind": "documentation"
+    }
+  ],
+  "price": "Contact for pricing",
+  "specs": {},
+  "isNew": true,
+  "rating": 4.7,
+  "reviews": 38
+}

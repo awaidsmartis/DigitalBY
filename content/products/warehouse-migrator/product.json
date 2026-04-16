@@ -1,0 +1,71 @@
+{
+  "id": "warehouse-migrator",
+  "name": "Warehouse Migrator",
+  "category": "Blue Yonder",
+  "shortDescription": "Accelerate Your Upgrades",
+  "description": "The Warehouse Migrator by Smart IS simplifies moving ID-based configuration data between environments with custom control files. It ensures hierarchy integrity and streamlines rollouts in SAS environments. With unmatched robustness and ease of use, it is the go-to solution for multi-environment businesses. Say goodbye to ID mismatches and hello to efficient configuration duplication.",
+  "valueProposition": [
+    "Warehouse or subset duplication with just a few clicks",
+    "Fits the new warehouse model offered by Blue Yonder",
+    "A duplicate Warehouse can be made anytime without a call & in off hours.",
+    "Effortless procedure saves you time.",
+    "Secures data by providing backing up"
+  ],
+  "features": [
+    "User Defined and extensible Configuration",
+    "Translate ID Values to Codes",
+    "Load into Target Environment through an Extracted File",
+    "Load into Target Environment using Roll-out",
+    "Saving Extract Data as a Named data set",
+    "Extracting & Loading a Subset of Data, and/ or as Functional Sets",
+    "Convert WH_ID during Migration",
+    "Directly Load data from one environment to another using Remote Call*"
+  ],
+  "logo": "/assets/images/products-icons/WarehouseMigrator.png",
+  "image": "/assets/images/products/images/WarehouseMigrator/WarehouseMigrator-1.png",
+  "media": [
+    {
+      "type": "video",
+      "src": "https://autoupdate.oracular.com/smartis/warehousemigrator/MigratorMarketing.mp4",
+      "title": "Marketing"
+    },
+    {
+      "type": "video",
+      "src": "https://autoupdate.oracular.com/smartis/warehousemigrator/WarehouseMigrator.mp4",
+      "title": "Demo"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/WarehouseMigrator/WarehouseMigrator-1.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/WarehouseMigrator/WarehouseMigrator-2.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/WarehouseMigrator/WarehouseMigrator-3.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/WarehouseMigrator/WarehouseMigrator-4.png"
+    }
+  ],
+  "references": [
+    {
+      "label": "Product Page",
+      "url": "https://www.smart-is.com/what-we-do/smart-product/warehouse-migration-tool/",
+      "kind": "product-page"
+    },
+    {
+      "label": "Documentation",
+      "url": "https://oracularis.github.io/warehousemigrator/#/",
+      "kind": "documentation"
+    }
+  ],
+  "price": "Contact for pricing",
+  "specs": {},
+  "isNew": false,
+  "rating": 4.6,
+  "reviews": 35
+}

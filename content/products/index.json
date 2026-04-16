@@ -1,0 +1,62 @@
+[
+  {
+    "id": "moca-client",
+    "name": "MOCA Client",
+    "category": "Blue Yonder"
+  },
+  {
+    "id": "autest",
+    "name": "AuTest",
+    "category": "Blue Yonder"
+  },
+  {
+    "id": "warehouse-migrator",
+    "name": "Warehouse Migrator",
+    "category": "Blue Yonder"
+  },
+  {
+    "id": "smart-dda-converter",
+    "name": "Smart DDA Converter",
+    "category": "Blue Yonder"
+  },
+  {
+    "id": "smart-j-board",
+    "name": "Smart J-Board",
+    "category": "Blue Yonder"
+  },
+  {
+    "id": "rf-plus-plus",
+    "name": "RF++",
+    "category": "Blue Yonder"
+  },
+  {
+    "id": "oogy",
+    "name": "OOGY",
+    "category": "Blue Yonder"
+  },
+  {
+    "id": "smart-devops",
+    "name": "Smart DevOps",
+    "category": "Blue Yonder"
+  },
+  {
+    "id": "smart-viu",
+    "name": "Smart Viu",
+    "category": "Blue Yonder"
+  },
+  {
+    "id": "smart-training-portal",
+    "name": "Smart Training Portal",
+    "category": "Microsoft"
+  },
+  {
+    "id": "smart-rule-engine",
+    "name": "Smart Rule Engine",
+    "category": "Blue Yonder"
+  },
+  {
+    "id": "smart-assistant",
+    "name": "Smart Assistant",
+    "category": "Microsoft"
+  }
+]

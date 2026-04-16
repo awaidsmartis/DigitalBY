@@ -1,0 +1,78 @@
+{
+  "id": "rf-plus-plus",
+  "name": "RF++",
+  "category": "Blue Yonder",
+  "shortDescription": "Taking your RF Screens to the Next Level",
+  "description": "All JDA/ Blue Yonder (BY) WMS implementations need an RF Solution - a solution for the physical devices that are used on the floor to perform most of the warehouse functions. Smart IS’s RF++ application provides several enhancements for your existing RF screens.\nWe provide an Android app that builds on top of the standard JDA/ BY solution, thus providing support for delivered, as well as custom RF screens without any extra work.",
+  "valueProposition": [
+    "Builds on Existing BY Solution",
+    "Additional information can be integrated.",
+    "Eases System Support.",
+    "Reduces the Need for Developers.",
+    "Improved User Experience.",
+    "Adds Contextual Information.",
+    "Screen Layout Enhancements and Touch Support.",
+    "Simplified system interaction by simplifying access to the function keys."
+  ],
+  "features": [
+    "Easy to connect – Simplify the administrative aspect like adding new devices.",
+    "Touch Support – Easy for screen interaction with more options.",
+    "Screen Layout – Utilize additional space if available and provide multi-tab options.",
+    "Additional Information – Contextual information can be made available.",
+    "Voice Support – Natively support the voice capability of the device if available.",
+    "Simplified deployment architecture for the enterprise.",
+    "Out-of-box compatibility with device level extensions like Camera and other sensors."
+  ],
+  "logo": "/assets/images/products-icons/RfPlus.png",
+  "image": "/assets/images/products/images/RF++/RF-1.png",
+  "media": [
+    {
+      "type": "video",
+      "src": "https://autoupdate.oracular.com/smartis/rfplus/RFPromo.mp4",
+      "title": "Promo"
+    },
+    {
+      "type": "video",
+      "src": "https://autoupdate.oracular.com/smartis/rfplus/RFDemo.mp4",
+      "title": "Demo"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/RF++/RF-1.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/RF++/RF-2.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/RF++/RF-3.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/RF++/RF-4.png"
+    }
+  ],
+  "references": [
+    {
+      "label": "Barcodes",
+      "url": "https://autoupdate.oracular.com/smartis/rfplus/RF-Barcodes.pdf",
+      "kind": "pdf"
+    },
+    {
+      "label": "Product Page",
+      "url": "https://www.smart-is.com/what-we-do/smart-product/rf/",
+      "kind": "product-page"
+    },
+    {
+      "label": "Documentation",
+      "url": "https://oracularis.github.io/smartrf",
+      "kind": "documentation"
+    }
+  ],
+  "price": "Contact for pricing",
+  "specs": {},
+  "isNew": false,
+  "rating": 4.6,
+  "reviews": 52
+}

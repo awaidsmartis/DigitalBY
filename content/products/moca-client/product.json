@@ -1,0 +1,62 @@
+{
+  "id": "moca-client",
+  "name": "MOCA Client",
+  "category": "Blue Yonder",
+  "shortDescription": "Turbocharge Development",
+  "description": "Developers need to be empowered with a development tool that can overcome the challenges that each client’s infrastructure landscape may present. Smart IS created a tool that allows for accessing the environment at the MOCA Command Level. MOCA Client can perform several tasks in the most efficient manner possible.",
+  "valueProposition": [
+    "The developer can access environments through a multi-tab layout making it easy to navigate between them.",
+    "Data tools to easily manage and manipulate data.",
+    "Wizards for everything a developer needs, from developing a command, to an RDT screen to labels etc.",
+    "Label renderer to be able to view the generated Out-files.",
+    "Enhanced paid tools for increased functionality."
+  ],
+  "features": [
+    "A Single Tool/Interface for Development, Prototyping, Troubleshooting and building Applications.",
+    "Provides Development Aids like command development, RF screen development, search tools within commands and algorithms etc.",
+    "Provide Access to the Application Server through MOCA Layer to avoid the need for accessing the application server directly via telnet or remote desktop.",
+    "Build Change Management into the DNA of the Application so this tool can face any audit challenges.",
+    "Security is built in, so only developers with proper access in each environment can connect.",
+    "Enterprise level controls can be imposed like forcing a minimum application version.",
+    "Audit log of every command executed to present to an external auditor if needed."
+  ],
+  "logo": "/assets/images/products-icons/MocaClient.png",
+  "image": "/assets/images/products/images/MocaClient/MocaClient-1.png",
+  "media": [
+    {
+      "type": "video",
+      "src": "https://autoupdate.oracular.com/smartis/mocaclient/MocaMarketing.mp4",
+      "title": "Marketing"
+    },
+    {
+      "type": "video",
+      "src": "https://autoupdate.oracular.com/smartis/mocaclient/MocaClient-Video-1.mp4",
+      "title": "Demo"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/MocaClient/MocaClient-1.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/MocaClient/MocaClient-2.png"
+    }
+  ],
+  "references": [
+    {
+      "label": "Product Page",
+      "url": "https://www.smart-is.com/what-we-do/smart-product/smart-is-moca-client/",
+      "kind": "product-page"
+    },
+    {
+      "label": "Documentation",
+      "url": "https://oracularis.github.io/mocaclient/",
+      "kind": "documentation"
+    }
+  ],
+  "price": "Contact for pricing",
+  "specs": {},
+  "isNew": true,
+  "rating": 4.8,
+  "reviews": 42
+}

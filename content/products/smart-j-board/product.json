@@ -1,0 +1,65 @@
+{
+  "id": "smart-j-board",
+  "name": "Smart J-Board",
+  "category": "Blue Yonder",
+  "shortDescription": "Your Blue Yonder (BY) Dashboards Revitalized",
+  "description": "Now your Warehouse KPIs are easily accessible and easy to understand for your entire team. Smart J-Board customizes BY Dashboards and brings them to big screens and empowers users to allow them to make better, more informed decisions.",
+  "valueProposition": [
+    "A secure system that relies on the MOCA security layer.",
+    "A central control system comprised of background statistics of all warehouse areas.",
+    "Allows Supervisors to easily view KPIs to make informed decisions.",
+    "Easily customizable to your warehouse needs."
+  ],
+  "features": [
+    "Compatibility across devices, built on Microsoft Windows platform.",
+    "Provides visual representation of rapidly changing data, for example the Work Queue.",
+    "Centralized control with automated device registration.",
+    "Customizable displays for tailored information.",
+    "Dynamic data representation, including real-time statistics and navigation automation.",
+    "For Blue Yonder 2017+ versions, drive existing screens in a dashboard.",
+    "Enhanced content integration, such as localized weather and internal announcements."
+  ],
+  "logo": "/assets/images/products-icons/Smart-J-Board.png",
+  "image": "/assets/images/products/images/JBoard/JBoard-1.png",
+  "media": [
+    {
+      "type": "video",
+      "src": "https://autoupdate.oracular.com/smartis/SmartJBoardMarketing.mp4",
+      "title": "Marketing"
+    },
+    {
+      "type": "video",
+      "src": "https://autoupdate.oracular.com/smartis/JBoard.mp4",
+      "title": "Demo"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/JBoard/JBoard-1.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/JBoard/JBoard-2.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/JBoard/JBoard-3.png"
+    }
+  ],
+  "references": [
+    {
+      "label": "Product Page",
+      "url": "https://www.smart-is.com/what-we-do/smart-product/smart-j-board/",
+      "kind": "product-page"
+    },
+    {
+      "label": "Digital Brochure",
+      "url": "https://www.smart-is.com/wp-content/uploads/2024/05/J-Board-1.pdf",
+      "kind": "pdf"
+    }
+  ],
+  "price": "Contact for pricing",
+  "specs": {},
+  "isNew": false,
+  "rating": 4.7,
+  "reviews": 45
+}

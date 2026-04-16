@@ -1,0 +1,41 @@
+{
+  "id": "smart-rule-engine",
+  "name": "Smart Rule Engine",
+  "category": "Blue Yonder",
+  "shortDescription": "A mod to end all mods!",
+  "description": "Rule Engine automates your workflows, reduces manual effort, and enhances operational efficiency. It provides a robust, customizable framework to define and manage conditional logic without complex modifications.",
+  "valueProposition": [
+    "Streamlines repetitive tasks by automating “if this, then do that” logic.",
+    "Enables non-technical teams to tweak system behavior without deep coding.",
+    "Improves system performance and reduces maintenance overhead.",
+    "Supports real-time decision-making through condition-based rules.",
+    "Consolidates large, complex configurations into simpler rule sets.",
+    "Enhances auditability and traceability of decisions and actions."
+  ],
+  "features": [
+    "Condition-Based Rules – Evaluate conditions and execute workflows or actions.",
+    "Drive decisions through easy-to-update tables.",
+    "Efficiently finding mapped values.",
+    "Automate business logic and trigger system behaviors.",
+    "Replace thousands of configurations with compact, reusable rules.",
+    "Trigger reports, call APIs, or connect external systems based on rules."
+  ],
+  "logo": "/assets/images/products-icons/SmartRuleEngine.png",
+  "image": "/assets/images/products/images/SmartRuleEngine/SmartRuleEngine-1.png",
+  "media": [
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/SmartRuleEngine/SmartRuleEngine-1.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/SmartRuleEngine/SmartRuleEngine-2.png"
+    }
+  ],
+  "references": [],
+  "price": "Contact for pricing",
+  "specs": {},
+  "isNew": false,
+  "rating": 4.7,
+  "reviews": 51
+}

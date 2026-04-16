@@ -1,0 +1,57 @@
+{
+  "id": "oogy",
+  "name": "OOGY",
+  "category": "Blue Yonder",
+  "shortDescription": "Seamlessly Integrate",
+  "description": "The Oracular Open Gateway (OOGY) offers a stand-alone web-service that enables access to the MOCA layer through standard HTTP based APIs. It provides an integration layer between the BY MOCA layer and any in-house or 3rd party application by exposing MOCA commands via API. Because it is written in Java, you can host the web-service on any OS.",
+  "valueProposition": [
+    "Enables End-to-End Visibility",
+    "Boosts Efficiency",
+    "Real-Time Data Exchange",
+    "API Swagger",
+    "Resolved Version Compatibility issues for many clients for AGVs (Automated guided vehicle) and API routing.",
+    "A single web-service for multiple Blue Yonder Instances.",
+    "Create and integrate existing and new applications with data from your BY WMS instances.",
+    "Super Compatible with all Java versions till Version 17."
+  ],
+  "features": [
+    "The Oracular Open Gateway (OOGY) offers a stand-alone web-service that enables access to the MOCA layer through standard HTTP based APIs.",
+    "It provides an integration layer between the BY MOCA layer and any in-house or 3rd party application by exposing MOCA commands via API.",
+    "Because it is written in Java, you can host the web-service on any OS."
+  ],
+  "logo": "/assets/images/products-icons/Oogy.png",
+  "image": "/assets/images/products/images/OOGY/Oogy-1.png",
+  "media": [
+    {
+      "type": "video",
+      "src": "https://autoupdate.oracular.com/smartis/oogy/OOGYMarketing.mp4",
+      "title": "Marketing"
+    },
+    {
+      "type": "video",
+      "src": "https://autoupdate.oracular.com/smartis/oogy/Oogy.mp4",
+      "title": "Demo"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/OOGY/Oogy-1.png"
+    }
+  ],
+  "references": [
+    {
+      "label": "Product Page",
+      "url": "https://www.smart-is.com/what-we-do/smart-product/oracular-open-gateway-oogy/",
+      "kind": "product-page"
+    },
+    {
+      "label": "Documentation",
+      "url": "https://oracularis.github.io/oogy",
+      "kind": "documentation"
+    }
+  ],
+  "price": "Contact for pricing",
+  "specs": {},
+  "isNew": true,
+  "rating": 4.8,
+  "reviews": 61
+}
