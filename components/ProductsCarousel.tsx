@@ -105,7 +105,7 @@ export default function ProductsCarousel({
                 return (
                   <div
                     key={product.id}
-                    className="flex-[0_0_94%] sm:flex-[0_0_74%] md:flex-[0_0_58%] lg:flex-[0_0_44%] px-3 [@media(orientation:portrait)]:flex-[0_0_82%]"
+                    className="flex-[0_0_94%] sm:flex-[0_0_74%] md:flex-[0_0_58%] lg:flex-[0_0_44%] xl:flex-[0_0_30%] px-3 [@media(orientation:portrait)]:flex-[0_0_82%]"
                   >
                     <motion.button
                       animate={{ scale: isActive ? 1 : 0.96, opacity: isActive ? 1 : 0.65 }}
