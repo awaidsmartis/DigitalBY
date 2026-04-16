@@ -47,7 +47,7 @@ export default function MainMenu({ onSelectCategory, onBack }: MainMenuProps) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
-      className="relative w-full min-h-screen bg-digitalby flex flex-col items-center justify-center px-6 py-12"
+      className="relative w-full min-h-screen bg-digitalby flex flex-col items-center justify-center px-6 py-12 pt-16 sm:pt-12"
     >
       <BottomLeftControls />
 
@@ -56,7 +56,7 @@ export default function MainMenu({ onSelectCategory, onBack }: MainMenuProps) {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         onClick={onBack}
-        className="absolute top-8 left-8 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300 backdrop-blur-sm z-20"
+        className="absolute top-4 left-4 sm:top-8 sm:left-8 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300 backdrop-blur-sm z-20"
         aria-label="Back"
         type="button"
       >

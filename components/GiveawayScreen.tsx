@@ -38,8 +38,11 @@ export default function GiveawayScreen({ onBack }: GiveawayScreenProps) {
           <p className="text-slate-300/70 mt-4 text-sm sm:text-base md:text-lg">{giveaway.subtitle}</p>
         </div>
 
-        {/* Content: always centered and fully visible on typical landscape kiosks */}
-        <div className="flex-1 min-h-0 grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-7 items-center">
+        {/*
+          Portrait tablets are usually ~768px wide (Tailwind `md`).
+          To fully support portrait, we only switch to 2 columns at `lg`.
+        */}
+        <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-7 items-center">
           <div className="rounded-3xl bg-white/5 border border-white/10 p-4 md:p-5">
             <div className="flex items-center gap-3 mb-3 md:mb-4">
               <div className="w-12 h-12 rounded-2xl bg-primary/20 flex items-center justify-center border border-primary/30">

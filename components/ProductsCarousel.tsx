@@ -59,10 +59,10 @@ export default function ProductsCarousel({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
-      className="relative w-full min-h-screen bg-digitalby flex flex-col px-6 py-12"
+      className="relative w-full min-h-screen bg-digitalby flex flex-col px-4 sm:px-6 py-8 sm:py-12"
     >
       {/* Header */}
-      <div className="flex justify-between items-center mb-10">
+      <div className="flex justify-between items-start gap-3 mb-6 sm:mb-10">
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -73,8 +73,8 @@ export default function ProductsCarousel({
           <ChevronLeft size={24} />
         </motion.button>
 
-        <div className="text-center flex-1">
-          <h1 className="text-4xl md:text-5xl font-black text-white">Products</h1>
+        <div className="text-center flex-1 min-w-0">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-white">Products</h1>
           <p className="text-slate-400 text-sm mt-1">
             <span className="lg:hidden">Swipe or use arrows • Tap a card for details • {products.length} total</span>
             <span className="hidden lg:inline">Scroll or use arrows • Click a card for details • {products.length} total</span>
@@ -98,71 +98,76 @@ export default function ProductsCarousel({
       {/* Carousel */}
       <div className="relative flex-1 flex flex-col justify-center">
         <div className="relative">
-          <div ref={viewportRef} className="overflow-hidden pt-6 pb-10">
+          <div ref={viewportRef} className="overflow-hidden pt-3 sm:pt-6 pb-8 sm:pb-10">
             <div className="flex">
               {products.map((product, index) => {
                 const isActive = index === selectedIndex
                 return (
                   <div
                     key={product.id}
-                    className="flex-[0_0_86%] sm:flex-[0_0_62%] md:flex-[0_0_46%] lg:flex-[0_0_36%] px-3"
+                    className="flex-[0_0_86%] sm:flex-[0_0_62%] md:flex-[0_0_46%] lg:flex-[0_0_36%] px-3 [@media(orientation:portrait)]:flex-[0_0_82%]"
                   >
                     <motion.button
                       animate={{ scale: isActive ? 1 : 0.96, opacity: isActive ? 1 : 0.65 }}
                       transition={{ type: 'spring', stiffness: 260, damping: 28 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => onSelectProduct(product)}
-                      className="w-full h-[340px] rounded-[28px] overflow-hidden group cursor-pointer relative border border-white/10 bg-white/5 shadow-2xl shadow-black/25"
+                      className="w-full h-[360px] sm:h-[340px] rounded-[28px] overflow-hidden group cursor-pointer relative border border-white/10 bg-white/5 shadow-2xl shadow-black/25 [@media(orientation:portrait)]:h-[400px]"
                     >
                       {/* Ambient background (no screenshot image) */}
                       <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-primary/10" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/10" />
 
-                      {/* Category */}
-                      <div className="absolute top-6 left-6">
-                        <span className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 border border-white/10 text-white text-xs font-bold tracking-wider backdrop-blur-sm">
-                          {product.category}
-                        </span>
-                      </div>
-
-                      {/* New badge */}
-                      {product.isNew && (
-                        <div className="absolute top-6 right-6">
-                          <span className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-primary text-white text-xs font-black tracking-wide shadow-lg shadow-primary/30">
-                            <span className="inline-block w-1.5 h-1.5 rounded-full bg-white/90" />
-                            New
+                      {/* Layout: use flex columns to prevent title overlapping the logo */}
+                      <div className="relative z-10 flex flex-col h-full p-5 sm:p-7 [@media(orientation:portrait)]:p-7">
+                        {/* Top row */}
+                        <div className="flex items-start justify-between gap-3">
+                          <span className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 border border-white/10 text-white text-xs font-bold tracking-wider backdrop-blur-sm">
+                            {product.category}
                           </span>
+
+                          {product.isNew && (
+                            <span className="inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-primary text-white text-xs font-black tracking-wide shadow-lg shadow-primary/30">
+                              <span className="inline-block w-1.5 h-1.5 rounded-full bg-white/90" />
+                              New
+                            </span>
+                          )}
                         </div>
-                      )}
 
-                      {/* Product Icon */}
-                      <div className="absolute inset-x-0 top-20 flex items-center justify-center">
-                        <div className="w-28 h-28 rounded-[28px] bg-white border border-white/20 shadow-2xl flex items-center justify-center overflow-hidden">
-                          <Image
-                            src={product.logo}
-                            alt={`${product.name} icon`}
-                            width={72}
-                            height={72}
-                            className="object-contain"
-                            priority={index < 2}
-                          />
-                        </div>
-                      </div>
-
-                      {/* Content */}
-                      <div className="absolute inset-0 p-7 flex flex-col justify-end">
-                        <h3 className="text-3xl font-black text-white mb-2 leading-tight text-center">
-                          {product.name}
-                        </h3>
-                        <p className="text-white/85 text-sm line-clamp-2 text-center">{product.shortDescription}</p>
-
-                      <div className="mt-5 flex items-center justify-between">
-                          <div className="text-slate-300 text-xs">
-                            <span className="lg:hidden">Tap to open</span>
-                            <span className="hidden lg:inline">Click to open</span>
+                        {/* Icon area */}
+                        <div className="flex-1 flex items-center justify-center pt-3 sm:pt-6 pb-2 sm:pb-4 [@media(orientation:portrait)]:pt-5 [@media(orientation:portrait)]:pb-4">
+                          <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-[22px] sm:rounded-[28px] bg-white border border-white/20 shadow-2xl flex items-center justify-center overflow-hidden [@media(orientation:portrait)]:w-28 [@media(orientation:portrait)]:h-28">
+                            <Image
+                              src={product.logo}
+                              alt={`${product.name} icon`}
+                              width={72}
+                              height={72}
+                              className="object-contain"
+                              priority={index < 2}
+                            />
                           </div>
-                          <div className="text-white/70 text-xs">
-                            {index + 1} / {products.length}
+                        </div>
+
+                        {/* Text area */}
+                        <div className="text-center flex flex-col">
+                          <div>
+                            <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white leading-snug line-clamp-2 [@media(orientation:portrait)]:text-3xl">
+                              {product.name}
+                            </h3>
+                            <p className="mt-2 text-white/85 text-xs sm:text-sm line-clamp-2 [@media(orientation:portrait)]:text-sm">
+                              {product.shortDescription}
+                            </p>
+                          </div>
+
+                          {/* Footer always visible */}
+                          <div className="mt-5 flex items-center justify-between">
+                            <div className="text-slate-300 text-xs">
+                              <span className="lg:hidden">Tap to open</span>
+                              <span className="hidden lg:inline">Click to open</span>
+                            </div>
+                            <div className="text-white/70 text-xs">
+                              {index + 1} / {products.length}
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -219,7 +224,7 @@ export default function ProductsCarousel({
         <motion.p
           animate={{ opacity: [0.5, 1, 0.5] }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="text-center text-slate-400 text-sm mt-8"
+          className="text-center text-slate-400 text-xs sm:text-sm mt-6 sm:mt-8 px-2"
         >
           <span className="lg:hidden">Swipe to browse • Tap any card to view full details</span>
           <span className="hidden lg:inline">Scroll to browse • Click any card to view full details</span>

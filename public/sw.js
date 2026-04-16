@@ -10,7 +10,11 @@
   navigations and caches a small app shell + last-seen pages.
 */
 
-const CACHE_NAME = 'digitalby-shell-v1'
+// Bump this when UI markup changes to avoid serving stale HTML that can
+// trigger React hydration mismatches.
+const CACHE_NAME = 'digitalby-shell-v2'
+
+// Keep this small: only cache the minimal routes needed as offline fallback.
 const APP_SHELL = ['/', '/menu', '/products', '/services', '/team', '/giveaway', '/offline.html']
 
 self.addEventListener('install', (event) => {
@@ -44,12 +48,13 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       (async () => {
         try {
-          const fresh = await fetch(req)
-          const cache = await caches.open(CACHE_NAME)
-          cache.put(req, fresh.clone())
-          return fresh
+          // Always prefer the latest HTML from the network.
+          // NOTE: We intentionally do NOT cache navigations here to avoid
+          // stale HTML causing hydration mismatches after updates.
+          return await fetch(req)
         } catch (e) {
-          const cached = await caches.match(req)
+          // Try exact route match first (app shell)
+          const cached = await caches.match(url.pathname)
           if (cached) return cached
           // Prefer landing pages over browser's offline error page
           return (await caches.match('/menu')) || (await caches.match('/')) || (await caches.match('/offline.html'))
@@ -78,5 +83,6 @@ self.addEventListener('fetch', (event) => {
     })(),
   )
 })
+
 
 
