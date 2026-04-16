@@ -130,11 +130,12 @@ export default function ProductDetail({
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={onClose}
-          className="absolute top-4 right-4 sm:top-8 sm:right-8 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300 backdrop-blur-sm z-20"
+          className="absolute top-2 right-2 sm:top-4 sm:right-4 p-2 sm:p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300 backdrop-blur-sm z-20"
           aria-label="Close"
           type="button"
         >
-          <X size={28} />
+          <X size={22} className="sm:hidden" />
+          <X size={28} className="hidden sm:block" />
         </motion.button>
 
         {/* Navigation Buttons */}
@@ -274,13 +275,13 @@ export default function ProductDetail({
               )}
 
               <div className="flex items-start justify-between gap-4">
-                <div>
-                  <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight">
+                <div className="min-w-0">
+                  <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight break-words">
                     {product.name}
                   </h1>
                   <p className="text-lg text-slate-400 mt-2">{product.category}</p>
                 </div>
-                <div className="hidden sm:flex items-center justify-center w-14 h-14 rounded-2xl bg-white border border-white/20 shadow-xl overflow-hidden">
+                <div className="hidden sm:flex shrink-0 items-center justify-center w-14 h-14 rounded-2xl bg-white border border-white/20 shadow-xl overflow-hidden">
                   <Image src={product.logo} alt={`${product.name} logo`} width={44} height={44} className="object-contain" />
                 </div>
               </div>
