@@ -2,29 +2,195 @@
   "id": "autest",
   "name": "AuTest",
   "category": "Blue Yonder",
-  "shortDescription": "Automated Testing Done Right",
-  "description": "Introducing Smart AuTest, the Automated Testing Solution that allows JDA/Blue Yonder (BY) users to automate their tests with full control. From stress testing to integration testing to performance testing, AuTest will prepare you for anything and everything that is in your warehouse implementation scope.",
-  "valueProposition": [
-    "Ability to perform Web-GUI, RF and MOCA based test cases, in any combination.",
-    "Ability to perform Directed Work based test cases.",
-    "Can perform all tests including single, group and stress tests.",
-    "Comes prepackaged with your day-to-day tests.",
-    "Requires fewer people working on the same task.",
-    "Highly reusable and scalable",
-    "No server footprint is required.",
-    "Frees up time for users.",
-    "Allows for quick JDA/BY solutions.",
-    "Faster client support"
+  "shortDescription": "AuTest: Blue Yonder Automated Testing Solution",
+  "description": "AuTest is an Automated Testing Solution designed to streamline and automate the testing of WMS use cases for BY WMS users, eliminating the need for manual intervention. It supports several types of tests, ensuring a versatile and robust testing environment.",
+  "cta": {
+    "primary": {
+      "label": "View Documentation",
+      "url": "https://oracularis.github.io/autest"
+    }
+  },
+  "stats": [
+    {
+      "value": "500+",
+      "label": "Developers trust AuTest"
+    },
+    {
+      "value": "14,000+",
+      "label": "Executed Test Cases",
+      "note": "Organizations worldwide have executed thousands of automated tests using AuTest to improve their Blue Yonder WMS testing"
+    },
+    {
+      "value": "92%",
+      "label": "Decision Confidence",
+      "note": "Decision confidence is achieved through consistent, validated results that guide toward faster, more reliable go-live approvals."
+    }
   ],
-  "features": [
-    "Provides a flexible and feature rich testing platform.",
-    "Utilizes JDA/BY components and customizations along with the application component to create, manage and run automated tests.",
-    "Can run any test scenario whether it is on the Web, GUI, or the RF.",
-    "AuTest is unique in the current testing landscape where no server components need to be installed.",
-    "Cloud based test cases that can be executed by providing a URL to the target WMS."
+  "highlights": [
+    { "value": "100%", "label": "Blue Yonder Compatibility" },
+    { "value": "60%", "label": "Manual Effort Reduced" },
+    { "value": "250+", "label": "Test Case Library" },
+    { "value": "90%", "label": "Traceability Boost" }
   ],
+  "keyFeatures": [
+    {
+      "title": "Flexible Testing Platform",
+      "summary": "AuTest delivers a versatile and feature-rich testing environment tailored for Blue Yonder WMS, enabling detailed validation of business processes.",
+      "bullets": [
+        "Create, manage, and execute automated tests across core WMS functions",
+        "Leverage native JDA/BY components and custom logic for targeted testing",
+        "Ensure full coverage of operational workflows and configurations."
+      ]
+    },
+    {
+      "title": "Versatile Test Scenarios",
+      "summary": "With support for MOCA, RF, and Web UI-based tests, AuTest provides full-spectrum test execution, automating validation at every layer of the WMS environment.",
+      "bullets": [
+        "Automate MOCA-based tests for backend processing and system logic",
+        "Run RF-based tests to validate warehouse device workflows and forms",
+        "Execute Web UI-based tests to simulate user interactions and interface behavior",
+        "Includes built-in stress testing to evaluate performance under simulated load"
+      ]
+    },
+    {
+      "title": "Cloud-Based Execution",
+      "summary": "AuTest simplifies test execution by eliminating infrastructure overhead. Tests run directly from the cloud, using only a URL to connect to your target WMS.",
+      "bullets": [
+        "Serverless architecture with no on-premise components required",
+        "Fast, lightweight deployment with minimal configuration",
+        "Execute tests securely from any location with internet access"
+      ]
+    },
+    {
+      "title": "Component Utilization",
+      "summary": "AuTest intelligently utilizes your existing JDA/BY components and custom-built modules, ensuring automated tests reflect the actual system environment.",
+      "bullets": [
+        "Integrates seamlessly with native BY configuration and extensions",
+        "Enables test creation using both standard and custom business logic",
+        "Fully compatible with MOCA, RF, and Web UI layers"
+      ]
+    },
+    {
+      "title": "Clear, Actionable Reports",
+      "summary": "AuTest provides detailed, easy-to-interpret execution reports, eliminating the need for manual log reviews and enabling fast issue identification.",
+      "bullets": [
+        "Real-time visibility into test outcomes: Passed, Failed, or Requires Attention",
+        "Drill into each step of any previous test for root cause analysis",
+        "Structured reports for quick decision-making"
+      ]
+    },
+    {
+      "title": "Key Dashboard Features",
+      "summary": "AuTest includes powerful dashboards that provide a clear, visual overview of your testing activity.",
+      "bullets": [
+        "Time-Based Filters: View test and runset execution data for any custom time range—daily, weekly, monthly, or custom date spans.",
+        "Execution Trends: Line and bar charts show pass/fail rates and execution volumes over time.",
+        "Real-Time Metrics: Monitor active executions, success rates, and alerts as they happen.",
+        "Runset Breakdown: Analyze execution outcomes for specific runsets or environments.",
+        "Error Heatmaps: Quickly spot recurring issues or bottlenecks across test cycles."
+      ]
+    }
+  ],
+  "benefits": [
+    {
+      "title": "Time Savings",
+      "description": "Accelerate test cycles by automating repetitive test cases, reducing manual testing time by up to 40%."
+    },
+    {
+      "title": "Quick Solutions",
+      "description": "Facilitate faster deployments of JDA/BY solutions through end-to-end automated validation workflows."
+    },
+    {
+      "title": "Prepackaged Tests",
+      "description": "Start testing immediately with ready-to-use test cases for common WMS processes."
+    },
+    {
+      "title": "Reduced Manpower",
+      "description": "Minimize resource demands by automating standard test execution across systems."
+    },
+    {
+      "title": "Comprehensive Testing",
+      "description": "Run single, grouped, and stress test scenarios with full support for MOCA, RF, and Web UI layers."
+    },
+    {
+      "title": "No Server Footprint",
+      "description": "Eliminate the need for server installations with our serverless architecture."
+    }
+  ],
+  "useCases": [
+    {
+      "title": "Blue Yonder WMS Upgrades",
+      "description": "Automate regression testing before and after upgrades to ensure critical business processes remain unaffected by new versions or patches."
+    },
+    {
+      "title": "New Warehouse Implementations",
+      "description": "Validate end-to-end workflows during initial deployments, ensuring that every system component, from RF devices to the Web UI, functions as expected."
+    },
+    {
+      "title": "Stress and Performance Validation",
+      "description": "Simulate concurrent user activity to assess how your WMS performs under peak loads, identifying bottlenecks before they impact operations."
+    },
+    {
+      "title": "Multi-Environment Testing",
+      "description": "Efficiently test across development, QA, and production environments with consistent, repeatable test cases."
+    }
+  ],
+  "blogs": [
+    {
+      "title": "Enhancing Customer Experience through Blue Yonder Consulting",
+      "author": "Saif Ali",
+      "date": "July 1, 2024"
+    },
+    {
+      "title": "The Risks of Manual Testing and the Shift to Blue Yonder WMS Automated Testing",
+      "author": "Saif Ali",
+      "date": "October 2, 2025"
+    },
+    {
+      "title": "The Future of Warehouse Management with AI and Automation",
+      "author": "Saif Ali",
+      "date": "December 24, 2024"
+    },
+    {
+      "title": "The Impact of Automation on Warehouse Management",
+      "author": "Saif Ali",
+      "date": "November 4, 2024"
+    }
+  ],
+  "faqs": [
+    {
+      "q": "Is AuTest compatible with my existing Blue Yonder infrastructure?",
+      "a": "Yes, AuTest is designed to work with all Blue Yonder WMS systems and respects your existing infrastructure landscape. It integrates seamlessly with your current Blue Yonder setup."
+    },
+    {
+      "q": "What kind of support is available?",
+      "a": "We offer 24/7 support for all AuTest users. Our support team consists of experienced Blue Yonder specialists who understand your challenges and can provide expert assistance."
+    },
+    {
+      "q": "How does Smart AuTest handle test data and environment isolation?",
+      "a": "Tests execute within a secure, cloud-based framework with tenant-level data isolation. Metadata, test inputs, and execution results are stored separately for each tenant, ensuring clean separation of data between clients and environments."
+    },
+    {
+      "q": "Is any server-side installation required to use Smart AuTest?",
+      "a": "No. AuTest is completely serverless. You only need to provide a valid URL to your target Blue Yonder WMS environment. Test execution and result storage occur securely in the cloud, eliminating any need for local infrastructure."
+    },
+    {
+      "q": "How does AuTest integrate with custom Blue Yonder components or extensions?",
+      "a": "AuTest is designed to utilize both standard and customized JDA/BY components. Whether your tests touch core MOCA logic or custom-built workflows, you can plug them into AuTest for automated validation."
+    },
+    {
+      "q": "Can we use Smart AuTest for unit testing during development?",
+      "a": "Yes. Smart AuTest includes a unit testing framework that enables developers and solution designers to validate MOCA logic or screen flows during build cycles, catching issues before they escalate."
+    },
+    {
+      "q": "How scalable is AuTest for enterprise-wide testing across multiple sites or teams?",
+      "a": "AuTest is cloud-native, stateless, and scalable by design. Multiple teams across geographies can run tests simultaneously, manage their own test suites, and share reusable components making it suitable for enterprise-scale deployments."
+    }
+  ],
+  "valueProposition": [],
+  "features": [],
   "logo": "/assets/images/products-icons/Autest.png",
-  "image": "/assets/images/products/images/AuTest/Autest-1.png",
+  "image": "/assets/images/products/images/AuTest/Autest1.png",
   "media": [
     {
       "type": "video",
@@ -38,31 +204,30 @@
     },
     {
       "type": "image",
-      "src": "/assets/images/products/images/AuTest/Autest-1.png"
+      "src": "/assets/images/products/images/AuTest/Autest1.png"
     },
     {
       "type": "image",
-      "src": "/assets/images/products/images/AuTest/Autest-2.png"
+      "src": "/assets/images/products/images/AuTest/Autest2.png"
     },
     {
       "type": "image",
-      "src": "/assets/images/products/images/AuTest/Autest-3.png"
+      "src": "/assets/images/products/images/AuTest/Autest3.png"
     },
     {
       "type": "image",
-      "src": "/assets/images/products/images/AuTest/Autest-4.png"
+      "src": "/assets/images/products/images/AuTest/Autest4.png"
     },
     {
       "type": "image",
-      "src": "/assets/images/products/images/AuTest/Autest-5.png"
+      "src": "/assets/images/products/images/AuTest/Autest5.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/AuTest/Autest6.png"
     }
   ],
   "references": [
-    {
-      "label": "Product Page",
-      "url": "https://www.smart-is.com/what-we-do/smart-product/autest/",
-      "kind": "product-page"
-    },
     {
       "label": "Documentation",
       "url": "https://oracularis.github.io/autest",

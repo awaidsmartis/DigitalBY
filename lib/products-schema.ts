@@ -24,6 +24,53 @@ export const productSchema = z.object({
   media: z.array(productMediaSchema).default([]),
   references: z.array(productReferenceSchema).default([]),
 
+  // Optional rich marketing content (used by MOCA Client)
+  cta: z
+    .object({
+      primary: z.object({ label: z.string().min(1), url: z.string().url() }),
+      secondary: z.object({ label: z.string().min(1), url: z.string().url() }).optional(),
+    })
+    .optional(),
+
+  stats: z
+    .array(
+      z.object({
+        value: z.string().min(1),
+        label: z.string().min(1),
+        note: z.string().optional(),
+      })
+    )
+    .optional(),
+
+  highlights: z.array(z.object({ value: z.string().min(1), label: z.string().min(1) })).optional(),
+
+  keyFeatures: z
+    .array(
+      z.object({
+        title: z.string().min(1),
+        summary: z.string().min(1),
+        bullets: z.array(z.string()).default([]),
+      })
+    )
+    .optional(),
+
+  benefits: z.array(z.object({ title: z.string().min(1), description: z.string().min(1) })).optional(),
+
+  useCases: z.array(z.object({ title: z.string().min(1), description: z.string().min(1) })).optional(),
+
+  blogs: z
+    .array(
+      z.object({
+        title: z.string().min(1),
+        author: z.string().min(1),
+        date: z.string().min(1),
+        url: z.string().url().optional(),
+      })
+    )
+    .optional(),
+
+  faqs: z.array(z.object({ q: z.string().min(1), a: z.string().min(1) })).optional(),
+
   // Legacy compatibility (some non-kiosk components still reference these)
   price: z.string().default('Contact for pricing'),
   specs: z.record(z.string()).default({}),

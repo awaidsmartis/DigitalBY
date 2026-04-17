@@ -1,5 +1,10 @@
 [
   {
+    "id": "smart-ai",
+    "name": "Smart AI",
+    "category": "Enterprise AI"
+  },
+  {
     "id": "moca-client",
     "name": "MOCA Client",
     "category": "Blue Yonder"
@@ -7,6 +12,16 @@
   {
     "id": "autest",
     "name": "AuTest",
+    "category": "Blue Yonder"
+  },
+  {
+    "id": "rf-plus-plus",
+    "name": "Smart RF Plus",
+    "category": "Blue Yonder"
+  },
+  {
+    "id": "smart-viu",
+    "name": "Smart Viu",
     "category": "Blue Yonder"
   },
   {
@@ -25,11 +40,6 @@
     "category": "Blue Yonder"
   },
   {
-    "id": "rf-plus-plus",
-    "name": "RF++",
-    "category": "Blue Yonder"
-  },
-  {
     "id": "oogy",
     "name": "OOGY",
     "category": "Blue Yonder"
@@ -37,11 +47,6 @@
   {
     "id": "smart-devops",
     "name": "Smart DevOps",
-    "category": "Blue Yonder"
-  },
-  {
-    "id": "smart-viu",
-    "name": "Smart Viu",
     "category": "Blue Yonder"
   },
   {

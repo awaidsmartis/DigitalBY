@@ -1,27 +1,215 @@
 {
   "id": "moca-client",
   "name": "MOCA Client",
-  "category": "Blue Yonder",
-  "shortDescription": "Turbocharge Development",
-  "description": "Developers need to be empowered with a development tool that can overcome the challenges that each client’s infrastructure landscape may present. Smart IS created a tool that allows for accessing the environment at the MOCA Command Level. MOCA Client can perform several tasks in the most efficient manner possible.",
-  "valueProposition": [
-    "The developer can access environments through a multi-tab layout making it easy to navigate between them.",
-    "Data tools to easily manage and manipulate data.",
-    "Wizards for everything a developer needs, from developing a command, to an RDT screen to labels etc.",
-    "Label renderer to be able to view the generated Out-files.",
-    "Enhanced paid tools for increased functionality."
+  "category": "Developer Productivity Tool",
+  "shortDescription": "Supercharge Your Blue Yonder Development",
+  "description": "The MOCA Client is an intuitive, all-in-one Blue Yonder development tool for accessing, prototyping, and troubleshooting Blue Yonder applications. It features multi-tab navigation, built-in security, integrated change management, and robust audit trails. This tool allows developers to access and manage environments at the MOCA Command Level efficiently, ensuring seamless execution and integration.",
+  "cta": {
+    "primary": {
+      "label": "View Documentation",
+      "url": "https://oracularis.github.io/mocaclient/"
+    }
+  },
+  "stats": [
+    {
+      "value": "845+",
+      "label": "Developers trust MOCA Client"
+    },
+    {
+      "value": "1,740+",
+      "label": "Downloads",
+      "note": "The MOCA Client has been widely adopted, reflecting its popularity and effectiveness among BY developers."
+    },
+    {
+      "value": "360+",
+      "label": "Organizations",
+      "note": "Companies of all sizes have implemented the MOCA Client, showcasing its versatility across different industries."
+    }
   ],
-  "features": [
-    "A Single Tool/Interface for Development, Prototyping, Troubleshooting and building Applications.",
-    "Provides Development Aids like command development, RF screen development, search tools within commands and algorithms etc.",
-    "Provide Access to the Application Server through MOCA Layer to avoid the need for accessing the application server directly via telnet or remote desktop.",
-    "Build Change Management into the DNA of the Application so this tool can face any audit challenges.",
-    "Security is built in, so only developers with proper access in each environment can connect.",
-    "Enterprise level controls can be imposed like forcing a minimum application version.",
-    "Audit log of every command executed to present to an external auditor if needed."
+  "highlights": [
+    { "value": "40%", "label": "Faster Development" },
+    { "value": "100%", "label": "Blue Yonder Compatible" },
+    { "value": "24/7", "label": "Developer Support" },
+    { "value": "845+", "label": "Active Users" }
   ],
+  "keyFeatures": [
+    {
+      "title": "Developer-Friendly Interface",
+      "summary": "Designed with developers in mind, MOCA Client offers an intuitive interface that makes complex tasks simple and efficient.",
+      "bullets": [
+        "A modern, intuitive UI designed for both beginners and experienced developers.",
+        "Intelligent auto-complete, keyboard shortcuts, and context-aware recommendations for streamlined query writing.",
+        "Effortlessly edit, save, and reuse commands with built-in history tracking and improved workflow efficiency.",
+        "Comprehensive documentation and step-by-step guides to ensure ease of use and maximum productivity."
+      ]
+    },
+    {
+      "title": "Seamless Blue Yonder Integration",
+      "summary": "MOCA Client offers direct access to Blue Yonder data while ensuring optimized performance and robust security, respecting your existing infrastructure.",
+      "bullets": [
+        "Direct access to Blue Yonder data with high-performance execution and minimal latency.",
+        "Prevent unintended commits in production with configurable policy enforcement and registry settings.",
+        "Enterprise-grade security standards to maintain compliance and prevent unauthorized modifications.",
+        "Fully integrates with existing client infrastructure, ensuring minimal disruptions and easy adoption."
+      ]
+    },
+    {
+      "title": "Smart Apps Connectivity",
+      "summary": "MOCA Client seamlessly integrates with SmartApps to streamline automation, issue tracking, and data migration with tools like AuTest, WH Migrator, and Issue Assignment.",
+      "bullets": [
+        "Seamlessly integrates with SmartApps tools like AuTest, WH Migrator, and Issue Assignment for a connected workflow.",
+        "Automatic transfer of saved server details, eliminating repetitive manual setup.",
+        "Streamlined license management for all SmartApps-enabled products, simplifying administration."
+      ]
+    },
+    {
+      "title": "Multiple Connection Tabs",
+      "summary": "Unlike WinMSQL, MOCA Client allows you to open multiple tabs for connections without having to close & restart the application, saving you valuable development time.",
+      "bullets": [
+        "Open and manage multiple connection tabs simultaneously without needing to restart.",
+        "Cancel long-running queries or executions without disrupting your workflow.",
+        "Effortless switching between environments to accelerate development across multiple instances."
+      ]
+    },
+    {
+      "title": "Add-ons & Extensions",
+      "summary": "Unlock the full potential of MOCA Client with a suite of powerful add-ons and extensions designed to enhance functionality, automation, and user experience.",
+      "bullets": [
+        "Automate testing and validation with integrated AuTest support.",
+        "Seamlessly migrate warehouse data across environments with the built-in Warehouse Migrator.",
+        "Track and log development changes using Issue Assignment for enhanced visibility and accountability.",
+        "Additional tools for report viewing, label printing, rollout building, report format conversion, and database comparison to streamline your workflow."
+      ]
+    },
+    {
+      "title": "Advanced Debugging & Troubleshooting",
+      "summary": "Moca Client allows to easily detect and resolve issues with MOCA Client’s built-in debugging tools, ensuring seamless Blue Yonder implementations.",
+      "bullets": [
+        "Real-time error detection and alerting for faster issue resolution.",
+        "Detailed query logs and execution insights for pinpointing and resolving problems efficiently.",
+        "Optimized debugging workflow, minimizing downtime and accelerating fixes for critical issues."
+      ]
+    }
+  ],
+  "benefits": [
+    {
+      "title": "Time Savings",
+      "description": "Eliminate the need to close and restart connections, saving up to 40% of your development time."
+    },
+    {
+      "title": "Efficient Performance",
+      "description": "Perform multiple tasks in the most efficient manner possible with optimized query execution."
+    },
+    {
+      "title": "Infrastructure Compatibility",
+      "description": "Works with your existing Blue Yonder infrastructure without requiring major changes."
+    },
+    {
+      "title": "Developer Empowerment",
+      "description": "A tool created by developers for developers, designed to address real-world challenges."
+    },
+    {
+      "title": "Comprehensive Documentation",
+      "description": "Detailed guides for both beginners and experienced users to master all features."
+    },
+    {
+      "title": "Continuous Improvement",
+      "description": "Regular updates and new features based on developer feedback and needs."
+    }
+  ],
+  "useCases": [
+    {
+      "title": "Database Query Optimization",
+      "description": "Developers use MOCA Client to test and optimize complex queries against Blue Yonder databases without the limitations of WinMSQL."
+    },
+    {
+      "title": "Multi-Environment Development",
+      "description": "Work across development, testing, and production environments simultaneously with multiple connection tabs."
+    },
+    {
+      "title": "Data Migration Projects",
+      "description": "Efficiently move and transform data between Blue Yonder instances with powerful query capabilities."
+    },
+    {
+      "title": "Troubleshooting & Debugging",
+      "description": "Quickly identify and resolve issues in Blue Yonder implementations with direct data access and efficient querying."
+    }
+  ],
+  "blogs": [
+    {
+      "title": "Introduction to MOCA Client by Smart IS",
+      "author": "Khurram Ahmad",
+      "date": "May 26, 2020"
+    },
+    {
+      "title": "Some Handy Moca Commands",
+      "author": "Saad Ahmad",
+      "date": "February 13, 2019"
+    },
+    {
+      "title": "Querying JDA/BY WMS Data for Adhoc Analysis",
+      "author": "Saad Ahmad",
+      "date": "February 7, 2019"
+    }
+  ],
+  "faqs": [
+    {
+      "q": "How is the MOCA Client different from WinMSQL?",
+      "a": "Unlike WinMSQL, the MOCA Client supports multiple connection tabs, eliminating the need to close and reopen the application when switching environments. It also features auto-complete, intelligent suggestions, and advanced debugging tools for more efficient development."
+    },
+    {
+      "q": "Is the MOCA Client compatible with all Blue Yonder environments?",
+      "a": "Yes. The MOCA Client is 100% compatible with Blue Yonder and integrates seamlessly with existing infrastructure without requiring major changes or additional configuration."
+    },
+    {
+      "q": "What SmartApps are integrated with the MOCA Client?",
+      "a": "MOCA Client integrates with SmartApps, including AuTest (automated testing), WH Migrator (warehouse data migration), and Issue Assignment (development tracking), enabling a connected, automated workflow across your development pipeline."
+    },
+    {
+      "q": "How does the MOCA Client support faster development cycles?",
+      "a": "With features like intelligent auto-complete, multi-tab connections, reusable query history, and advanced workflow tools, MOCA Client helps developers save up to 40% of their time compared to legacy tools."
+    },
+    {
+      "q": "How does the MOCA Client support secure development practices?",
+      "a": "The tool includes enterprise-grade security features, configurable policy enforcement to prevent unintended changes in production, and robust user access control to ensure all development complies with your organization’s security standards."
+    },
+    {
+      "q": "How does MOCA Client help with version control or audit trails?",
+      "a": "MOCA Client includes robust audit trail functionality, making it easy to track command execution history, monitor changes, and ensure development accountability across teams."
+    },
+    {
+      "q": "How does MOCA Client assist with Blue Yonder data access and analysis?",
+      "a": "MOCA Client provides direct access to Blue Yonder data at the MOCA command level, enabling deep data interrogation, transformation, and troubleshooting without latency or data access restrictions."
+    },
+    {
+      "q": "What types of logs and insights does the debugging feature provide?",
+      "a": "MOCA Client offers detailed execution logs, real-time error messages, and insights into query performance, making it easier to isolate and resolve issues quickly."
+    },
+    {
+      "q": "Does MOCA Client require installation, or is it browser-based?",
+      "a": "MOCA Client is a desktop application that requires installation. It is lightweight, regularly updated, and built for high performance, unlike browser-based tools that may be limited in capability or speed."
+    },
+    {
+      "q": "Does MOCA Client support parallel development?",
+      "a": "Yes. With its multi-tab, multi-environment support, developers can run parallel queries, test across environments, and validate deployments without interrupting ongoing work in other instances."
+    },
+    {
+      "q": "How does MOCA Client simplify server access for developers?",
+      "a": "MOCA Client provides direct access to Blue Yonder environments via the MOCA layer, eliminating the need to access the Application Server directly. This abstraction simplifies the development workflow and reduces potential risks tied to direct server interactions."
+    },
+    {
+      "q": "What enterprise controls are supported in the MOCA Client to enforce governance?",
+      "a": "MOCA Client allows enterprises to enforce policies such as minimum version requirements, restricted environment access, and registry-based settings. These controls help standardize tool usage across teams and maintain compliance with internal IT governance frameworks."
+    },
+    {
+      "q": "How does MOCA Client streamline license management for SmartApps and add-ons?",
+      "a": "With the integrated Cloud Connect feature, MOCA Client allows users to directly access the AppSmart website to manage licenses, generate app keys, and update profile information. This eliminates manual license handling and ensures all SmartApps are properly licensed and up to date."
+    }
+  ],
+  "valueProposition": [],
+  "features": [],
   "logo": "/assets/images/products-icons/MocaClient.png",
-  "image": "/assets/images/products/images/MocaClient/MocaClient-1.png",
+  "image": "/assets/images/products/images/MocaClient/Moca1.png",
   "media": [
     {
       "type": "video",
@@ -35,19 +223,30 @@
     },
     {
       "type": "image",
-      "src": "/assets/images/products/images/MocaClient/MocaClient-1.png"
+      "src": "/assets/images/products/images/MocaClient/Moca1.png"
     },
     {
       "type": "image",
-      "src": "/assets/images/products/images/MocaClient/MocaClient-2.png"
+      "src": "/assets/images/products/images/MocaClient/Moca2.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/MocaClient/Moca3.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/MocaClient/Moca4.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/MocaClient/Moca5.png"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/MocaClient/Moca6.png"
     }
   ],
   "references": [
-    {
-      "label": "Product Page",
-      "url": "https://www.smart-is.com/what-we-do/smart-product/smart-is-moca-client/",
-      "kind": "product-page"
-    },
     {
       "label": "Documentation",
       "url": "https://oracularis.github.io/mocaclient/",

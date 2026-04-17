@@ -2,21 +2,197 @@
   "id": "smart-viu",
   "name": "Smart Viu",
   "category": "Blue Yonder",
-  "shortDescription": "Data Anywhere, Anytime",
-  "description": "Smart Viu tackles the challenge of meeting user demands for data in BY-WMS by offering a single deployable object capable of displaying multiple data outputs. This eliminates the need for creating numerous custom Page Builder screens, streamlining development, and reducing change management complexities. With Smart Viu, organizations can develop various data layouts without adding new screens, while still supporting Master/Detail layouts and actions on selected data. Overall, Smart Viu enhances usability and efficiency, ensuring users have access to the information they need without overwhelming screen development and management.",
-  "valueProposition": [
-    "One screen to end the need for any more screen development.",
-    "Color coded grid based on user driven rules.",
-    "Chart renderings."
+  "shortDescription": "Smart Viu: Blue Yonder Screen Development Solution",
+  "description": "Smart Viu is a no-code/low-code solution built exclusively for Blue Yonder WMS users, enabling effortless screen development without the need for Page Builder or technical expertise. With an intuitive interface, role-based access, and dynamic reporting, Smart Viu simplifies operations and allows users to create, manage, and visualize data with ease and precision.",
+  "cta": {
+    "primary": {
+      "label": "View Documentation",
+      "url": "https://oracularis.github.io/smartviu/#/./readme"
+    }
+  },
+  "stats": [
+    {
+      "value": "5,000+",
+      "label": "Smart Viu Market Reach"
+    },
+    {
+      "value": "1 Year",
+      "label": "Support",
+      "note": "SmartViu comes with a comprehensive one-year support plan designed to assist you every step of the way."
+    },
+    {
+      "value": "5+",
+      "label": "Customers",
+      "note": "The world’s leading companies use Smart Viu in their operations for no-code screen development and powerful reporting."
+    }
   ],
-  "features": [
-    "One-screen deployment, with the ability to display any dataset.",
-    "Ability to configure and perform actions on the selected data.",
-    "Ability to render data as Master/ Child in a Multi-Tab layout.",
-    "Ability to render data as charts.",
-    "Embedded security layer to control which data outputs can be viewed by which users.",
-    "Smart Chat widget"
+  "highlights": [
+    { "value": "100%", "label": "Blue Yonder & Snowflake Compatible" },
+    { "value": "200%", "label": "Achieve ROI Faster" },
+    { "value": "86%", "label": "Boost Productivity Instantly" },
+    { "value": "70%", "label": "Slash Development Cost" }
   ],
+  "keyFeatures": [
+    {
+      "title": "Easy Screen Development",
+      "summary": "Smart Viu is built for warehouse teams to design and deploy screens independently, eliminating the need for technical expertise or development resources.",
+      "bullets": [
+        "No need for Page Builder, DDAs, or web development experience",
+        "Allows functional teams to own and manage their own reporting needs",
+        "Reduces development time and dependency on technical resources"
+      ]
+    },
+    {
+      "title": "LES Command Management",
+      "summary": "SmartViu simplifies LES command configuration through a centralized maintenance screen, supporting custom actions and secure access control.",
+      "bullets": [
+        "Easily add, update, or delete LES commands to tailor functionality.",
+        "Configure detailed parameters and define actions like running reports or executing tasks.",
+        "Centralized management for flexible, scalable command configurations."
+      ]
+    },
+    {
+      "title": "One-Screen, Multiple Outputs",
+      "summary": "Streamline data access with a single screen that supports multiple layouts and datasets, removing the need for repeated screen development.",
+      "bullets": [
+        "Display various data outputs through a single deployable object",
+        "Eliminate redundant Page Builder screen creation",
+        "Reduce complexity in managing layout changes and enhancements"
+      ]
+    },
+    {
+      "title": "Interactive Report Viewing",
+      "summary": "SmartViu offers an intuitive interface to browse, filter, and act on reports, enabling users to engage with live data without navigating complex systems.",
+      "bullets": [
+        "View and manage reports created via LES commands",
+        "Perform data actions directly from the SmartViu interface",
+        "Dynamic screen behavior tailored to user-defined logic"
+      ]
+    },
+    {
+      "title": "Role-Based Access Control",
+      "summary": "Ensure that only the right people have access to the right information with flexible role-based access controls fully integrated with BY standards.",
+      "bullets": [
+        "Assign visibility of reports and screens based on user roles",
+        "Aligns with Blue Yonder's standard configuration structure",
+        "Maintain security and compliance across all user levels"
+      ]
+    },
+    {
+      "title": "Key Dashboard Features",
+      "summary": "Transform the way you view data by highlighting key insights through customizable grid colouring making trends and outliers immediately visible.",
+      "bullets": [
+        "Define custom criteria to highlight specific data values",
+        "Improve decision-making through visual indicators",
+        "Enhance readability and focus on actionable insights"
+      ]
+    }
+  ],
+  "benefits": [
+    {
+      "title": "Faster Time-to-Value",
+      "description": "Deploy custom data views rapidly and eliminate weeks of screen development effort."
+    },
+    {
+      "title": "Simplified Change Management",
+      "description": "Adapt to evolving requirements without adding complexity to your environment."
+    },
+    {
+      "title": "Lower Operational Overhead",
+      "description": "Reduce the time and cost associated with maintaining and updating custom screens."
+    },
+    {
+      "title": "Business-Led Control",
+      "description": "Enable operations teams to manage and update screens without IT involvement."
+    },
+    {
+      "title": "Real-Time Visibility",
+      "description": "Deliver always-updated, actionable data directly from Blue Yonder WMS."
+    },
+    {
+      "title": "Unified Interface",
+      "description": "Consolidate multiple datasets into one intuitive view for faster decision-making."
+    }
+  ],
+  "useCases": [
+    {
+      "title": "Rapid Deployment",
+      "description": "Deploy new warehouse reports instantly without coding or Page Builder, enabling faster response to changing operational data needs."
+    },
+    {
+      "title": "Role-Based Data Access",
+      "description": "Assign data access by role to maintain control, improve security, and ensure teams only see what they need."
+    },
+    {
+      "title": "Visual Monitoring of Warehouse KPIs",
+      "description": "Monitor warehouse KPIs using real-time visual grids and charts to quickly identify trends, bottlenecks, and performance gaps."
+    },
+    {
+      "title": "Centralizing Disparate Data Sources",
+      "description": "Consolidate multiple datasets into a single screen view, improving operational visibility and reducing screen-switching fatigue for users."
+    },
+    {
+      "title": "Business-Led Screen Management",
+      "description": "Let business users independently create or update screens, minimizing IT dependency and accelerating warehouse process optimization initiatives."
+    },
+    {
+      "title": "Minimizing Downtime",
+      "description": "Apply layout or logic changes without system disruption, ensuring updates happen smoothly without risking downtime or data loss."
+    }
+  ],
+  "blogs": [
+    {
+      "title": "How SmartViu Enhances Blue Yonder Warehouse Management System’s Visibility",
+      "author": "Saif Ali",
+      "date": "August 5, 2024"
+    },
+    {
+      "title": "Why Consulting Is a Core Component of Today’s Warehouse Management Projects",
+      "author": "Saif Ali",
+      "date": "August 6, 2025"
+    },
+    {
+      "title": "From Strategy to Daily Operations: Smart IS’s Blue Yonder Solutions",
+      "author": "Saif Ali",
+      "date": "February 7, 2025"
+    }
+  ],
+  "faqs": [
+    {
+      "q": "Is SmartViu a Page Builder replacement or a different framework?",
+      "a": "SmartViu is a custom framework inspired by Dynamic Data Applications (DDAs) but designed using modern, more advanced architecture."
+    },
+    {
+      "q": "Does SmartViu use REST APIs for its actions?",
+      "a": "Yes, SmartViu utilizes REST APIs for its actions. It employs an action file to invoke MOCA commands, similar to the approach used by BY in their Standard Page Builder."
+    },
+    {
+      "q": "How does the backend of SmartViu differ from Page Builder and React screens?",
+      "a": "SmartViu’s backend is built using the ExtJS Framework, a standard framework also employed by BY for its REFS systems. This enables a robust and scalable backend infrastructure."
+    },
+    {
+      "q": "How often do users export data for analysis, and how can this process be minimized?",
+      "a": "This is a common practice, and Smart Viu’s conversational features can help streamline these tasks by providing actionable insights directly."
+    },
+    {
+      "q": "Is the Smart Warehouse Agent available for environments beyond Blue Yonder?",
+      "a": "This can be explored based on the specific requirements of the organization."
+    },
+    {
+      "q": "Can the system create visualizations (e.g., pie charts) dynamically?",
+      "a": "Yes, Smart Viu can generate dynamic visualizations based on user input and the available data."
+    },
+    {
+      "q": "Are the chatbot's prompts predefined or dynamically generated?",
+      "a": "The chatbot leverages large language models (LLMs) to generate insights dynamically based on the data. Prompts are not predefined or hardcoded, ensuring flexibility and adaptability."
+    },
+    {
+      "q": "Can chatbot access be restricted based on user roles?",
+      "a": "Yes, access control can be implemented to ensure only authorized users have access to the AI capabilities."
+    }
+  ],
+  "valueProposition": [],
+  "features": [],
   "logo": "/assets/images/products-icons/SmartViu.png",
   "image": "/assets/images/products/images/SmartViu/SmartViu-1.png",
   "media": [
@@ -44,11 +220,6 @@
     }
   ],
   "references": [
-    {
-      "label": "Product Page",
-      "url": "https://www.smart-is.com/what-we-do/smart-product/smart-viu/",
-      "kind": "product-page"
-    },
     {
       "label": "Documentation",
       "url": "https://oracularis.github.io/smartviu/#/./readme",

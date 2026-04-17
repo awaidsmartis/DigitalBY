@@ -1,30 +1,190 @@
 {
   "id": "rf-plus-plus",
-  "name": "RF++",
+  "name": "Smart RF Plus",
   "category": "Blue Yonder",
-  "shortDescription": "Taking your RF Screens to the Next Level",
-  "description": "All JDA/ Blue Yonder (BY) WMS implementations need an RF Solution - a solution for the physical devices that are used on the floor to perform most of the warehouse functions. Smart IS’s RF++ application provides several enhancements for your existing RF screens.\nWe provide an Android app that builds on top of the standard JDA/ BY solution, thus providing support for delivered, as well as custom RF screens without any extra work.",
-  "valueProposition": [
-    "Builds on Existing BY Solution",
-    "Additional information can be integrated.",
-    "Eases System Support.",
-    "Reduces the Need for Developers.",
-    "Improved User Experience.",
-    "Adds Contextual Information.",
-    "Screen Layout Enhancements and Touch Support.",
-    "Simplified system interaction by simplifying access to the function keys."
+  "shortDescription": "Smart RF Plus: Blue Yonder RF Solution",
+  "description": "Smart RF Plus is an advanced Android-based enhancement for Blue Yonder WMS RF screens. Designed to work with your existing devices, it improves speed, usability, and functionality without requiring new hardware. From intuitive navigation to enriched data display, Smart RF Plus modernizes warehouse operations with a seamless, cost-effective upgrade.",
+  "cta": {
+    "primary": {
+      "label": "View Documentation",
+      "url": "https://oracularis.github.io/smartrf"
+    }
+  },
+  "highlights": [
+    {
+      "value": "Boost Productivity",
+      "label": "Streamlined workflows help teams complete tasks faster and with fewer errors"
+    },
+    { "value": "Lower Hardware Costs", "label": "Replace RF guns with affordable Android devices." },
+    { "value": "Visibility", "label": "Embed product images, videos, and details." },
+    { "value": "Compatible", "label": "Run on phones, tablets, or RF guns." },
+    { "value": "Multi-Protocol", "label": "Supports Mobile RF, Telnet, and SSH." },
+    { "value": "Secure by Design", "label": "Enterprise-grade security and auto-stuffing." }
   ],
-  "features": [
-    "Easy to connect – Simplify the administrative aspect like adding new devices.",
-    "Touch Support – Easy for screen interaction with more options.",
-    "Screen Layout – Utilize additional space if available and provide multi-tab options.",
-    "Additional Information – Contextual information can be made available.",
-    "Voice Support – Natively support the voice capability of the device if available.",
-    "Simplified deployment architecture for the enterprise.",
-    "Out-of-box compatibility with device level extensions like Camera and other sensors."
+  "keyFeatures": [
+    {
+      "title": "Broad Device Compatibility",
+      "summary": "Smart RF Plus runs flawlessly across a wide range of Android devices, including RF guns, smartphones, tablets, cameras, sensors, integrated scanners, and Bluetooth-enabled hardware.",
+      "bullets": [
+        "Seamlessly supports mixed hardware environments, reducing the need for new device purchases.",
+        "Leverage existing investments by modernizing older hardware with a new UI and extended capabilities.",
+        "Bluetooth and sensor integrations make data capture smarter, faster, and more connected."
+      ]
+    },
+    {
+      "title": "Rich Data and Media Integration",
+      "summary": "Bring more information to your operators without changing your core RF screens. Smart RF Plus enables the addition of images, videos, and external content directly into the user interface.",
+      "bullets": [
+        "Easily integrate product images, safety diagrams, instructional videos, or supplier info.",
+        "Pull data from Blue Yonder or any external system using API-based connections.",
+        "Maintain native Blue Yonder screen structures for simplified upgrades and compliance."
+      ]
+    },
+    {
+      "title": "Intuitive Gesture-Based Navigation",
+      "summary": "Smart RF Plus introduces gesture-based navigation—swipe left, right, up, or down to move between functions and screens, just like on a smartphone.",
+      "bullets": [
+        "Eliminates reliance on physical buttons or F-keys, reducing device wear and tear.",
+        "Streamline operations with quick screen switching, ideal for fast-paced environments.",
+        "Delivers a modern UI experience that minimizes training time and maximizes ease of use."
+      ]
+    },
+    {
+      "title": "One-Time Device Registration",
+      "summary": "Simplify the onboarding of new hardware with Smart RF Plus’s persistent device registration. Just enter the required information once per device, and Smart RF Plus handles the rest.",
+      "bullets": [
+        "Avoid repeated entry of terminal IDs, usernames, or configuration parameters.",
+        "Ideal for large warehouse environments with rotating or shared devices.",
+        "Reduces configuration errors and support calls during new device rollout."
+      ]
+    },
+    {
+      "title": "Touch-First Interaction Design",
+      "summary": "Designed for today’s touchscreen users, Smart RF Plus ensures every screen is optimized for taps, swipes, and touch gestures, making interaction feel natural and effortless.",
+      "bullets": [
+        "Provides a mobile-like experience familiar to anyone using smartphones or tablets.",
+        "Reduces cognitive load with clean layouts and large, easy-to-use touch targets.",
+        "Boosts task speed and operator comfort in both standing and mobile workflows."
+      ]
+    },
+    {
+      "title": "Auto-Stuffing for Terminal IDs",
+      "summary": "Smart RF Plus supports secure device registration and auto-stuffing patterns that reduce repetitive data entry and enforce consistency.",
+      "bullets": [
+        "Auto-fill terminal/user details to speed up logins and reduce errors.",
+        "Enterprise-grade security and governed access patterns.",
+        "Designed for scalable, multi-site deployments."
+      ]
+    }
   ],
+  "benefits": [
+    {
+      "title": "Lower Total Cost of Ownership",
+      "description": "Eliminates the need for expensive hardware upgrades or custom screen development, driving long-term cost savings."
+    },
+    {
+      "title": "Faster User Adoption",
+      "description": "Touch-friendly design and familiar mobile-like interactions reduce training time and improve user comfort on the floor."
+    },
+    {
+      "title": "Increased Workforce Productivity",
+      "description": "Operators spend less time navigating screens or entering data, completing tasks more quickly and with fewer interruptions."
+    },
+    {
+      "title": "Accelerated Time-to-Value",
+      "description": "Rapid deployment and easy device registration allow you to realize performance gains faster across warehouse operations."
+    },
+    {
+      "title": "Flexible Scalability",
+      "description": "Easily scale across multiple facilities and device types without rewriting screens or investing in new infrastructure."
+    },
+    {
+      "title": "Enhanced Operational Visibility",
+      "description": "Support for multimedia and extended data views empowers teams to make faster, better-informed decisions right from the RF screen."
+    }
+  ],
+  "useCases": [
+    {
+      "title": "Legacy RF Modernization",
+      "description": "Upgrade outdated RF solutions without hardware replacement by enhancing functionality through Smart RF Plus."
+    },
+    {
+      "title": "Multimedia Support in Receiving & Inspection",
+      "description": "Enable teams to view product images, safety info, or inspection guidelines directly in RF screens, reducing lookup times."
+    },
+    {
+      "title": "Multi-Modal Scanning and Input Integration",
+      "description": "Combine traditional barcode scanning with camera and sensor inputs on one device, improving data accuracy."
+    },
+    {
+      "title": "Multi-Site Rollouts",
+      "description": "Standardize RF usability and performance across multiple warehouses with easy configuration and scalable deployment."
+    }
+  ],
+  "blogs": [
+    {
+      "title": "Why Smart RF Plus is the Smartest Investment for Your Warehouse in 2025",
+      "author": "Saif Ali",
+      "date": "March 17, 2025"
+    },
+    {
+      "title": "Transforming Warehouse Management with Smart RF Plus",
+      "author": "Saif Ali",
+      "date": "March 13, 2025"
+    },
+    {
+      "title": "Smart RF Plus vs. Traditional RF Solutions for Warehouse Management Systems",
+      "author": "Saif Ali",
+      "date": "March 10, 2025"
+    },
+    {
+      "title": "Can Your Current RF Terminal Emulator Keep Up with Today’s Warehouse Needs?",
+      "author": "Saif Ali",
+      "date": "September 18, 2025"
+    }
+  ],
+  "faqs": [
+    {
+      "q": "What devices are compatible with Smart RF Plus?",
+      "a": "Smart RF Plus is built on the Android platform, ensuring compatibility with most modern Android devices. It also supports device-level extensions like cameras and sensors, allowing seamless integration for warehouse operations."
+    },
+    {
+      "q": "How is Smart RF Plus different from standard RF solutions?",
+      "a": "Smart RF Plus is an Android-based enhancement for Blue Yonder RF that brings touch navigation, multimedia support, and seamless integration with modern devices, all without requiring changes to your existing infrastructure or hardware."
+    },
+    {
+      "q": "Do I need to purchase new hardware to use Smart RF Plus?",
+      "a": "No. Smart RF Plus works with your existing Android RF guns, phones, tablets, scanners, cameras, and other Bluetooth-enabled devices. It enhances functionality without requiring hardware upgrades."
+    },
+    {
+      "q": "How does Smart RF Plus simplify device registration?",
+      "a": "Smart RF Plus automatically determines the device ID and terminal ID through hardware settings, eliminating the need for manual input. Additionally, devices can be pre-registered using an SQL script to streamline the process."
+    },
+    {
+      "q": "Is Smart RF Plus compatible with my existing Blue Yonder WMS setup?",
+      "a": "Yes. Smart RF Plus integrates natively with Blue Yonder WMS and supports both standard and custom RF screens. It operates using MOCA and respects your current security and configuration settings."
+    },
+    {
+      "q": "Can Smart RF Plus display multimedia or additional information on RF screens?",
+      "a": "Yes. It allows you to embed images, videos, and contextual data from Blue Yonder or external sources directly within your RF screens, all without modifying standard screens."
+    },
+    {
+      "q": "Is Smart RF Plus secure for enterprise use?",
+      "a": "Yes. It adheres to enterprise-grade security protocols, supports secure device registration, and ensures that terminal and user credentials are managed safely."
+    },
+    {
+      "q": "How does Smart RF Plus improve the user experience for warehouse staff?",
+      "a": "With features like auto-filling login details, touch-based interaction, and visual enhancements, users find it easier to learn and faster to operate, reducing training time and minimizing errors."
+    },
+    {
+      "q": "Can Smart RF Plus scale across multiple warehouses or sites?",
+      "a": "Yes. Its architecture supports multi-site deployment, allowing enterprises to maintain a consistent user experience and performance across locations with centralized management."
+    }
+  ],
+  "valueProposition": [],
+  "features": [],
   "logo": "/assets/images/products-icons/RfPlus.png",
-  "image": "/assets/images/products/images/RF++/RF-1.png",
+  "image": "/assets/images/products/images/RF++/RF1.png",
   "media": [
     {
       "type": "video",
@@ -38,32 +198,30 @@
     },
     {
       "type": "image",
-      "src": "/assets/images/products/images/RF++/RF-1.png"
+      "src": "/assets/images/products/images/RF++/RF1.png"
     },
     {
       "type": "image",
-      "src": "/assets/images/products/images/RF++/RF-2.png"
+      "src": "/assets/images/products/images/RF++/RF2.png"
     },
     {
       "type": "image",
-      "src": "/assets/images/products/images/RF++/RF-3.png"
+      "src": "/assets/images/products/images/RF++/RF1.gif"
     },
     {
       "type": "image",
-      "src": "/assets/images/products/images/RF++/RF-4.png"
+      "src": "/assets/images/products/images/RF++/RF2.gif"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/RF++/RF3.gif"
+    },
+    {
+      "type": "image",
+      "src": "/assets/images/products/images/RF++/RF4.gif"
     }
   ],
   "references": [
-    {
-      "label": "Barcodes",
-      "url": "https://autoupdate.oracular.com/smartis/rfplus/RF-Barcodes.pdf",
-      "kind": "pdf"
-    },
-    {
-      "label": "Product Page",
-      "url": "https://www.smart-is.com/what-we-do/smart-product/rf/",
-      "kind": "product-page"
-    },
     {
       "label": "Documentation",
       "url": "https://oracularis.github.io/smartrf",

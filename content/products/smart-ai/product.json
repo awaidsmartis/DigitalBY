@@ -1,0 +1,186 @@
+{
+  "id": "smart-ai",
+  "name": "Smart AI",
+  "category": "Enterprise AI",
+  "shortDescription": "The Cognitive Intelligence Layer for Enterprise Operations",
+  "description": "From integration to intelligence. Smart AI understands your business across systems—reasoning over operations like orders, inventory, and workflows to deliver unified, actionable intelligence. It unifies fragmented system states into a single business truth and empowers business and technical users to design, govern, and interact with their enterprise through a unified intelligence layer.",
+  "cta": {
+    "primary": {
+      "label": "View Documentation",
+      "url": "https://oracularis.github.io/smartai/"
+    },
+    "secondary": {
+      "label": "Visit Smart IS",
+      "url": "https://www.smart-is.com/"
+    }
+  },
+  "stats": [
+    {
+      "value": "TBD",
+      "label": "Active Deployments",
+      "note": "Application metrics will be added as Smart AI rolls out across organizations."
+    },
+    {
+      "value": "TBD",
+      "label": "Connected Systems",
+      "note": "Smart AI is designed to connect and reason across WMS, ERP, CRM, and analytics platforms."
+    },
+    {
+      "value": "TBD",
+      "label": "Weekly Interactions",
+      "note": "Usage and engagement metrics will be added soon."
+    }
+  ],
+  "highlights": [
+    { "value": "Unified", "label": "Single business truth across systems" },
+    { "value": "Governed", "label": "Permission-checked, role-based execution" },
+    { "value": "Extensible", "label": "MCP + managed integrations" },
+    { "value": "Observable", "label": "Traces, diffs, and execution visibility" }
+  ],
+  "keyFeatures": [
+    {
+      "title": "Built for Unified Operational Excellence",
+      "summary": "Smart AI makes it easy to connect enterprise systems, define business logic, and interact securely through Smart Chat.",
+      "bullets": [
+        "Unifies fragmented system states into a single business truth",
+        "Maps user intent to approved system actions",
+        "Secure, governed execution with clear observability"
+      ]
+    },
+    {
+      "title": "Developer-Friendly Interface",
+      "summary": "SmartFX Studio provides an intuitive interface to configure business logic, govern execution, and manage enterprise functions.",
+      "bullets": [
+        "Modern, Intuitive UI for managing projects, systems, and functions",
+        "Monaco Code Editor for Python, SQL, or MOCA/MSQL with syntax highlighting",
+        "Git Status Awareness with built-in diff viewer and revert options",
+        "Searchable Help Panel backed by your repo’s own content"
+      ]
+    },
+    {
+      "title": "Manage Connections and Credentials",
+      "summary": "Create connections to your systems and manage credentials securely from a centralized console.",
+      "bullets": [
+        "Create new connections: configure endpoints, secrets, and system details",
+        "Connect to leading platforms: OpenAI, Claude, Snowflake, enterprise systems, and more",
+        "Add or update credentials anytime with controlled access"
+      ]
+    },
+    {
+      "title": "MCP Server Integration",
+      "summary": "Expose enterprise functions as MCP tools for AI agents—bridging internal platforms with the broader AI ecosystem.",
+      "bullets": [
+        "Generate MCP links and publish live MCP servers from functions",
+        "Inspect & validate tool lists and test them end-to-end with Smart Chat",
+        "Export to MCP-compatible platforms like Microsoft Copilot, OpenAI, and Claude",
+        "Centralized connection management to update/revoke/regenerate links safely"
+      ]
+    },
+    {
+      "title": "Centralized Metadata Management",
+      "summary": "Keep every function consistent across your repository using shared tags, domains, and reusable collections.",
+      "bullets": [
+        "Tags & Domains: define reusable data types, enums, and required flags once",
+        "Input/Output collections: write once, reuse across teams and functions",
+        "Consistency at scale: prevent schema drift and keep systems predictable"
+      ]
+    },
+    {
+      "title": "Function Evaluation",
+      "summary": "Test how well your LLM selects the right tool, and detect ambiguity before going to production.",
+      "bullets": [
+        "AI-generated test questions to stress-test tool selection",
+        "Scored reports with traces showing what was sent and returned",
+        "Detects overlap, vague args, ambiguity, and execution reliability"
+      ]
+    },
+    {
+      "title": "Smart Chat",
+      "summary": "A secure conversational interface that interprets intent, applies business logic, and executes governed actions across connected systems.",
+      "bullets": [
+        "Ask questions that return live operational data (orders, inventory, shipments, devices)",
+        "Run approved actions and schedule workflows",
+        "Turn results into summaries, charts, and dashboards",
+        "Full observability: view intent logic and the invoked command"
+      ]
+    }
+  ],
+  "benefits": [
+    {
+      "title": "Unified AI Architecture",
+      "description": "Combines Smart Chat, Enterprise Mesh, and Smart FX into a single platform for building, governing, and executing enterprise AI workflows end to end."
+    },
+    {
+      "title": "Secure Execution Layer",
+      "description": "Ensures every request is validated, permission-checked, and executed through approved logic with full governance and role-based access control."
+    },
+    {
+      "title": "Function-Driven Design",
+      "description": "Define reusable, version-controlled Smart Functions that standardize how AI interacts with enterprise systems and executes business logic."
+    },
+    {
+      "title": "Multi-System Intelligence",
+      "description": "Understand and reason across WMS, ERP, CRM, and more—unifying fragmented system states into a single, consistent business view."
+    },
+    {
+      "title": "Built-In Evaluation & Testing",
+      "description": "Validate tool selection, detect ambiguity, and test business logic before deployment using integrated evaluation frameworks and reporting."
+    },
+    {
+      "title": "Extensible Integration Layer",
+      "description": "Connect external systems via native protocols and expose capabilities as tools for AI agents through MCP and managed integrations."
+    }
+  ],
+  "useCases": [
+    {
+      "title": "Enterprise System Orchestration",
+      "description": "Design and execute workflows across WMS, ERP, and other systems through unified, governed logic."
+    },
+    {
+      "title": "Multi-System Integration",
+      "description": "Connect and manage multiple enterprise systems in one place, enabling seamless data flow and interoperability."
+    },
+    {
+      "title": "AI-Driven Operations",
+      "description": "Leverage AI to automate decision-making, generate insights, and enhance operational efficiency in real time."
+    },
+    {
+      "title": "Testing & Validation",
+      "description": "Validate business logic, tool selection, and system behavior before deployment using built-in evaluation and testing capabilities."
+    },
+    {
+      "title": "Real-Time Insights & Dashboards",
+      "description": "Transform live system data into actionable insights, summaries, and visual dashboards for better decision-making."
+    },
+    {
+      "title": "Troubleshooting & Debugging",
+      "description": "Identify and resolve issues quickly with full visibility into execution flows, system interactions, and responses."
+    }
+  ],
+  "blogs": [],
+  "faqs": [],
+  "valueProposition": [],
+  "features": [],
+  "logo": "/assets/images/icons/smart-is-small.png",
+  "image": "/assets/images/icons/smart-is-small.png",
+  "media": [
+    { "type": "image", "src": "/assets/images/icons/smart-is-small.png", "alt": "Smart AI" }
+  ],
+  "references": [
+    {
+      "label": "Documentation",
+      "url": "https://oracularis.github.io/smartai/",
+      "kind": "documentation"
+    },
+    {
+      "label": "Smart IS",
+      "url": "https://www.smart-is.com/",
+      "kind": "other"
+    }
+  ],
+  "price": "Contact for pricing",
+  "specs": {},
+  "isNew": true,
+  "rating": 4.8,
+  "reviews": 0
+}

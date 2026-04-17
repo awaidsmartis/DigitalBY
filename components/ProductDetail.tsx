@@ -15,6 +15,7 @@ import {
   Zap,
 } from 'lucide-react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import BottomLeftControls from './BottomLeftControls'
 
@@ -30,9 +31,11 @@ export default function ProductDetail({
   allProducts,
   onClose,
 }: ProductDetailProps) {
+  const router = useRouter()
   const [product, setProduct] = useState(initialProduct)
   const [direction, setDirection] = useState(0)
   const [selectedMediaIndex, setSelectedMediaIndex] = useState(0)
+  const [tab, setTab] = useState('overview')
 
   const videoRefs = useRef<Record<number, HTMLVideoElement | null>>({})
 
@@ -81,6 +84,7 @@ export default function ProductDetail({
       setDirection(newIndex > currentIndex ? 1 : -1)
       setProduct(allProducts[newIndex])
       setSelectedMediaIndex(0)
+      setTab('overview')
       // reset embla to first slide
       requestAnimationFrame(() => mainEmbla?.scrollTo(0, true))
     }
@@ -110,6 +114,57 @@ export default function ProductDetail({
       return url
     }
   }
+
+  const isSmartAppsUrl = (url: string) => {
+    try {
+      const host = new URL(url).hostname.toLowerCase()
+      return host === 'smartapps.com' || host.endsWith('.smartapps.com')
+    } catch {
+      return false
+    }
+  }
+
+  const isSmartIsProductUrl = (url: string) => {
+    try {
+      const u = new URL(url)
+      const host = u.hostname.toLowerCase()
+      const pathname = u.pathname.toLowerCase()
+      return host === 'www.smart-is.com' && pathname.includes('/what-we-do/smart-product')
+    } catch {
+      return false
+    }
+  }
+
+  const previewBenefits = (product.benefits ?? []).slice(0, 3)
+  const previewKeyFeatures = (product.keyFeatures ?? []).slice(0, 6)
+  const previewHighlights = (product.highlights ?? []).slice(0, 6)
+
+  const isRichProduct =
+    Boolean(product.stats?.length) ||
+    Boolean(product.highlights?.length) ||
+    Boolean(product.keyFeatures?.length) ||
+    Boolean(product.benefits?.length) ||
+    Boolean(product.useCases?.length) ||
+    Boolean(product.faqs?.length)
+
+  const highlightList = previewHighlights
+    .map((h) => {
+      const value = (h.value ?? '').trim()
+      const label = (h.label ?? '').trim()
+      if (!value) return null
+
+      // Many products use highlights in 2 different ways:
+      // 1) Metric highlight (e.g., value="100%", label="Blue Yonder Compatible")
+      // 2) Marketing highlight (e.g., value="Boost Productivity", label="Long description...")
+      // For the main modal we keep it clean:
+      // - Metric highlights: show a small value pill + the short label
+      // - Marketing highlights: show just the title (value)
+      const isMetricLike = /\d|%|\+|tbd/i.test(value)
+      return { value, label, isMetricLike }
+    })
+    .filter(Boolean) as Array<{ value: string; label: string; isMetricLike: boolean }>
+
+  const detailsUrl = `/products/${product.id}/details`
 
   return (
     <AnimatePresence mode="wait">
@@ -224,7 +279,7 @@ export default function ProductDetail({
                             mainEmbla?.scrollTo(idx)
                           }}
                           className={
-                            'relative h-20 w-28 md:h-24 md:w-32 lg:h-20 lg:w-28 rounded-2xl overflow-hidden border transition ' +
+                            'relative shrink-0 h-20 w-28 md:h-24 md:w-32 lg:h-20 lg:w-28 rounded-2xl overflow-hidden border transition ' +
                             (isActive
                               ? 'border-white/60 bg-white/10'
                               : 'border-white/10 bg-white/5 hover:bg-white/10')
@@ -288,33 +343,51 @@ export default function ProductDetail({
             </div>
 
             <div className="mt-6 flex-1 min-h-0">
-              <Tabs defaultValue="overview" className="h-full">
-                <TabsList className="bg-white/5 border border-white/10 text-slate-400">
-                  <TabsTrigger
-                    value="overview"
-                    className="text-slate-300 data-[state=active]:text-slate-900"
+              <Tabs
+                value={tab}
+                onValueChange={(v) => {
+                  setTab(v)
+                }}
+                className="h-full"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <TabsList className="bg-white/5 border border-white/10 text-slate-400">
+                    <TabsTrigger
+                      value="overview"
+                      className="text-slate-300 data-[state=active]:text-slate-900"
+                    >
+                      Overview
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="value"
+                      className="text-slate-300 data-[state=active]:text-slate-900"
+                    >
+                      Value
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="features"
+                      className="text-slate-300 data-[state=active]:text-slate-900"
+                    >
+                      Features
+                    </TabsTrigger>
+                    <TabsTrigger
+                      value="refs"
+                      className="text-slate-300 data-[state=active]:text-slate-900"
+                    >
+                      References
+                    </TabsTrigger>
+                  </TabsList>
+
+                  <button
+                    type="button"
+                    onClick={() => router.push(detailsUrl)}
+                    className="shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 text-white font-bold transition"
+                    title="Open rich details"
                   >
-                    Overview
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="value"
-                    className="text-slate-300 data-[state=active]:text-slate-900"
-                  >
-                    Value
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="features"
-                    className="text-slate-300 data-[state=active]:text-slate-900"
-                  >
-                    Features
-                  </TabsTrigger>
-                  <TabsTrigger
-                    value="refs"
-                    className="text-slate-300 data-[state=active]:text-slate-900"
-                  >
-                    References
-                  </TabsTrigger>
-                </TabsList>
+                    <ExternalLink size={16} />
+                    Details
+                  </button>
+                </div>
 
                 <TabsContent value="overview" className="mt-4">
                   <ScrollArea className="h-[calc(100vh-380px)] sm:h-[420px] lg:h-[calc(100vh-320px)] pr-4">
@@ -322,19 +395,38 @@ export default function ProductDetail({
                       <p className="text-slate-200 text-xl font-semibold mb-4">{product.shortDescription}</p>
                       <p className="text-lg text-slate-300 leading-relaxed">{product.description}</p>
 
-                      {product.references?.[0]?.url && (
-                        <div className="mt-8 rounded-3xl border border-white/10 bg-white/5 p-6">
-                          <div className="text-sm text-slate-400 mb-2">Quick link</div>
-                          <a
-                            href={product.references[0].url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-primary text-white font-bold hover-primary transition"
-                          >
-                            <ExternalLink size={18} />
-                            Open {product.references[0].label}
-                          </a>
-                        </div>
+                      {/* Keep main modal lightweight: show highlight *headings only* (no long descriptions). */}
+                      {!!highlightList.length && (
+                        <section className="mt-8">
+                          <h3 className="text-2xl font-black text-white mb-4">Highlights</h3>
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                            {highlightList.map((h, idx) => {
+                              const showLabel =
+                                h.isMetricLike ||
+                                // Only show non-metric labels if they are short enough (avoid clutter)
+                                (h.label && h.label.length <= 72)
+
+                              return (
+                                <motion.div
+                                  key={`${h.value}-${h.label}-${idx}`}
+                                  initial={{ opacity: 0, y: 10 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ delay: Math.min(0.03 * idx, 0.15) }}
+                                  className="rounded-3xl border border-white/10 bg-white/5 p-5 h-[132px] flex flex-col overflow-hidden"
+                                >
+                                  <div className="text-white font-black text-lg leading-snug break-words line-clamp-2">
+                                    {h.value}
+                                  </div>
+                                  {showLabel ? (
+                                    <div className="text-slate-300 text-sm mt-2 leading-snug break-words line-clamp-2">
+                                      {h.label || '—'}
+                                    </div>
+                                  ) : null}
+                                </motion.div>
+                              )
+                            })}
+                          </div>
+                        </section>
                       )}
                     </div>
                   </ScrollArea>
@@ -343,21 +435,44 @@ export default function ProductDetail({
                 <TabsContent value="value" className="mt-4">
                   <ScrollArea className="h-[calc(100vh-380px)] sm:h-[420px] lg:h-[calc(100vh-320px)] pr-4">
                     <div className="pb-16">
-                      <h3 className="text-2xl font-black text-white mb-4">Value Proposition</h3>
-                      <div className="space-y-3">
-                        {(product.valueProposition ?? []).map((v, idx) => (
-                          <motion.div
-                            key={idx}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.05 * idx }}
-                            className="flex items-start gap-3"
-                          >
-                            <div className="mt-2 w-2 h-2 rounded-full bg-primary flex-shrink-0" />
-                            <p className="text-slate-200">{v}</p>
-                          </motion.div>
-                        ))}
-                      </div>
+                      {/* For rich products, show the shared “Benefits” content (keep it clean). */}
+                      {isRichProduct && previewBenefits.length ? (
+                        <section>
+                          <h3 className="text-2xl font-black text-white mb-4">Value</h3>
+                          <div className="space-y-3">
+                            {previewBenefits.map((b, idx) => (
+                              <motion.div
+                                key={b.title}
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 0.03 * idx }}
+                                className="flex items-start gap-3"
+                              >
+                                <div className="mt-2 w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+                                <p className="text-slate-200">{b.title}</p>
+                              </motion.div>
+                            ))}
+                          </div>
+                        </section>
+                      ) : (
+                        <section>
+                          <h3 className="text-2xl font-black text-white mb-4">Value Proposition</h3>
+                          <div className="space-y-3">
+                            {(product.valueProposition ?? []).map((v, idx) => (
+                              <motion.div
+                                key={idx}
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 0.05 * idx }}
+                                className="flex items-start gap-3"
+                              >
+                                <div className="mt-2 w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+                                <p className="text-slate-200">{v}</p>
+                              </motion.div>
+                            ))}
+                          </div>
+                        </section>
+                      )}
                     </div>
                   </ScrollArea>
                 </TabsContent>
@@ -366,20 +481,44 @@ export default function ProductDetail({
                   <ScrollArea className="h-[calc(100vh-380px)] sm:h-[420px] lg:h-[calc(100vh-320px)] pr-4">
                     <div className="pb-16">
                       <h3 className="text-2xl font-black text-white mb-4">Features</h3>
-                      <div className="space-y-3">
-                        {(product.features ?? []).map((f, idx) => (
-                          <motion.div
-                            key={idx}
-                            initial={{ opacity: 0, x: -10 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.03 * idx }}
-                            className="flex items-start gap-3"
-                          >
-                            <Zap size={18} className="text-primary flex-shrink-0 mt-0.5" />
-                            <p className="text-slate-200">{f}</p>
-                          </motion.div>
-                        ))}
-                      </div>
+
+                      {!!previewKeyFeatures.length && (
+                        <section className="mb-8">
+                          <h4 className="text-white font-black text-lg mb-3">Key features</h4>
+                          <div className="space-y-3">
+                            {previewKeyFeatures.map((kf, idx) => (
+                              <motion.div
+                                key={kf.title}
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: 0.03 * idx }}
+                                className="flex items-start gap-3"
+                              >
+                                <Zap size={18} className="text-primary flex-shrink-0 mt-0.5" />
+                                <p className="text-slate-200">{kf.title}</p>
+                              </motion.div>
+                            ))}
+                          </div>
+                        </section>
+                      )}
+
+                      {/* Avoid mixing legacy flat feature lists with the shared rich Key Features content */}
+                      {!isRichProduct && (
+                        <div className="space-y-3">
+                          {(product.features ?? []).map((f, idx) => (
+                            <motion.div
+                              key={idx}
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: 0.03 * idx }}
+                              className="flex items-start gap-3"
+                            >
+                              <Zap size={18} className="text-primary flex-shrink-0 mt-0.5" />
+                              <p className="text-slate-200">{f}</p>
+                            </motion.div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </ScrollArea>
                 </TabsContent>
@@ -390,7 +529,9 @@ export default function ProductDetail({
                       <h3 className="text-2xl font-black text-white mb-4">References</h3>
                       {product.references?.length ? (
                         <div className="grid grid-cols-1 gap-4">
-                          {product.references.map((r) => (
+                          {product.references
+                            .filter(r => r?.url && !isSmartAppsUrl(r.url) && !isSmartIsProductUrl(r.url))
+                            .map((r) => (
                             <a
                               key={r.label}
                               href={r.url}
