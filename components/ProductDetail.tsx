@@ -94,17 +94,85 @@ export default function ProductDetail({
     thumbEmbla.scrollTo(selectedMediaIndex)
   }, [thumbEmbla, selectedMediaIndex])
 
-  // If we deep-link into details, open them and scroll down smoothly once mounted.
-  useEffect(() => {
-    if (!initialShowRichDetails) return
+  const computeRichDetailsScrollTop = () => {
+    const container = scrollerRef.current
+    const el = richDetailsRef.current
+    if (!container || !el) return null
 
-    // Ensure the section exists before trying to scroll.
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
-        richDetailsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      })
+    const containerRect = container.getBoundingClientRect()
+    const elRect = el.getBoundingClientRect()
+    const nextTop = container.scrollTop + (elRect.top - containerRect.top) - 16
+    return Math.max(0, nextTop)
+  }
+
+  const scrollToRichDetails = (behavior: ScrollBehavior = 'smooth') => {
+    const container = scrollerRef.current
+    const top = computeRichDetailsScrollTop()
+    if (!container || top == null) return
+    container.scrollTo({ top, behavior })
+  }
+
+  // When the rich details section becomes visible, scroll the modal container to it.
+  // This avoids intermittent failures caused by trying to scroll before the ref is attached.
+  useEffect(() => {
+    if (!showRichDetails) return
+
+    // The rich details body loads lazily and can expand after the first render.
+    // If we scroll before the scroll container has enough height, the browser clamps
+    // the scrollTop and it looks like a small/partial scroll. We wait for the rich
+    // area to stop resizing (or time out), then do a single smooth scroll.
+    const container = scrollerRef.current
+    const el = richDetailsRef.current
+    if (!container || !el) return
+
+    let done = false
+    let debounceTimer: number | undefined
+    let maxTimer: number | undefined
+    let retryTimer: number | undefined
+
+    const attemptScroll = () => {
+      const top = computeRichDetailsScrollTop()
+      if (top == null) return false
+
+      const maxScrollTop = Math.max(0, container.scrollHeight - container.clientHeight)
+      if (maxScrollTop + 4 < top) return false
+
+      container.scrollTo({ top, behavior: 'smooth' })
+      return true
+    }
+
+    const finish = () => {
+      if (done) return
+      if (attemptScroll()) {
+        done = true
+        cleanup()
+        return
+      }
+      // Still no room to scroll; try again shortly.
+      retryTimer = window.setTimeout(finish, 120)
+    }
+
+    const cleanup = () => {
+      ro.disconnect()
+      if (debounceTimer) window.clearTimeout(debounceTimer)
+      if (maxTimer) window.clearTimeout(maxTimer)
+      if (retryTimer) window.clearTimeout(retryTimer)
+    }
+
+    const ro = new ResizeObserver(() => {
+      if (done) return
+      if (debounceTimer) window.clearTimeout(debounceTimer)
+      debounceTimer = window.setTimeout(finish, 160)
     })
-  }, [initialShowRichDetails])
+
+    ro.observe(el)
+    // Kick once in case we already have enough height.
+    debounceTimer = window.setTimeout(finish, 60)
+    // Fail-safe: never wait forever.
+    maxTimer = window.setTimeout(finish, 1800)
+
+    return cleanup
+  }, [showRichDetails, product.id])
 
   const navigate = (newIndex: number) => {
     if (newIndex >= 0 && newIndex < allProducts.length) {
@@ -243,7 +311,11 @@ export default function ProductDetail({
         )}
 
         {/* Content Grid (no page scroll on desktop; panel scroll inside tabs) */}
-        <div ref={scrollerRef} className="h-screen overflow-y-auto overscroll-contain">
+        <div
+          ref={scrollerRef}
+          data-scroll-container="product-detail-modal"
+          className="h-screen overflow-y-auto overscroll-contain"
+        >
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 p-6 md:p-10 lg:p-14 min-h-full">
             {/* Left: Media + thumbs */}
             <motion.div
@@ -373,12 +445,22 @@ export default function ProductDetail({
               <Tabs
                 value={tab}
                 onValueChange={(v) => {
+                  if (v === 'details') {
+                    // Details behaves like a tab control, but we keep the current tab
+                    // selected and instead open + scroll to the rich details section.
+                    if (showRichDetails) {
+                      scrollToRichDetails('smooth')
+                    } else {
+                      setShowRichDetails(true)
+                    }
+                    return
+                  }
                   setTab(v)
                 }}
                 className="h-full"
               >
-                <div className="flex items-center justify-between gap-3">
-                  <TabsList className="bg-white/5 border border-white/10 text-slate-400">
+                <div className="flex items-center gap-3">
+                  <TabsList className="w-full bg-white/5 border border-white/10 text-slate-400 gap-1 px-1">
                     <TabsTrigger
                       value="overview"
                       className="text-slate-300 data-[state=active]:text-slate-900"
@@ -403,26 +485,19 @@ export default function ProductDetail({
                     >
                       References
                     </TabsTrigger>
-                  </TabsList>
 
-                  <button
-                    type="button"
-                    onClick={() => {
-                      // Inline brochure-style details (no navigation)
-                      setShowRichDetails(true)
-                      // Wait for section to render then scroll within the modal container
-                      requestAnimationFrame(() => {
-                        requestAnimationFrame(() => {
-                          richDetailsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-                        })
-                      })
-                    }}
-                    className="shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 text-white font-bold transition"
-                    title="View rich details"
-                  >
-                    <ChevronDown size={16} />
-                    Details
-                  </button>
+                    {/* Rightmost primary pill: opens the rich details section */}
+                    <div className="ml-auto pl-2 border-l border-white/10">
+                      <TabsTrigger
+                        value="details"
+                        title="View rich details"
+                        className="flex-none h-8 rounded-full bg-primary text-white font-black border-primary/40 px-4 hover-primary data-[state=active]:bg-primary data-[state=active]:text-white"
+                      >
+                        <ChevronDown size={16} />
+                        Details
+                      </TabsTrigger>
+                    </div>
+                  </TabsList>
                 </div>
 
                 <TabsContent value="overview" className="mt-4">

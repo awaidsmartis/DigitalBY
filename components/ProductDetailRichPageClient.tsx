@@ -158,6 +158,22 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
   const scrollToSection = (id: string) => {
     const el = document.getElementById(sectionId(id))
     if (!el) return
+
+    // Embedded mode lives inside the ProductDetail modal's internal scroll container.
+    // Scrolling the container directly is more reliable than relying on `scrollIntoView`
+    // (which can occasionally land a section under the sticky sub-nav).
+    if (embedded) {
+      const container = el.closest('[data-scroll-container="product-detail-modal"]') as HTMLElement | null
+      if (container) {
+        const containerRect = container.getBoundingClientRect()
+        const elRect = el.getBoundingClientRect()
+        const stickyOffset = 88 // sticky sub-nav height + spacing
+        const nextTop = container.scrollTop + (elRect.top - containerRect.top) - stickyOffset
+        container.scrollTo({ top: Math.max(0, nextTop), behavior: 'smooth' })
+        return
+      }
+    }
+
     el.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }
 
@@ -313,7 +329,7 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
       >
         {/* Embedded mode: horizontal section nav (tab-like) */}
         {embedded ? (
-          <div className="sticky top-0 z-10 border-b border-white/10 bg-black/25 backdrop-blur-xl px-5 md:px-8 py-3 mb-6 rounded-t-[32px]">
+          <div className="sticky top-0 z-30 border-b border-white/10 bg-digitalby px-5 md:px-8 py-3 mb-6 rounded-t-[32px] shadow-[0_10px_30px_-20px_rgba(0,0,0,0.85)]">
             <div
               className="flex items-center gap-2 overflow-x-auto pr-2
                 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
