@@ -3,10 +3,11 @@
 import LoadingScreen from '@/components/LoadingScreen'
 import ProductDetail from '@/components/ProductDetail'
 import { useProducts } from '@/hooks/useProducts'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 
 export default function ProductDetailRouteClient() {
   const router = useRouter()
+  const searchParams = useSearchParams()
   const params = useParams()
   const id = params.id as string
   const { state, productById } = useProducts()
@@ -41,6 +42,7 @@ export default function ProductDetailRouteClient() {
       product={product}
       allProducts={state.products}
       onClose={() => router.push('/products')}
+      initialShowRichDetails={searchParams.get('details') === '1'}
     />
   )
 }

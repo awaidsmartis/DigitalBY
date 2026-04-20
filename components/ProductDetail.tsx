@@ -6,6 +6,7 @@ import { Product } from '@/lib/products'
 import useEmblaCarousel from 'embla-carousel-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   ExternalLink,
@@ -14,28 +15,42 @@ import {
   X,
   Zap,
 } from 'lucide-react'
+import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import BottomLeftControls from './BottomLeftControls'
+
+const ProductDetailRichPageClient = dynamic(() => import('./ProductDetailRichPageClient'), {
+  // Lightweight fallback; we just reserve space visually
+  loading: () => (
+    <div className="rounded-3xl border border-white/10 bg-white/5 p-6 text-slate-300">
+      Loading details…
+    </div>
+  ),
+})
 
 interface ProductDetailProps {
   product: Product
   allProducts: Product[]
   onClose: () => void
+  /** Used when deep-linking from the legacy details route. */
+  initialShowRichDetails?: boolean
 }
-
 
 export default function ProductDetail({
   product: initialProduct,
   allProducts,
   onClose,
+  initialShowRichDetails,
 }: ProductDetailProps) {
-  const router = useRouter()
   const [product, setProduct] = useState(initialProduct)
   const [direction, setDirection] = useState(0)
   const [selectedMediaIndex, setSelectedMediaIndex] = useState(0)
   const [tab, setTab] = useState('overview')
+  const [showRichDetails, setShowRichDetails] = useState(Boolean(initialShowRichDetails))
+
+  const scrollerRef = useRef<HTMLDivElement | null>(null)
+  const richDetailsRef = useRef<HTMLDivElement | null>(null)
 
   const videoRefs = useRef<Record<number, HTMLVideoElement | null>>({})
 
@@ -79,14 +94,28 @@ export default function ProductDetail({
     thumbEmbla.scrollTo(selectedMediaIndex)
   }, [thumbEmbla, selectedMediaIndex])
 
+  // If we deep-link into details, open them and scroll down smoothly once mounted.
+  useEffect(() => {
+    if (!initialShowRichDetails) return
+
+    // Ensure the section exists before trying to scroll.
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        richDetailsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      })
+    })
+  }, [initialShowRichDetails])
+
   const navigate = (newIndex: number) => {
     if (newIndex >= 0 && newIndex < allProducts.length) {
       setDirection(newIndex > currentIndex ? 1 : -1)
       setProduct(allProducts[newIndex])
       setSelectedMediaIndex(0)
       setTab('overview')
+      setShowRichDetails(false)
       // reset embla to first slide
       requestAnimationFrame(() => mainEmbla?.scrollTo(0, true))
+      requestAnimationFrame(() => scrollerRef.current?.scrollTo({ top: 0 }))
     }
   }
 
@@ -164,8 +193,6 @@ export default function ProductDetail({
     })
     .filter(Boolean) as Array<{ value: string; label: string; isMetricLike: boolean }>
 
-  const detailsUrl = `/products/${product.id}/details`
-
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -216,7 +243,7 @@ export default function ProductDetail({
         )}
 
         {/* Content Grid (no page scroll on desktop; panel scroll inside tabs) */}
-        <div className="h-screen overflow-y-auto lg:overflow-hidden">
+        <div ref={scrollerRef} className="h-screen overflow-y-auto overscroll-contain">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 p-6 md:p-10 lg:p-14 min-h-full">
             {/* Left: Media + thumbs */}
             <motion.div
@@ -380,11 +407,20 @@ export default function ProductDetail({
 
                   <button
                     type="button"
-                    onClick={() => router.push(detailsUrl)}
+                    onClick={() => {
+                      // Inline brochure-style details (no navigation)
+                      setShowRichDetails(true)
+                      // Wait for section to render then scroll within the modal container
+                      requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                          richDetailsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                        })
+                      })
+                    }}
                     className="shrink-0 inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 text-white font-bold transition"
-                    title="Open rich details"
+                    title="View rich details"
                   >
-                    <ExternalLink size={16} />
+                    <ChevronDown size={16} />
                     Details
                   </button>
                 </div>
@@ -574,6 +610,49 @@ export default function ProductDetail({
               {currentIndex + 1} of {allProducts.length}
             </p>
             </motion.div>
+
+            {/* Inline rich details section (brochure style) - full width */}
+            {showRichDetails ? (
+              <div ref={richDetailsRef} className="lg:col-span-2 pt-2 pb-24">
+                <div className="rounded-[32px] border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.03] backdrop-blur p-5 md:p-8">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                    <div className="min-w-0">
+                      <div className="text-white font-black text-2xl md:text-3xl leading-tight">
+                        {product.name}
+                      </div>
+                      <div className="text-slate-300 mt-1">{product.shortDescription}</div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setShowRichDetails(false)
+                          requestAnimationFrame(() => {
+                            scrollerRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+                          })
+                        }}
+                        className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 text-white font-bold transition"
+                      >
+                        <X size={16} />
+                        Close
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Reuse exact layout/structure/tab system from the existing rich details page */}
+                  <ProductDetailRichPageClient
+                    productId={product.id}
+                    embedded
+                    onBack={() => {
+                      setShowRichDetails(false)
+                      requestAnimationFrame(() => {
+                        scrollerRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
+                      })
+                    }}
+                  />
+                </div>
+              </div>
+            ) : null}
           </div>
         </div>
       </motion.div>

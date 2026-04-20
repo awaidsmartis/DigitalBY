@@ -1,4 +1,4 @@
-import ProductDetailRichPageClient from '@/components/ProductDetailRichPageClient'
+import { redirect } from 'next/navigation'
 
 export default async function ProductDetailsPage({
   params,
@@ -6,5 +6,6 @@ export default async function ProductDetailsPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  return <ProductDetailRichPageClient productId={id} />
+  // Details are now inline on the main product page (single-page brochure experience)
+  redirect(`/products/${id}?details=1`)
 }
