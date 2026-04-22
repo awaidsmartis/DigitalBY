@@ -14,6 +14,7 @@ interface ServicesScreenProps {
 
 export default function ServicesScreen({ onBack }: ServicesScreenProps) {
   const rootRef = useRef<HTMLDivElement>(null)
+  const mobileDetailsRef = useRef<HTMLDivElement>(null)
   const [mode, setMode] = useState<'grid' | 'detail'>('grid')
   const [selectedId, setSelectedId] = useState<string>(services[0]?.id)
   const selected = useMemo(
@@ -24,6 +25,10 @@ export default function ServicesScreen({ onBack }: ServicesScreenProps) {
   const openDetail = (id: string) => {
     setSelectedId(id)
     setMode('detail')
+    // On mobile/portrait, bring the details panel into view.
+    requestAnimationFrame(() => {
+      mobileDetailsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    })
   }
 
   const backToGrid = () => {
@@ -39,7 +44,7 @@ export default function ServicesScreen({ onBack }: ServicesScreenProps) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
-      className="relative w-full h-screen overflow-y-auto bg-digitalby text-white px-6 py-12"
+      className="relative w-full h-screen overflow-y-auto overscroll-contain bg-digitalby text-white px-6 py-12"
     >
       <BottomLeftControls />
       {/* Back button (fixed so it stays visible while scrolling) */}
@@ -47,7 +52,7 @@ export default function ServicesScreen({ onBack }: ServicesScreenProps) {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         onClick={onBack}
-        className="fixed top-8 left-8 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300 backdrop-blur-sm z-20"
+        className="fixed top-4 left-4 sm:top-8 sm:left-8 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300 backdrop-blur-sm z-20"
       >
         <ChevronLeft size={24} />
       </motion.button>
@@ -151,7 +156,12 @@ export default function ServicesScreen({ onBack }: ServicesScreenProps) {
                             <motion.button
                               key={service.id}
                               layoutId={`service-card-${service.id}`}
-                              onClick={() => setSelectedId(service.id)}
+                              onClick={() => {
+                                setSelectedId(service.id)
+                                requestAnimationFrame(() => {
+                                  mobileDetailsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                                })
+                              }}
                               className="w-full text-left px-4 py-4 rounded-2xl border bg-white text-slate-900 border-white/20 shadow-xl"
                             >
                               <div className="flex items-center gap-4">
@@ -178,15 +188,21 @@ export default function ServicesScreen({ onBack }: ServicesScreenProps) {
                         return (
                           <button
                             key={service.id}
-                            onClick={() => setSelectedId(service.id)}
+                            onClick={() => {
+                              setSelectedId(service.id)
+                              requestAnimationFrame(() => {
+                                mobileDetailsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+                              })
+                            }}
                             className="w-full text-left px-4 py-4 rounded-2xl border bg-white/5 hover:bg-white/10 border-white/10 transition"
+                            type="button"
                           >
                             <div className="flex items-center gap-4">
                               <div className="relative w-11 h-11 rounded-2xl bg-white/10 border border-white/10 overflow-hidden">
                                 <Image src={service.icon} alt={service.title} fill className="object-contain p-2" />
                               </div>
-                              <div>
-                                <div className="text-base font-black text-white">{service.title}</div>
+                              <div className="min-w-0">
+                                <div className="text-base font-black text-white truncate">{service.title}</div>
                                 <div className="text-xs text-slate-400">{service.bullets.length} capabilities</div>
                               </div>
                             </div>
@@ -197,8 +213,50 @@ export default function ServicesScreen({ onBack }: ServicesScreenProps) {
                   </div>
                 </div>
 
+                {/* Mobile/portrait: keep details visible BELOW the list (redesign), not hidden */}
+                <div
+                  ref={mobileDetailsRef}
+                  className="lg:hidden rounded-[28px] border border-white/10 bg-white/5 backdrop-blur-md p-5 sm:p-6 overflow-hidden"
+                >
+                  <AnimatePresence mode="wait">
+                    {selected && (
+                      <motion.div
+                        key={`mobile-${selected.id}`}
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -12 }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="relative w-12 h-12 rounded-2xl bg-white border border-white/20 shadow-xl overflow-hidden shrink-0">
+                            <Image src={selected.icon} alt={selected.title} fill className="object-contain p-2" />
+                          </div>
+                          <div className="min-w-0">
+                            <h2 className="text-xl font-black leading-tight break-words">{selected.title}</h2>
+                            <p className="text-slate-400 text-sm">Capabilities</p>
+                          </div>
+                        </div>
+
+                        <ScrollArea className="h-[360px] pr-2">
+                          <div className="space-y-2">
+                            {selected.bullets.map((b) => (
+                              <div
+                                key={b}
+                                className="rounded-xl border border-white/10 bg-black/20 p-3 flex items-start gap-3"
+                              >
+                                <div className="mt-2 w-2 h-2 rounded-full bg-primary shrink-0" />
+                                <p className="text-slate-200 text-sm leading-snug break-words">{b}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </ScrollArea>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+
                 {/* Right details */}
-                <div className="rounded-[28px] border border-white/10 bg-white/5 backdrop-blur-md p-8 md:p-10 min-h-[420px] overflow-hidden">
+                <div className="hidden lg:block rounded-[28px] border border-white/10 bg-white/5 backdrop-blur-md p-8 md:p-10 min-h-[420px] overflow-hidden">
                   <AnimatePresence mode="wait">
                     {selected && (
                       <motion.div

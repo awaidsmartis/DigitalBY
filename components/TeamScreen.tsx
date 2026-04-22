@@ -26,19 +26,19 @@ export default function TeamScreen({ onBack }: TeamScreenProps) {
   return (
     <LayoutGroup id="team">
       <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.25 }}
-      className="relative w-full h-screen overflow-y-auto bg-digitalby text-white px-6 py-12"
-    >
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.25 }}
+        className="relative w-full h-screen overflow-y-auto overscroll-contain bg-digitalby text-white px-6 py-12"
+      >
       <BottomLeftControls />
       {/* Back button */}
       <motion.button
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         onClick={onBack}
-        className="fixed top-8 left-8 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300 backdrop-blur-sm z-20"
+        className="fixed top-4 left-4 sm:top-8 sm:left-8 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300 backdrop-blur-sm z-20"
       >
         <ChevronLeft size={24} />
       </motion.button>
@@ -125,7 +125,7 @@ export default function TeamScreen({ onBack }: TeamScreenProps) {
               exit={{ opacity: 0 }}
             />
 
-            <div className="absolute inset-0 p-4 sm:p-8 flex items-center justify-center">
+            <div className="absolute inset-0 p-4 sm:p-8 flex items-start sm:items-center justify-center overflow-y-auto overscroll-contain">
               <motion.div
                 layoutId={`team-card-${selected.id}`}
                 className="relative w-[min(980px,calc(100vw-2rem))] rounded-[32px] overflow-hidden border border-white/10 bg-slate-950/95 shadow-2xl text-white"
@@ -133,14 +133,14 @@ export default function TeamScreen({ onBack }: TeamScreenProps) {
                 {/* Close */}
                 <button
                   onClick={() => setSelected(null)}
-                  className="absolute top-5 right-5 z-10 w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center text-white"
+                  className="absolute top-3 right-3 sm:top-5 sm:right-5 z-10 w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center text-white"
                   aria-label="Close"
                 >
                   <X size={18} />
                 </button>
 
                 {/* Header */}
-                <div className="px-8 pt-8 pb-6 border-b border-white/10">
+                <div className="px-5 sm:px-8 pt-6 sm:pt-8 pb-4 sm:pb-6 border-b border-white/10">
                   <motion.div
                     layoutId={`team-name-${selected.id}`}
                     className="text-3xl md:text-4xl font-black text-white"
@@ -152,18 +152,18 @@ export default function TeamScreen({ onBack }: TeamScreenProps) {
 
                 {/* Body */}
                 <div className="grid grid-cols-1 md:grid-cols-[380px_1fr] gap-0 md:gap-6">
-                  <div className="p-8">
+                  <div className="p-5 sm:p-8">
                     <motion.div
                       layoutId={`team-img-${selected.id}`}
-                      className="relative w-full h-[360px] md:h-[440px] rounded-3xl overflow-hidden bg-white/5 border border-white/10"
+                      className="relative w-full h-[300px] sm:h-[360px] md:h-[440px] rounded-3xl overflow-hidden bg-white/5 border border-white/10"
                     >
                       <Image src={selected.image} alt={selected.name} fill className="object-cover object-top" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent" />
                     </motion.div>
                   </div>
 
-                  <div className="p-8 pt-0 md:pt-8 md:pl-0 min-h-0">
-                    <ScrollArea className="h-[260px] md:h-[440px] pr-4">
+                  <div className="p-5 sm:p-8 pt-0 md:pt-8 md:pl-0 min-h-0">
+                    <ScrollArea className="h-[240px] sm:h-[260px] md:h-[440px] pr-4">
                       <p className="text-slate-200 leading-relaxed text-base md:text-lg">
                         {selected.bio}
                       </p>

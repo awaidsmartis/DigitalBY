@@ -715,8 +715,9 @@ export default function ProductDetail({
             {/* Inline rich details section (brochure style) - full width */}
             {showRichDetails ? (
               <div ref={richDetailsRef} className="lg:col-span-2 pt-2 pb-14 sm:pb-24">
-                <div className="rounded-[32px] border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.03] backdrop-blur p-0 sm:p-5 md:p-8">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
+                <div className="rounded-[32px] overflow-hidden border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.03] backdrop-blur p-0 sm:p-5 md:p-8">
+                  <div className="px-4 pt-4 sm:px-0 sm:pt-0">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
                     <div className="min-w-0">
                       <div className="text-white font-black text-2xl md:text-3xl leading-tight">
                         {product.name}
@@ -737,6 +738,7 @@ export default function ProductDetail({
                         <X size={16} />
                         Back to tabs
                       </button>
+                    </div>
                     </div>
                   </div>
 
