@@ -51,6 +51,9 @@ export default function ProductDetail({
   const [selectedMediaIndex, setSelectedMediaIndex] = useState(0)
   const [tab, setTab] = useState('overview')
   const [showRichDetails, setShowRichDetails] = useState(Boolean(initialShowRichDetails))
+  const [showScrollCue, setShowScrollCue] = useState(false)
+  const [scrollCueTrigger, setScrollCueTrigger] = useState(0)
+  const scrollCueStartTopRef = useRef<number | null>(null)
 
   const scrollerRef = useRef<HTMLDivElement | null>(null)
   const richDetailsRef = useRef<HTMLDivElement | null>(null)
@@ -116,12 +119,79 @@ export default function ProductDetail({
   }
 
   const openDetails = () => {
+    // Each user intent to view details should re-show the scroll hint (mobile)
+    // even if the rich section is already mounted.
+    setScrollCueTrigger((n) => n + 1)
+
     if (showRichDetails) {
       scrollToRichDetails('smooth')
     } else {
       setShowRichDetails(true)
     }
   }
+
+  // Mobile cue: when the rich details section opens, show a subtle “scroll for more” hint
+  // and hide it once the user scrolls.
+  useEffect(() => {
+    if (!showRichDetails) {
+      setShowScrollCue(false)
+      scrollCueStartTopRef.current = null
+      return
+    }
+
+    const container = scrollerRef.current
+    const detailsEl = richDetailsRef.current
+    if (!container) return
+
+    // Optimistically show right away (users just tapped “Details”).
+    // We'll hide later if we detect there's nothing to scroll.
+    setShowScrollCue(true)
+
+    let timer: number | undefined
+    let timer2: number | undefined
+    let ro: ResizeObserver | undefined
+
+    const evaluate = () => {
+      // Only show if we can scroll further down.
+      const canScroll = container.scrollHeight - container.clientHeight > container.scrollTop + 32
+      if (canScroll) {
+        scrollCueStartTopRef.current = container.scrollTop
+        setShowScrollCue(true)
+      } else {
+        setShowScrollCue(false)
+        scrollCueStartTopRef.current = null
+      }
+    }
+
+    const onScroll = () => {
+      const start = scrollCueStartTopRef.current
+      if (start == null) return
+      if (Math.abs(container.scrollTop - start) > 48) {
+        setShowScrollCue(false)
+        scrollCueStartTopRef.current = null
+      }
+    }
+
+    // Wait for lazy content + initial scroll-to-details, then re-check.
+    timer = window.setTimeout(evaluate, 520)
+    timer2 = window.setTimeout(evaluate, 1200)
+
+    // If the details section resizes (dynamic content), re-evaluate.
+    if (detailsEl && 'ResizeObserver' in window) {
+      ro = new ResizeObserver(() => {
+        evaluate()
+      })
+      ro.observe(detailsEl)
+    }
+
+    container.addEventListener('scroll', onScroll, { passive: true })
+    return () => {
+      if (timer) window.clearTimeout(timer)
+      if (timer2) window.clearTimeout(timer2)
+      ro?.disconnect()
+      container.removeEventListener('scroll', onScroll)
+    }
+  }, [showRichDetails, scrollCueTrigger])
 
   // When the rich details section becomes visible, scroll the modal container to it.
   // This avoids intermittent failures caused by trying to scroll before the ref is attached.
@@ -298,6 +368,16 @@ export default function ProductDetail({
           <X size={22} className="sm:hidden" />
           <X size={28} className="hidden sm:block" />
         </motion.button>
+
+        {/* Mobile scroll hint (shown only when rich details are open + content can scroll). */}
+        {showRichDetails && showScrollCue ? (
+          <div className="sm:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
+            <div className="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-black/45 border border-white/10 backdrop-blur text-white text-xs font-black animate-bounce">
+              <span>Scroll</span>
+              <ChevronDown size={16} />
+            </div>
+          </div>
+        ) : null}
 
         {/* Navigation Buttons */}
         {showNavigationArrows && currentIndex > 0 && (
