@@ -242,10 +242,12 @@ export default function ProductDetail({
                   <button
                     type="button"
                     onClick={closeLightbox}
-                    className="absolute top-3 right-3 z-10 w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center text-white"
+                    // In tablet landscape the background behind can be bright (image/video),
+                    // so use a darker, more opaque close button for consistent contrast.
+                    className="absolute top-3 right-3 z-10 w-10 h-10 rounded-xl bg-black/60 hover:bg-black/75 border border-white/20 backdrop-blur flex items-center justify-center text-white shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
                     aria-label="Close"
                   >
-                    <X size={18} />
+                    <X size={20} />
                   </button>
 
                   <div className="relative w-full h-full rounded-[28px] overflow-hidden border border-white/10 bg-black">

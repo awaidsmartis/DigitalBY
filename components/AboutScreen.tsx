@@ -156,7 +156,7 @@ export default function AboutScreen({
           </div>
 
           {/* Bottom row */}
-          <div className="flex flex-wrap items-center gap-4 text-sm">
+          <div className="flex flex-wrap items-center gap-4 text-sm mt-6 sm:mt-8">
             <a
               href={eventInfo.websiteUrl}
               target="_blank"

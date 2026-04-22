@@ -1112,7 +1112,8 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
                     type="button"
                     onClick={scrollEmbeddedToTop}
                     className="fixed left-5 z-40 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 backdrop-blur text-white inline-flex items-center justify-center shadow-lg"
-                    style={{ bottom: '1.25rem' }}
+                    // Safe-area aware so it doesn’t get cut off by iOS Safari bottom bar.
+                    style={{ bottom: 'calc(1.25rem + env(safe-area-inset-bottom))' }}
                     aria-label="Back to top"
                   >
                     <ArrowUp size={18} />

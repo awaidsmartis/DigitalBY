@@ -166,7 +166,9 @@ export default function ProductsCarousel({
         // Persist scroll position (mainly for cards view)
         if (viewMode === 'cards') persistState()
       }}
-      className="relative w-full h-screen overflow-y-auto overscroll-contain bg-digitalby flex flex-col px-4 sm:px-6 py-8 sm:py-12"
+      // RootLayout locks body/html scrolling (kiosk). This page must own its own scroll.
+      // Use `dvh` so iPad/Safari landscape doesn’t cut the bottom content behind browser UI.
+      className="relative w-full h-dvh overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch] bg-digitalby flex flex-col px-4 sm:px-6 pt-8 sm:pt-12 pb-[calc(5.5rem+env(safe-area-inset-bottom))]"
     >
       {/* Header */}
       <div className="flex justify-between items-start gap-3 mb-6 sm:mb-10">
@@ -377,7 +379,7 @@ export default function ProductsCarousel({
         </div>
       ) : (
         <div className="flex-1">
-          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 pb-10">
+          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 pb-[calc(5.5rem+env(safe-area-inset-bottom))]">
             {products.map((p, idx) => (
               <motion.button
                 key={p.id}
