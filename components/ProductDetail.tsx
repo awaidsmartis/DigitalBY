@@ -503,7 +503,7 @@ export default function ProductDetail({
                 />
               </div>
 
-              <p className="text-slate-500 text-sm mt-4 pb-24 lg:pb-0 text-right">
+              <p className="text-slate-500 text-sm mt-4 pb-24 lg:pb-0 text-right pr-1 sm:pr-2">
                 {currentIndex + 1} of {allProducts.length}
               </p>
             </motion.div>
