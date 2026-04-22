@@ -342,7 +342,7 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
                     type="button"
                     onClick={() => scrollToSection(s.id)}
                     className={
-                      'shrink-0 whitespace-nowrap px-4 py-2 rounded-full border text-sm font-bold transition ' +
+                      'shrink-0 whitespace-nowrap px-3 sm:px-4 py-2 rounded-full border text-xs sm:text-sm font-bold transition ' +
                       (isActive
                         ? 'bg-primary text-white border-primary/40'
                         : 'bg-white/5 text-slate-200 border-white/10 hover:bg-white/10')

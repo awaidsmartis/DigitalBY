@@ -47,7 +47,7 @@ export default function MainMenu({ onSelectCategory, onBack }: MainMenuProps) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
-      className="relative w-full min-h-screen bg-digitalby flex flex-col items-center justify-center px-6 py-12 pt-16 sm:pt-12"
+      className="relative w-full h-screen overflow-y-auto overscroll-contain bg-digitalby flex flex-col items-center justify-start px-6 py-12 pt-16 sm:pt-12"
     >
       <BottomLeftControls />
 
@@ -68,14 +68,14 @@ export default function MainMenu({ onSelectCategory, onBack }: MainMenuProps) {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2 }}
-        className="text-center mb-16"
+        className="text-center mb-10 sm:mb-16"
       >
         <h2 className="text-5xl md:text-6xl font-black text-white mb-3">What interests you?</h2>
         <p className="text-slate-400 text-xl">Select a category to explore</p>
       </motion.div>
 
       {/* Menu Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8 max-w-5xl w-full mb-12">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 sm:gap-8 max-w-5xl w-full mb-10 sm:mb-12">
         {menuItems.map((item, index) => {
           const Icon = item.icon
           return (
@@ -101,13 +101,14 @@ export default function MainMenu({ onSelectCategory, onBack }: MainMenuProps) {
               />
 
               {/* Content */}
-              <div className="relative z-10 p-10 lg:p-12 h-56 lg:h-60 flex flex-col items-center justify-center text-center">
+              <div className="relative z-10 p-8 sm:p-10 lg:p-12 h-48 sm:h-56 lg:h-60 flex flex-col items-center justify-center text-center">
                 <motion.div
                   animate={{ y: [0, -5, 0] }}
                   transition={{ duration: 2, repeat: Infinity }}
                   className="mb-4"
                 >
-                  <Icon size={56} className="text-white" />
+                  <Icon size={44} className="text-white sm:hidden" />
+                  <Icon size={56} className="text-white hidden sm:block" />
                 </motion.div>
                 <h3 className="text-3xl font-bold text-white mb-2">{item.label}</h3>
                 <p className="text-white/80 text-sm">{item.description}</p>

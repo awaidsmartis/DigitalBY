@@ -21,7 +21,8 @@ export default function ProductsCarousel({
 }: ProductsCarouselProps) {
   const [viewportRef, embla] = useEmblaCarousel({
     loop: false,
-    align: 'center',
+    // Mobile felt “cut”/stretched when centered. Start from left and rely on snap spacing.
+    align: 'start',
     containScroll: 'trimSnaps',
     dragFree: false,
   })
@@ -59,7 +60,7 @@ export default function ProductsCarousel({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
-      className="relative w-full min-h-screen bg-digitalby flex flex-col px-4 sm:px-6 py-8 sm:py-12"
+      className="relative w-full h-screen overflow-y-auto overscroll-contain bg-digitalby flex flex-col px-4 sm:px-6 py-8 sm:py-12"
     >
       {/* Header */}
       <div className="flex justify-between items-start gap-3 mb-6 sm:mb-10">
@@ -105,21 +106,21 @@ export default function ProductsCarousel({
                 return (
                   <div
                     key={product.id}
-                    className="flex-[0_0_94%] sm:flex-[0_0_74%] md:flex-[0_0_58%] lg:flex-[0_0_44%] xl:flex-[0_0_30%] px-3 [@media(orientation:portrait)]:flex-[0_0_82%]"
+                    className="flex-[0_0_92%] sm:flex-[0_0_74%] md:flex-[0_0_58%] lg:flex-[0_0_44%] xl:flex-[0_0_30%] px-2 sm:px-3 [@media(orientation:portrait)]:flex-[0_0_88%]"
                   >
                     <motion.button
                       animate={{ scale: isActive ? 1 : 0.96, opacity: isActive ? 1 : 0.65 }}
                       transition={{ type: 'spring', stiffness: 260, damping: 28 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => onSelectProduct(product)}
-                      className="w-full h-[410px] sm:h-[380px] rounded-[28px] overflow-hidden group cursor-pointer relative border border-white/10 bg-white/5 shadow-2xl shadow-black/25 [@media(orientation:portrait)]:h-[400px] [@media(orientation:portrait)_and_(max-width:820px)]:h-[420px]"
+                      className="w-full h-[360px] sm:h-[380px] rounded-[28px] overflow-hidden group cursor-pointer relative border border-white/10 bg-white/5 shadow-2xl shadow-black/25"
                     >
                       {/* Ambient background (no screenshot image) */}
                       <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-primary/10" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/10" />
 
                       {/* Layout: use flex columns to prevent title overlapping the logo */}
-                      <div className="relative z-10 flex flex-col h-full p-5 sm:p-7 [@media(orientation:portrait)]:p-7">
+                      <div className="relative z-10 flex flex-col h-full p-5 sm:p-7">
                         {/* Top row */}
                         <div className="flex items-start justify-between gap-3">
                           <span className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 border border-white/10 text-white text-xs font-bold tracking-wider backdrop-blur-sm">
@@ -135,8 +136,8 @@ export default function ProductsCarousel({
                         </div>
 
                         {/* Icon area */}
-                        <div className="flex-1 flex items-center justify-center pt-3 sm:pt-6 pb-2 sm:pb-4 [@media(orientation:portrait)]:pt-5 [@media(orientation:portrait)]:pb-4">
-                          <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-[22px] sm:rounded-[28px] bg-white border border-white/20 shadow-2xl flex items-center justify-center overflow-hidden [@media(orientation:portrait)]:w-28 [@media(orientation:portrait)]:h-28">
+                        <div className="flex-1 flex items-center justify-center pt-3 sm:pt-6 pb-2 sm:pb-4">
+                          <div className="w-20 h-20 sm:w-28 sm:h-28 rounded-[22px] sm:rounded-[28px] bg-white border border-white/20 shadow-2xl flex items-center justify-center overflow-hidden">
                             <Image
                               src={product.logo}
                               alt={`${product.name} icon`}
@@ -151,16 +152,16 @@ export default function ProductsCarousel({
                         {/* Text area */}
                         <div className="text-center flex flex-col mt-auto">
                           <div>
-                            <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white leading-snug line-clamp-2 [@media(orientation:portrait)_and_(max-width:820px)]:text-2xl">
+                            <h3 className="text-xl sm:text-2xl md:text-3xl font-black text-white leading-snug line-clamp-2">
                               {product.name}
                             </h3>
-                            <p className="mt-2 text-white/85 text-xs sm:text-sm line-clamp-2 [@media(orientation:portrait)]:text-sm [@media(orientation:portrait)_and_(min-width:768px)]:line-clamp-1">
+                            <p className="mt-2 text-white/85 text-xs sm:text-sm line-clamp-2">
                               {product.shortDescription}
                             </p>
                           </div>
 
                           {/* Footer always visible */}
-                          <div className="mt-5 flex items-center justify-between [@media(orientation:portrait)]:mt-4">
+                          <div className="mt-5 flex items-center justify-between">
                             <div className="text-slate-300 text-xs">
                               <span className="lg:hidden">Tap to open</span>
                               <span className="hidden lg:inline">Click to open</span>

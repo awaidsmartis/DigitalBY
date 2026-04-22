@@ -35,6 +35,8 @@ interface ProductDetailProps {
   onClose: () => void
   /** Used when deep-linking from the legacy details route. */
   initialShowRichDetails?: boolean
+  /** Show prev/next product arrows (kiosk-style). Hide on standalone product pages/mobile if undesired. */
+  showNavigationArrows?: boolean
 }
 
 export default function ProductDetail({
@@ -42,6 +44,7 @@ export default function ProductDetail({
   allProducts,
   onClose,
   initialShowRichDetails,
+  showNavigationArrows = true,
 }: ProductDetailProps) {
   const [product, setProduct] = useState(initialProduct)
   const [direction, setDirection] = useState(0)
@@ -280,7 +283,7 @@ export default function ProductDetail({
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={onClose}
-          className="absolute top-2 right-2 sm:top-4 sm:right-4 p-2 sm:p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300 backdrop-blur-sm z-20"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 p-2 sm:p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300 backdrop-blur-sm z-20"
           aria-label="Close"
           type="button"
         >
@@ -289,22 +292,26 @@ export default function ProductDetail({
         </motion.button>
 
         {/* Navigation Buttons */}
-        {currentIndex > 0 && (
+        {showNavigationArrows && currentIndex > 0 && (
           <motion.button
             whileHover={{ scale: 1.1, x: -5 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => navigate(currentIndex - 1)}
-            className="absolute left-8 top-1/2 -translate-y-1/2 p-3 rounded-full bg-primary text-white hover-primary transition-all duration-300 shadow-lg z-10"
+            className="hidden sm:flex absolute left-6 lg:left-8 top-1/2 -translate-y-1/2 p-3 rounded-full bg-primary text-white hover-primary transition-all duration-300 shadow-lg z-10"
+            aria-label="Previous product"
+            type="button"
           >
             <ChevronLeft size={32} />
           </motion.button>
         )}
-        {currentIndex < allProducts.length - 1 && (
+        {showNavigationArrows && currentIndex < allProducts.length - 1 && (
           <motion.button
             whileHover={{ scale: 1.1, x: 5 }}
             whileTap={{ scale: 0.9 }}
             onClick={() => navigate(currentIndex + 1)}
-            className="absolute right-8 top-1/2 -translate-y-1/2 p-3 rounded-full bg-primary text-white hover-primary transition-all duration-300 shadow-lg z-10"
+            className="hidden sm:flex absolute right-6 lg:right-8 top-1/2 -translate-y-1/2 p-3 rounded-full bg-primary text-white hover-primary transition-all duration-300 shadow-lg z-10"
+            aria-label="Next product"
+            type="button"
           >
             <ChevronRight size={32} />
           </motion.button>
@@ -460,43 +467,44 @@ export default function ProductDetail({
                 className="h-full"
               >
                 <div className="flex items-center gap-3">
-                  <TabsList className="w-full bg-white/5 border border-white/10 text-slate-400 gap-1 px-1">
+                  <TabsList
+                    className="w-full bg-white/5 border border-white/10 text-slate-400 gap-1 px-1 overflow-x-auto whitespace-nowrap pr-2
+                      [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                  >
                     <TabsTrigger
                       value="overview"
-                      className="text-slate-300 data-[state=active]:text-slate-900"
+                      className="flex-none px-3 text-xs sm:text-sm text-slate-300 data-[state=active]:text-slate-900"
                     >
                       Overview
                     </TabsTrigger>
                     <TabsTrigger
                       value="value"
-                      className="text-slate-300 data-[state=active]:text-slate-900"
+                      className="flex-none px-3 text-xs sm:text-sm text-slate-300 data-[state=active]:text-slate-900"
                     >
                       Value
                     </TabsTrigger>
                     <TabsTrigger
                       value="features"
-                      className="text-slate-300 data-[state=active]:text-slate-900"
+                      className="flex-none px-3 text-xs sm:text-sm text-slate-300 data-[state=active]:text-slate-900"
                     >
                       Features
                     </TabsTrigger>
                     <TabsTrigger
                       value="refs"
-                      className="text-slate-300 data-[state=active]:text-slate-900"
+                      className="flex-none px-3 text-xs sm:text-sm text-slate-300 data-[state=active]:text-slate-900"
                     >
                       References
                     </TabsTrigger>
 
-                    {/* Rightmost primary pill: opens the rich details section */}
-                    <div className="ml-auto pl-2 border-l border-white/10">
-                      <TabsTrigger
-                        value="details"
-                        title="View rich details"
-                        className="flex-none h-8 rounded-full bg-primary text-white font-black border-primary/40 px-4 hover-primary data-[state=active]:bg-primary data-[state=active]:text-white"
-                      >
-                        <ChevronDown size={16} />
-                        Details
-                      </TabsTrigger>
-                    </div>
+                    {/* Primary pill: opens the rich details section */}
+                    <TabsTrigger
+                      value="details"
+                      title="View rich details"
+                      className="flex-none h-8 rounded-full bg-primary text-white font-black border-primary/40 px-4 hover-primary data-[state=active]:bg-primary data-[state=active]:text-white"
+                    >
+                      <ChevronDown size={16} />
+                      Details
+                    </TabsTrigger>
                   </TabsList>
                 </div>
 
@@ -706,10 +714,10 @@ export default function ProductDetail({
                             scrollerRef.current?.scrollTo({ top: 0, behavior: 'smooth' })
                           })
                         }}
-                        className="inline-flex items-center gap-2 px-4 py-2 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 text-white font-bold transition"
+                        className="inline-flex items-center gap-2 px-3 py-2 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/10 text-white font-bold transition"
                       >
                         <X size={16} />
-                        Close
+                        Back to tabs
                       </button>
                     </div>
                   </div>

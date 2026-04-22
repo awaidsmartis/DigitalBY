@@ -43,6 +43,7 @@ export default function ProductDetailRouteClient() {
       allProducts={state.products}
       onClose={() => router.push('/products')}
       initialShowRichDetails={searchParams.get('details') === '1'}
+      showNavigationArrows={false}
     />
   )
 }

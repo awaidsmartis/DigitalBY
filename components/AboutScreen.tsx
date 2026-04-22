@@ -27,7 +27,7 @@ export default function AboutScreen({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
-      className="relative w-full h-screen overflow-hidden bg-digitalby text-white"
+      className="relative w-full h-screen overflow-y-auto overscroll-contain bg-digitalby text-white"
     >
       <BottomLeftControls />
       {/* Ambient background (no hero image) */}
@@ -35,7 +35,7 @@ export default function AboutScreen({
         {/* Watermark: booth number */}
         <div className="absolute left-[72%] md:left-[74%] lg:left-[66%] top-1/2 -translate-x-1/2 -translate-y-1/2 select-none">
           <div className="text-[520px] md:text-[640px] lg:text-[760px] leading-none font-black tracking-tight text-white/5">
-            16
+            402
           </div>
         </div>
 
@@ -68,12 +68,12 @@ export default function AboutScreen({
         <ChevronLeft size={24} />
       </motion.button>
 
-      <div className="relative z-10 h-full max-w-6xl mx-auto px-6 lg:px-12">
+      <div className="relative z-10 min-h-full max-w-6xl mx-auto px-6 lg:px-12">
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.12 }}
-          className="h-full pt-14 pb-12 flex flex-col"
+          className="min-h-full pt-14 pb-12 flex flex-col"
         >
           {/* Top row: event pill + Smart IS badge */}
           <div className="flex items-center justify-between gap-6">
