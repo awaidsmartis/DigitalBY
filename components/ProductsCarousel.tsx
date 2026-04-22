@@ -106,14 +106,14 @@ export default function ProductsCarousel({
                 return (
                   <div
                     key={product.id}
-                    className="flex-[0_0_92%] sm:flex-[0_0_74%] md:flex-[0_0_58%] lg:flex-[0_0_44%] xl:flex-[0_0_30%] px-2 sm:px-3 [@media(orientation:portrait)]:flex-[0_0_88%]"
+                    className="flex-[0_0_92%] sm:flex-[0_0_74%] md:flex-[0_0_58%] lg:flex-[0_0_44%] xl:flex-[0_0_30%] px-2 sm:px-3 [@media(orientation:portrait)]:flex-[0_0_92%]"
                   >
                     <motion.button
                       animate={{ scale: isActive ? 1 : 0.96, opacity: isActive ? 1 : 0.65 }}
                       transition={{ type: 'spring', stiffness: 260, damping: 28 }}
                       whileTap={{ scale: 0.98 }}
                       onClick={() => onSelectProduct(product)}
-                      className="w-full h-[360px] sm:h-[380px] rounded-[28px] overflow-hidden group cursor-pointer relative border border-white/10 bg-white/5 shadow-2xl shadow-black/25"
+                      className="w-full h-[380px] sm:h-[380px] rounded-[28px] overflow-hidden group cursor-pointer relative border border-white/10 bg-white/5 shadow-2xl shadow-black/25 [@media(orientation:portrait)_and_(min-width:768px)]:h-[440px]"
                     >
                       {/* Ambient background (no screenshot image) */}
                       <div className="absolute inset-0 bg-gradient-to-br from-white/10 via-transparent to-primary/10" />

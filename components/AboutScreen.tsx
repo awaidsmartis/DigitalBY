@@ -27,14 +27,14 @@ export default function AboutScreen({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
-      className="relative w-full h-screen overflow-y-auto overscroll-contain bg-digitalby text-white"
+      className="relative w-full h-screen overflow-hidden bg-digitalby text-white"
     >
       <BottomLeftControls />
       {/* Ambient background (no hero image) */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Watermark: booth number */}
-        <div className="absolute left-[72%] md:left-[74%] lg:left-[66%] top-1/2 -translate-x-1/2 -translate-y-1/2 select-none">
-          <div className="text-[520px] md:text-[640px] lg:text-[760px] leading-none font-black tracking-tight text-white/5">
+        <div className="absolute left-1/2 sm:left-[72%] md:left-[74%] lg:left-[66%] top-1/2 -translate-x-1/2 -translate-y-1/2 select-none">
+          <div className="text-[340px] sm:text-[520px] md:text-[640px] lg:text-[760px] leading-none font-black tracking-tight text-white/5">
             402
           </div>
         </div>
@@ -68,12 +68,13 @@ export default function AboutScreen({
         <ChevronLeft size={24} />
       </motion.button>
 
-      <div className="relative z-10 min-h-full max-w-6xl mx-auto px-6 lg:px-12">
+      {/* Internal scroll container (body/html are locked for kiosk mode) */}
+      <div className="relative z-10 h-full overflow-y-auto overscroll-contain max-w-6xl mx-auto px-6 lg:px-12">
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.12 }}
-          className="min-h-full pt-14 pb-12 flex flex-col"
+          className="min-h-full box-border pt-12 pb-10 sm:pt-14 sm:pb-12 flex flex-col"
         >
           {/* Top row: event pill + Smart IS badge */}
           <div className="flex items-center justify-between gap-6">
@@ -103,11 +104,11 @@ export default function AboutScreen({
 
           {/* Main hero (centered vertically) */}
           <div className="flex-1 flex flex-col justify-center">
-            <p className="text-primary font-black tracking-[0.22em] mt-10 uppercase">
-              {eventInfo.titleSmall.replace('#16', '').trim()}
+            <p className="text-primary font-black tracking-[0.22em] mt-6 sm:mt-10 uppercase">
+              {eventInfo.titleSmall.replace(/#\d+/g, '').trim()}
             </p>
 
-            <h1 className="text-6xl sm:text-7xl md:text-8xl font-black mt-4 leading-[0.92]">
+            <h1 className="text-5xl sm:text-7xl md:text-8xl font-black mt-3 sm:mt-4 leading-[0.95] sm:leading-[0.92]">
               <span className="text-white">Blue </span>
               <span className="bg-gradient-to-r from-white via-white to-primary text-transparent bg-clip-text">
                 Yonder
@@ -116,35 +117,35 @@ export default function AboutScreen({
               <span className="text-primary">ICON 2026</span>
             </h1>
 
-            <p className="text-slate-300 text-lg leading-relaxed mt-8 max-w-2xl">
+            <p className="text-slate-300 text-base sm:text-lg leading-relaxed mt-6 sm:mt-8 max-w-2xl">
               {eventInfo.description}
             </p>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-10 max-w-2xl">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8 sm:mt-10 max-w-2xl">
               <button
                 onClick={onGoProducts}
-                className="flex items-center justify-center gap-3 px-7 py-4 rounded-2xl bg-primary text-white font-black shadow-2xl shadow-primary/25 hover-primary hover:shadow-primary/40 transition-all"
+                className="flex items-center justify-center gap-3 px-6 sm:px-7 py-3.5 sm:py-4 rounded-2xl bg-primary text-white font-black shadow-2xl shadow-primary/25 hover-primary hover:shadow-primary/40 transition-all"
               >
                 <ArrowRight size={20} />
                 Explore Products
               </button>
               <button
                 onClick={onGoServices}
-                className="flex items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 font-semibold transition-all"
+                className="flex items-center justify-center gap-3 px-6 py-3.5 sm:py-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 font-semibold transition-all"
               >
                 <Wrench size={20} />
                 View Services
               </button>
               <button
                 onClick={onGoTeam}
-                className="flex items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 font-semibold transition-all"
+                className="flex items-center justify-center gap-3 px-6 py-3.5 sm:py-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 font-semibold transition-all"
               >
                 <Users size={20} />
                 Meet Our Team
               </button>
               <button
                 onClick={onGoGiveaway}
-                className="flex items-center justify-center gap-3 px-6 py-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 font-semibold transition-all"
+                className="flex items-center justify-center gap-3 px-6 py-3.5 sm:py-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 font-semibold transition-all"
               >
                 <Gift size={20} />
                 Giveaway

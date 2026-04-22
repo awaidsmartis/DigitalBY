@@ -115,6 +115,14 @@ export default function ProductDetail({
     container.scrollTo({ top, behavior })
   }
 
+  const openDetails = () => {
+    if (showRichDetails) {
+      scrollToRichDetails('smooth')
+    } else {
+      setShowRichDetails(true)
+    }
+  }
+
   // When the rich details section becomes visible, scroll the modal container to it.
   // This avoids intermittent failures caused by trying to scroll before the ref is attached.
   useEffect(() => {
@@ -323,7 +331,7 @@ export default function ProductDetail({
           data-scroll-container="product-detail-modal"
           className="h-screen overflow-y-auto overscroll-contain"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 p-6 md:p-10 lg:p-14 min-h-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-12 p-4 sm:p-6 md:p-10 lg:p-14 min-h-full">
             {/* Left: Media + thumbs */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
@@ -448,18 +456,14 @@ export default function ProductDetail({
               </div>
             </div>
 
-            <div className="mt-6 flex-1 min-h-0">
+            <div className="mt-5 sm:mt-6 flex-1 min-h-0">
               <Tabs
                 value={tab}
                 onValueChange={(v) => {
                   if (v === 'details') {
                     // Details behaves like a tab control, but we keep the current tab
                     // selected and instead open + scroll to the rich details section.
-                    if (showRichDetails) {
-                      scrollToRichDetails('smooth')
-                    } else {
-                      setShowRichDetails(true)
-                    }
+                    openDetails()
                     return
                   }
                   setTab(v)
@@ -468,7 +472,7 @@ export default function ProductDetail({
               >
                 <div className="flex items-center gap-3">
                   <TabsList
-                    className="w-full bg-white/5 border border-white/10 text-slate-400 gap-1 px-1 overflow-x-auto whitespace-nowrap pr-2
+                    className="w-full bg-white/5 border border-white/10 text-slate-400 gap-1 px-1 overflow-x-auto whitespace-nowrap pr-2 justify-start
                       [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
                   >
                     <TabsTrigger
@@ -500,12 +504,26 @@ export default function ProductDetail({
                     <TabsTrigger
                       value="details"
                       title="View rich details"
-                      className="flex-none h-8 rounded-full bg-primary text-white font-black border-primary/40 px-4 hover-primary data-[state=active]:bg-primary data-[state=active]:text-white"
+                      className="hidden sm:inline-flex flex-none h-8 rounded-full bg-primary text-white font-black border-primary/40 px-4 hover-primary data-[state=active]:bg-primary data-[state=active]:text-white"
                     >
                       <ChevronDown size={16} />
                       Details
                     </TabsTrigger>
                   </TabsList>
+                </div>
+
+                {/* Mobile-only: keep the “Details” CTA visible (tabs can overflow horizontally).
+                    NOTE: This must NOT use <TabsTrigger/> outside TabsList (Radix roving focus).
+                */}
+                <div className="sm:hidden mt-2">
+                  <button
+                    type="button"
+                    onClick={openDetails}
+                    className="w-full h-10 rounded-2xl bg-primary text-white font-black border border-primary/40 inline-flex items-center justify-center gap-2 hover-primary"
+                  >
+                    <ChevronDown size={16} />
+                    Details
+                  </button>
                 </div>
 
                 <TabsContent value="overview" className="mt-4">
@@ -696,9 +714,9 @@ export default function ProductDetail({
 
             {/* Inline rich details section (brochure style) - full width */}
             {showRichDetails ? (
-              <div ref={richDetailsRef} className="lg:col-span-2 pt-2 pb-24">
-                <div className="rounded-[32px] border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.03] backdrop-blur p-5 md:p-8">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+              <div ref={richDetailsRef} className="lg:col-span-2 pt-2 pb-14 sm:pb-24">
+                <div className="rounded-[32px] border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.03] backdrop-blur p-0 sm:p-5 md:p-8">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
                     <div className="min-w-0">
                       <div className="text-white font-black text-2xl md:text-3xl leading-tight">
                         {product.name}

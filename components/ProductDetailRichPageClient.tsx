@@ -327,35 +327,6 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
               'mx-auto max-w-6xl px-6 pb-20 -mt-10 pt-6 relative z-10'
         }
       >
-        {/* Embedded mode: horizontal section nav (tab-like) */}
-        {embedded ? (
-          <div className="sticky top-0 z-30 border-b border-white/10 bg-digitalby px-5 md:px-8 py-3 mb-6 rounded-t-[32px] shadow-[0_10px_30px_-20px_rgba(0,0,0,0.85)]">
-            <div
-              className="flex items-center gap-2 overflow-x-auto pr-2
-                [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-            >
-              {tocSections.map((s) => {
-                const isActive = activeSection === s.id
-                return (
-                  <button
-                    key={s.id}
-                    type="button"
-                    onClick={() => scrollToSection(s.id)}
-                    className={
-                      'shrink-0 whitespace-nowrap px-3 sm:px-4 py-2 rounded-full border text-xs sm:text-sm font-bold transition ' +
-                      (isActive
-                        ? 'bg-primary text-white border-primary/40'
-                        : 'bg-white/5 text-slate-200 border-white/10 hover:bg-white/10')
-                    }
-                  >
-                    {s.label}
-                  </button>
-                )
-              })}
-            </div>
-          </div>
-        ) : null}
-
         <div className={embedded ? 'grid grid-cols-1 gap-10' : 'grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-10'}>
           {/* TOC (page mode only) */}
           {!embedded ? (
@@ -391,7 +362,7 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
           ) : null}
 
           {/* CONTENT */}
-          <div className={embedded ? 'space-y-12 px-5 md:px-8 pb-10' : 'space-y-10'}>
+          <div className={embedded ? 'space-y-10 px-3 sm:px-5 md:px-8 pb-8 sm:pb-10' : 'space-y-10'}>
             <section id={sectionId('overview')} className={sectionScrollMt}>
               <motion.div
                 initial={{ opacity: 0, y: 16 }}
@@ -470,8 +441,12 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
                       transition={{ duration: 0.4, delay: Math.min(idx * 0.03, 0.12) }}
                       className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur p-5"
                     >
-                      <div className="text-2xl font-black text-white">{h.value}</div>
-                      <div className="text-slate-300 text-sm mt-1">{h.label}</div>
+                      <div className="text-2xl font-black text-white leading-tight break-words line-clamp-2">
+                        {h.value}
+                      </div>
+                      <div className="text-slate-300 text-sm mt-1 leading-snug break-words line-clamp-3">
+                        {h.label}
+                      </div>
                     </motion.div>
                   ))}
                 </div>
@@ -487,11 +462,13 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   {product.stats.map((s) => (
                     <Card key={s.label} className="bg-white/5 border-white/10 text-white">
-                      <CardHeader className="pb-3">
-                        <CardTitle className="text-3xl font-black text-white">{s.value}</CardTitle>
+                      <CardHeader className="pb-2 px-5 sm:px-6">
+                        <CardTitle className="text-2xl sm:text-3xl font-black text-white leading-tight break-words">
+                          {s.value}
+                        </CardTitle>
                       </CardHeader>
-                      <CardContent className="space-y-2">
-                        <div className="text-slate-200 font-semibold">{s.label}</div>
+                      <CardContent className="space-y-2 px-5 sm:px-6">
+                        <div className="text-slate-200 font-semibold leading-snug break-words">{s.label}</div>
                         {s.note && <div className="text-slate-400 text-sm">{s.note}</div>}
                       </CardContent>
                     </Card>
