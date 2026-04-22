@@ -369,10 +369,10 @@ export default function ProductDetail({
           <X size={28} className="hidden sm:block" />
         </motion.button>
 
-        {/* Mobile scroll hint (shown only when rich details are open + content can scroll). */}
+        {/* Scroll hint (mobile + tablet portrait / <lg) shown only when rich details are open + content can scroll). */}
         {showRichDetails && showScrollCue ? (
-          <div className="sm:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
-            <div className="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-black/45 border border-white/10 backdrop-blur text-white text-xs font-black animate-bounce">
+          <div className="lg:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
+            <div className="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-black/45 border border-white/10 backdrop-blur text-white text-xs sm:text-sm font-black animate-bounce">
               <span>Scroll</span>
               <ChevronDown size={16} />
             </div>
