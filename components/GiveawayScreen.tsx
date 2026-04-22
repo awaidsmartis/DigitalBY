@@ -17,7 +17,7 @@ export default function GiveawayScreen({ onBack }: GiveawayScreenProps) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
-      className="relative w-full h-screen overflow-hidden bg-digitalby text-white px-4 md:px-6 py-4 md:py-6"
+      className="relative w-full h-screen overflow-y-auto overscroll-contain bg-digitalby text-white px-4 md:px-6 py-4 md:py-6"
     >
       <BottomLeftControls />
       {/* Back button */}
@@ -25,7 +25,7 @@ export default function GiveawayScreen({ onBack }: GiveawayScreenProps) {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         onClick={onBack}
-        className="absolute top-8 left-8 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300 backdrop-blur-sm z-20"
+        className="fixed top-4 left-4 sm:top-8 sm:left-8 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300 backdrop-blur-sm z-20"
       >
         <ChevronLeft size={24} />
       </motion.button>
@@ -42,7 +42,7 @@ export default function GiveawayScreen({ onBack }: GiveawayScreenProps) {
           Portrait tablets are usually ~768px wide (Tailwind `md`).
           To fully support portrait, we only switch to 2 columns at `lg`.
         */}
-        <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-7 items-center">
+        <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-2 gap-5 lg:gap-7 items-start lg:items-center">
           <div className="rounded-3xl bg-white/5 border border-white/10 p-4 md:p-5">
             <div className="flex items-center gap-3 mb-3 md:mb-4">
               <div className="w-12 h-12 rounded-2xl bg-primary/20 flex items-center justify-center border border-primary/30">

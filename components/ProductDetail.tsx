@@ -11,6 +11,7 @@ import {
   ChevronRight,
   ExternalLink,
   Link as LinkIcon,
+  Maximize2,
   Play,
   X,
   Zap,
@@ -53,10 +54,13 @@ export default function ProductDetail({
   const [showRichDetails, setShowRichDetails] = useState(Boolean(initialShowRichDetails))
   const [showScrollCue, setShowScrollCue] = useState(false)
   const [scrollCueTrigger, setScrollCueTrigger] = useState(0)
+  const [lightboxOpen, setLightboxOpen] = useState(false)
+  const [lightboxIndex, setLightboxIndex] = useState(0)
   const scrollCueStartTopRef = useRef<number | null>(null)
 
   const scrollerRef = useRef<HTMLDivElement | null>(null)
   const richDetailsRef = useRef<HTMLDivElement | null>(null)
+  const tabsTopRef = useRef<HTMLDivElement | null>(null)
 
   const videoRefs = useRef<Record<number, HTMLVideoElement | null>>({})
 
@@ -65,17 +69,68 @@ export default function ProductDetail({
   const media = product.media ?? []
   const hasMedia = media.length > 0
 
+  const mainMediaSrc = useMemo(() => {
+    const firstImage = media.find(m => m.type === 'image')
+    if (firstImage?.type === 'image') return firstImage.src
+    return product.image
+  }, [media, product.image])
+
+  const lightboxMedia = useMemo(() => {
+    if (hasMedia) return media
+    return mainMediaSrc
+      ? ([{ type: 'image', src: mainMediaSrc, alt: product.name }] as typeof media)
+      : ([] as typeof media)
+  }, [hasMedia, mainMediaSrc, media, product.name])
+
   const [mainViewportRef, mainEmbla] = useEmblaCarousel({ loop: false })
   const [thumbViewportRef, thumbEmbla] = useEmblaCarousel({
     dragFree: true,
     containScroll: 'trimSnaps',
   })
 
-  const mainMediaSrc = useMemo(() => {
-    const firstImage = media.find(m => m.type === 'image')
-    if (firstImage?.type === 'image') return firstImage.src
-    return product.image
-  }, [media, product.image])
+  const [lightboxViewportRef, lightboxEmbla] = useEmblaCarousel({ loop: false })
+  const lightboxVideoRefs = useRef<Record<number, HTMLVideoElement | null>>({})
+
+  const activeMedia = hasMedia ? media[selectedMediaIndex] : undefined
+
+  const openLightbox = (index: number) => {
+    if (!lightboxMedia.length) return
+    const safeIndex = Math.max(0, Math.min(index, lightboxMedia.length - 1))
+    setLightboxIndex(safeIndex)
+    setLightboxOpen(true)
+  }
+
+  const closeLightbox = () => {
+    setLightboxOpen(false)
+    Object.values(lightboxVideoRefs.current).forEach(v => v?.pause?.())
+  }
+
+  // Keep lightbox index in sync with the lightbox embla carousel.
+  useEffect(() => {
+    if (!lightboxEmbla || !lightboxOpen) return
+
+    const onSelect = () => {
+      const idx = lightboxEmbla.selectedScrollSnap()
+      setLightboxIndex(idx)
+      Object.values(lightboxVideoRefs.current).forEach(v => v?.pause?.())
+    }
+
+    lightboxEmbla.on('select', onSelect)
+    lightboxEmbla.on('reInit', onSelect)
+    onSelect()
+
+    return () => {
+      lightboxEmbla.off('select', onSelect)
+      lightboxEmbla.off('reInit', onSelect)
+    }
+  }, [lightboxEmbla, lightboxOpen])
+
+  // When opening (or changing index while open), jump to the correct slide.
+  useEffect(() => {
+    if (!lightboxOpen) return
+    if (!lightboxEmbla) return
+    requestAnimationFrame(() => lightboxEmbla.scrollTo(lightboxIndex, true))
+  }, [lightboxEmbla, lightboxIndex, lightboxOpen])
 
   // Keep the selectedMediaIndex in sync with embla selection
   useEffect(() => {
@@ -116,6 +171,18 @@ export default function ProductDetail({
     const top = computeRichDetailsScrollTop()
     if (!container || top == null) return
     container.scrollTo({ top, behavior })
+  }
+
+  const scrollToTabs = (behavior: ScrollBehavior = 'smooth') => {
+    const container = scrollerRef.current
+    const el = tabsTopRef.current
+    if (!container || !el) return
+
+    const containerRect = container.getBoundingClientRect()
+    const elRect = el.getBoundingClientRect()
+    const stickyOffset = 14
+    const nextTop = container.scrollTop + (elRect.top - containerRect.top) - stickyOffset
+    container.scrollTo({ top: Math.max(0, nextTop), behavior })
   }
 
   const openDetails = () => {
@@ -356,6 +423,98 @@ export default function ProductDetail({
       >
         <BottomLeftControls />
 
+        {/* Lightbox media slider (images + videos) */}
+        <AnimatePresence>
+          {lightboxOpen ? (
+            <motion.div
+              key="lightbox"
+              className="fixed inset-0 z-[60]"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <button
+                type="button"
+                aria-label="Close"
+                className="absolute inset-0 bg-black/80"
+                onClick={closeLightbox}
+              />
+
+              <div className="absolute inset-0 p-4 sm:p-10 flex items-center justify-center">
+                <div className="relative w-full h-full max-w-5xl max-h-[90vh]">
+                  <button
+                    type="button"
+                    onClick={closeLightbox}
+                    className="absolute top-3 right-3 z-10 w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center text-white"
+                    aria-label="Close"
+                  >
+                    <X size={18} />
+                  </button>
+
+                  <div className="relative w-full h-full rounded-[28px] overflow-hidden border border-white/10 bg-black">
+                    <div ref={lightboxViewportRef} className="h-full overflow-hidden">
+                      <div className="flex h-full">
+                        {lightboxMedia.map((m, idx) => (
+                          <div key={`${m.type}-${m.src}`} className="relative flex-[0_0_100%] h-full">
+                            {m.type === 'image' ? (
+                              <Image
+                                src={m.src}
+                                alt={m.alt ?? product.name}
+                                fill
+                                sizes="100vw"
+                                className="object-contain"
+                                priority={idx === lightboxIndex}
+                              />
+                            ) : (
+                              <div className="absolute inset-0 flex items-center justify-center bg-black">
+                                <video
+                                  ref={(el) => {
+                                    lightboxVideoRefs.current[idx] = el
+                                  }}
+                                  className="w-full h-full object-contain"
+                                  controls
+                                  preload="metadata"
+                                  src={m.src}
+                                />
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Lightbox nav */}
+                    {lightboxEmbla?.canScrollPrev() ? (
+                      <button
+                        type="button"
+                        onClick={() => lightboxEmbla.scrollPrev()}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center text-white"
+                        aria-label="Previous"
+                      >
+                        <ChevronLeft size={26} />
+                      </button>
+                    ) : null}
+                    {lightboxEmbla?.canScrollNext() ? (
+                      <button
+                        type="button"
+                        onClick={() => lightboxEmbla.scrollNext()}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 z-10 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center text-white"
+                        aria-label="Next"
+                      >
+                        <ChevronRight size={26} />
+                      </button>
+                    ) : null}
+
+                    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 text-xs text-white/80 bg-black/40 border border-white/10 backdrop-blur px-3 py-1.5 rounded-full">
+                      {lightboxIndex + 1} / {lightboxMedia.length}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
+
         {/* Close Button */}
         <motion.button
           whileHover={{ scale: 1.1 }}
@@ -420,22 +579,39 @@ export default function ProductDetail({
               className="flex flex-col gap-5 lg:h-[calc(100vh-112px)]"
             >
             {/* Main slider */}
-            <div className="relative w-full aspect-[16/11] sm:aspect-square lg:flex-1 rounded-3xl overflow-hidden bg-black/40 shadow-2xl border border-white/10">
+            <div className="relative w-full aspect-[4/3] sm:aspect-square lg:flex-1 rounded-3xl overflow-hidden bg-black/40 shadow-2xl border border-white/10">
               {!hasMedia ? (
-                <Image src={mainMediaSrc} alt={product.name} fill className="object-contain" priority />
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (!mainMediaSrc) return
+                    openLightbox(0)
+                  }}
+                  className="absolute inset-0 cursor-zoom-in"
+                  aria-label="Open image"
+                >
+                  <Image src={mainMediaSrc} alt={product.name} fill className="object-contain" priority />
+                </button>
               ) : (
                 <div ref={mainViewportRef} className="h-full">
                   <div className="flex h-full">
                     {media.map((m, idx) => (
                       <div key={`${m.type}-${m.src}`} className="relative flex-[0_0_100%] h-full">
                         {m.type === 'image' ? (
-                          <Image
-                            src={m.src}
-                            alt={product.name}
-                            fill
-                            className="object-contain"
-                            priority={idx === 0}
-                          />
+                          <button
+                            type="button"
+                            onClick={() => openLightbox(idx)}
+                            className="absolute inset-0 cursor-zoom-in"
+                            aria-label="Open image"
+                          >
+                            <Image
+                              src={m.src}
+                              alt={product.name}
+                              fill
+                              className="object-contain"
+                              priority={idx === 0}
+                            />
+                          </button>
                         ) : (
                           <div className="absolute inset-0 bg-black flex items-center justify-center">
                             <video
@@ -457,6 +633,18 @@ export default function ProductDetail({
 
               {/* subtle overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-transparent to-transparent pointer-events-none" />
+
+              {/* Expand affordance (opens the media slider lightbox at current slide) */}
+              {lightboxMedia.length ? (
+                <button
+                  type="button"
+                  onClick={() => openLightbox(selectedMediaIndex)}
+                  className="absolute top-3 right-3 z-10 w-10 h-10 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 flex items-center justify-center text-white"
+                  aria-label="View full screen"
+                >
+                  <Maximize2 size={18} />
+                </button>
+              ) : null}
             </div>
 
             {hasMedia && (
@@ -536,7 +724,7 @@ export default function ProductDetail({
               </div>
             </div>
 
-            <div className="mt-5 sm:mt-6 flex-1 min-h-0">
+            <div ref={tabsTopRef} className="mt-5 sm:mt-6 flex-1 min-h-0">
               <Tabs
                 value={tab}
                 onValueChange={(v) => {
@@ -547,35 +735,73 @@ export default function ProductDetail({
                     return
                   }
                   setTab(v)
+
+                  // If the user is currently down in the rich-details section,
+                  // jumping to another tab should bring them back to the tab content.
+                  if (showRichDetails) setShowRichDetails(false)
+
+                  requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                      scrollToTabs('smooth')
+                    })
+                  })
                 }}
                 className="h-full"
               >
-                <div className="flex items-center gap-3">
-                  <TabsList
-                    className="w-full bg-white/5 border border-white/10 text-slate-400 gap-1 px-1 overflow-x-auto whitespace-nowrap pr-2 justify-start
-                      [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-                  >
+                <div className="flex items-center gap-3 w-full">
+                  <div className="w-full">
+                    {/* Mobile + tablet portrait: Details CTA ABOVE the tabs (not below) */}
+                    <div className="lg:hidden mb-2">
+                      <motion.button
+                        whileTap={{ scale: 0.985 }}
+                        type="button"
+                        onClick={openDetails}
+                        className="w-full h-10 rounded-2xl bg-primary text-white font-black hover-primary transition
+                          ring-1 ring-white/10 shadow-lg shadow-primary/25
+                          inline-flex items-center justify-center gap-2 px-5"
+                        aria-label="Open details"
+                      >
+                        <ChevronDown size={18} />
+                        More details
+                      </motion.button>
+                    </div>
+
+                    <TabsList
+                      className="w-full h-auto lg:h-11 border border-white/10 text-slate-200/80 gap-1 p-1
+                        bg-black/20 backdrop-blur-sm
+                        grid grid-cols-2 md:grid-cols-4 lg:flex lg:overflow-x-auto lg:whitespace-nowrap lg:px-1 lg:justify-between
+                        rounded-2xl
+                        [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                    >
                     <TabsTrigger
                       value="overview"
-                      className="flex-none px-3 text-xs sm:text-sm text-slate-300 data-[state=active]:text-slate-900"
+                      className="w-full h-9 sm:h-10 leading-none justify-center px-3 py-0 rounded-xl text-[11px] sm:text-sm text-slate-200/80 hover:text-white hover:bg-white/10
+                        data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow
+                        lg:flex-1"
                     >
                       Overview
                     </TabsTrigger>
                     <TabsTrigger
                       value="value"
-                      className="flex-none px-3 text-xs sm:text-sm text-slate-300 data-[state=active]:text-slate-900"
+                      className="w-full h-9 sm:h-10 leading-none justify-center px-3 py-0 rounded-xl text-[11px] sm:text-sm text-slate-200/80 hover:text-white hover:bg-white/10
+                        data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow
+                        lg:flex-1"
                     >
                       Value
                     </TabsTrigger>
                     <TabsTrigger
                       value="features"
-                      className="flex-none px-3 text-xs sm:text-sm text-slate-300 data-[state=active]:text-slate-900"
+                      className="w-full h-9 sm:h-10 leading-none justify-center px-3 py-0 rounded-xl text-[11px] sm:text-sm text-slate-200/80 hover:text-white hover:bg-white/10
+                        data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow
+                        lg:flex-1"
                     >
                       Features
                     </TabsTrigger>
                     <TabsTrigger
                       value="refs"
-                      className="flex-none px-3 text-xs sm:text-sm text-slate-300 data-[state=active]:text-slate-900"
+                      className="w-full h-9 sm:h-10 leading-none justify-center px-3 py-0 rounded-xl text-[11px] sm:text-sm text-slate-200/80 hover:text-white hover:bg-white/10
+                        data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow
+                        lg:flex-1"
                     >
                       References
                     </TabsTrigger>
@@ -584,26 +810,13 @@ export default function ProductDetail({
                     <TabsTrigger
                       value="details"
                       title="View rich details"
-                      className="hidden sm:inline-flex flex-none h-8 rounded-full bg-primary text-white font-black border-primary/40 px-4 hover-primary data-[state=active]:bg-primary data-[state=active]:text-white"
+                      className="hidden lg:inline-flex flex-none h-9 rounded-full bg-primary text-white font-black border-primary/40 px-5 hover-primary data-[state=active]:bg-primary data-[state=active]:text-white"
                     >
                       <ChevronDown size={16} />
                       Details
                     </TabsTrigger>
-                  </TabsList>
-                </div>
-
-                {/* Mobile-only: keep the “Details” CTA visible (tabs can overflow horizontally).
-                    NOTE: This must NOT use <TabsTrigger/> outside TabsList (Radix roving focus).
-                */}
-                <div className="sm:hidden mt-2">
-                  <button
-                    type="button"
-                    onClick={openDetails}
-                    className="w-full h-10 rounded-2xl bg-primary text-white font-black border border-primary/40 inline-flex items-center justify-center gap-2 hover-primary"
-                  >
-                    <ChevronDown size={16} />
-                    Details
-                  </button>
+                    </TabsList>
+                  </div>
                 </div>
 
                 <TabsContent value="overview" className="mt-4">
@@ -795,7 +1008,7 @@ export default function ProductDetail({
             {/* Inline rich details section (brochure style) - full width */}
             {showRichDetails ? (
               <div ref={richDetailsRef} className="lg:col-span-2 pt-2 pb-14 sm:pb-24">
-                <div className="rounded-[32px] overflow-hidden border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.03] backdrop-blur p-0 sm:p-5 md:p-8">
+                <div className="rounded-[32px] overflow-hidden border border-white/10 bg-gradient-to-b from-white/[0.06] to-white/[0.03] backdrop-blur p-0 sm:p-4 md:p-5 lg:p-8">
                   <div className="px-4 pt-4 sm:px-0 sm:pt-0">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 mb-4 sm:mb-6">
                     <div className="min-w-0">

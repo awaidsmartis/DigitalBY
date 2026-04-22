@@ -322,7 +322,7 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
       <div
         className={
           embedded
-            ? 'mx-auto max-w-6xl px-0 md:px-2 pb-2 pt-0 relative'
+            ? 'w-full px-0 pb-2 pt-0 relative'
             : // Pull the content slightly into the hero so the first cards don't “hard cut” at the hero edge
               'mx-auto max-w-6xl px-6 pb-20 -mt-10 pt-6 relative z-10'
         }
@@ -362,7 +362,7 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
           ) : null}
 
           {/* CONTENT */}
-          <div className={embedded ? 'space-y-10 px-3 sm:px-5 md:px-8 pb-8 sm:pb-10' : 'space-y-10'}>
+          <div className={embedded ? 'space-y-10 px-2 sm:px-3 md:px-4 pb-8 sm:pb-10' : 'space-y-10'}>
             <section id={sectionId('overview')} className={sectionScrollMt}>
               <motion.div
                 initial={{ opacity: 0, y: 16 }}
