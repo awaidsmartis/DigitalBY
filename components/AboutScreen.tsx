@@ -27,11 +27,13 @@ export default function AboutScreen({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
-      className="relative w-full h-screen overflow-hidden bg-digitalby text-white"
+      // RootLayout locks body/html scrolling (kiosk). Keep this screen scrollable
+      // by owning the vertical scroll at the page root (works better on tablet landscape).
+      className="relative w-full h-dvh overflow-y-auto overscroll-contain bg-digitalby text-white [-webkit-overflow-scrolling:touch]"
     >
       <BottomLeftControls />
       {/* Ambient background (no hero image) */}
-      <div className="absolute inset-0 pointer-events-none">
+      <div className="fixed inset-0 pointer-events-none">
         {/* Watermark: booth number */}
         <div className="absolute left-1/2 sm:left-[72%] md:left-[74%] lg:left-[66%] top-1/2 -translate-x-1/2 -translate-y-1/2 select-none">
           <div className="text-[340px] sm:text-[520px] md:text-[640px] lg:text-[760px] leading-none font-black tracking-tight text-white/5">
@@ -68,13 +70,13 @@ export default function AboutScreen({
         <ChevronLeft size={24} />
       </motion.button>
 
-      {/* Internal scroll container (body/html are locked for kiosk mode) */}
-      <div className="relative z-10 h-full overflow-y-auto overscroll-contain max-w-6xl mx-auto px-6 lg:px-12">
+      {/* Content (scrolls with the page root above) */}
+      <div className="relative z-10 max-w-6xl mx-auto px-6 lg:px-12">
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.12 }}
-          className="min-h-full box-border pt-12 pb-10 sm:pt-14 sm:pb-12 flex flex-col"
+          className="min-h-dvh box-border pt-12 pb-10 sm:pt-14 sm:pb-12 flex flex-col"
         >
           {/* Top row: event pill + Smart IS badge */}
           <div className="flex items-center justify-between gap-6">
@@ -103,7 +105,7 @@ export default function AboutScreen({
           </div>
 
           {/* Main hero (centered vertically) */}
-          <div className="flex-1 flex flex-col justify-center">
+          <div className="flex-1 flex flex-col justify-center [@media_(max-height:560px)]:justify-start">
             <p className="text-primary font-black tracking-[0.22em] mt-6 sm:mt-10 uppercase">
               {eventInfo.titleSmall.replace(/#\d+/g, '').trim()}
             </p>
