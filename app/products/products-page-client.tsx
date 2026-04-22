@@ -5,7 +5,11 @@ import ProductsCarousel from '@/components/ProductsCarousel'
 import { useProducts } from '@/hooks/useProducts'
 import { useRouter } from 'next/navigation'
 
-export default function ProductsPageClient() {
+export default function ProductsPageClient({
+  initialViewMode,
+}: {
+  initialViewMode: 'carousel' | 'cards'
+}) {
   const router = useRouter()
   const { state } = useProducts()
 
@@ -31,6 +35,7 @@ export default function ProductsPageClient() {
   return (
     <ProductsCarousel
       products={state.products}
+      initialViewMode={initialViewMode}
       onSelectProduct={(p) => router.push(`/products/${p.id}`)}
       onBack={() => router.push('/menu')}
     />

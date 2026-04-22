@@ -289,7 +289,7 @@ export default function ProductDetail({
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           onClick={onClose}
-          className="absolute top-3 right-3 sm:top-4 sm:right-4 p-2 sm:p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300 backdrop-blur-sm z-20"
+          className="absolute top-3 right-3 sm:top-4 sm:right-4 p-2 sm:p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all duration-300 backdrop-blur-sm z-[80]"
           aria-label="Close"
           type="button"
         >
@@ -503,10 +503,16 @@ export default function ProductDetail({
                 />
               </div>
 
-              <p className="text-slate-500 text-sm mt-4 pb-24 lg:pb-0 text-right pr-1 sm:pr-2">
+              {/* Desktop: show the index as a fixed pill on the bottom-right */}
+              <div className="hidden lg:block fixed bottom-6 right-6 z-40 text-sm text-white/80 bg-black/40 border border-white/10 backdrop-blur px-3 py-1.5 rounded-full">
                 {currentIndex + 1} of {allProducts.length}
-              </p>
+              </div>
             </motion.div>
+          </div>
+
+          {/* Mobile/Tablet portrait: fixed product index on the bottom-right (kept clear of theme button) */}
+          <div className="fixed bottom-4 right-20 sm:bottom-6 sm:right-24 z-40 lg:hidden text-xs text-white/80 bg-black/40 border border-white/10 backdrop-blur px-3 py-1.5 rounded-full">
+            {currentIndex + 1} of {allProducts.length}
           </div>
         </div>
       </motion.div>

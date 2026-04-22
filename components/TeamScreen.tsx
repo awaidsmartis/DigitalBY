@@ -46,7 +46,7 @@ export default function TeamScreen({ onBack }: TeamScreenProps) {
       <div className="max-w-7xl mx-auto pt-10">
         <div className="text-center mb-12">
           <p className="text-primary font-semibold tracking-wide">OUR TEAM</p>
-          <h1 className="text-5xl md:text-6xl font-black mt-3">Meet the people behind DigitalBY</h1>
+          <h1 className="text-5xl md:text-6xl font-black mt-3">Meet the people behind</h1>
           <p className="text-slate-400 mt-4 text-lg">
             <span className="lg:hidden">Tap a card to read more</span>
             <span className="hidden lg:inline">Click a card to read more</span>

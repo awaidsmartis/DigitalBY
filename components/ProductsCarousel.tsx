@@ -8,18 +8,27 @@ import Image from 'next/image'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import BottomLeftControls from './BottomLeftControls'
 
+type PersistedProductsCarouselState = {
+  selectedIndex: number
+  scrollTop?: number
+}
+
+const PRODUCTS_CAROUSEL_STATE_KEY = 'digitalby:productsCarouselState:v1'
+
 interface ProductsCarouselProps {
   products: Product[]
+  initialViewMode: 'carousel' | 'cards'
   onSelectProduct: (product: Product) => void
   onBack: () => void
 }
 
 export default function ProductsCarousel({
   products,
+  initialViewMode,
   onSelectProduct,
   onBack,
 }: ProductsCarouselProps) {
-  const [viewMode, setViewMode] = useState<'carousel' | 'cards'>('carousel')
+  const [viewMode, setViewMode] = useState<'carousel' | 'cards'>(initialViewMode)
 
   const [viewportRef, embla] = useEmblaCarousel({
     loop: false,
@@ -32,6 +41,79 @@ export default function ProductsCarousel({
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [canScrollPrev, setCanScrollPrev] = useState(false)
   const [canScrollNext, setCanScrollNext] = useState(false)
+
+  // Prevent the initial default state from overwriting a persisted state.
+  const didRestoreRef = useMemo(() => ({ current: false }), [])
+
+  const rootScrollRef = useCallback((el: HTMLDivElement | null) => {
+    // store ref in closure via DOM; we only need it for reading scrollTop
+    // (avoid useRef to keep code simple)
+    ;(rootScrollRef as any)._el = el
+  }, [])
+  const initialCarouselIndexRef = useMemo(() => ({ current: null as number | null }), [])
+
+  const setViewCookie = useCallback((mode: 'carousel' | 'cards') => {
+    if (typeof document === 'undefined') return
+    // 1 year
+    document.cookie = `digitalby_products_view=${mode}; Max-Age=31536000; Path=/; SameSite=Lax`
+  }, [])
+
+  const readPersistedState = () => {
+    if (typeof window === 'undefined') return null
+    try {
+      // Prefer localStorage (survives refresh). Fall back to older sessionStorage value.
+      const raw =
+        window.localStorage.getItem(PRODUCTS_CAROUSEL_STATE_KEY) ??
+        window.sessionStorage.getItem(PRODUCTS_CAROUSEL_STATE_KEY)
+      if (!raw) return null
+      const parsed = JSON.parse(raw) as Partial<PersistedProductsCarouselState>
+      return {
+        selectedIndex: typeof parsed.selectedIndex === 'number' ? parsed.selectedIndex : 0,
+        scrollTop: typeof parsed.scrollTop === 'number' ? parsed.scrollTop : undefined,
+      } satisfies PersistedProductsCarouselState
+    } catch {
+      return null
+    }
+  }
+
+  const persistState = useCallback((partial?: Partial<PersistedProductsCarouselState>) => {
+    if (typeof window === 'undefined') return
+    const el = (rootScrollRef as any)._el as HTMLDivElement | null
+    const next: PersistedProductsCarouselState = {
+      selectedIndex,
+      scrollTop: el?.scrollTop,
+      ...(partial ?? {}),
+    }
+
+    try {
+      window.localStorage.setItem(PRODUCTS_CAROUSEL_STATE_KEY, JSON.stringify(next))
+    } catch {
+      // ignore
+    }
+  }, [rootScrollRef, selectedIndex, viewMode])
+
+  // Restore state when navigating back from product details.
+  useEffect(() => {
+    const saved = readPersistedState()
+    didRestoreRef.current = true
+    if (!saved) return
+    setSelectedIndex(Math.max(0, Math.min(saved.selectedIndex, Math.max(0, products.length - 1))))
+    initialCarouselIndexRef.current = saved.selectedIndex
+
+    // If returning to card view, restore scroll position after paint.
+    if (viewMode === 'cards' && typeof saved.scrollTop === 'number') {
+      requestAnimationFrame(() => {
+        const el = (rootScrollRef as any)._el as HTMLDivElement | null
+        if (el) el.scrollTop = saved.scrollTop ?? 0
+      })
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  // Keep cookie in sync so server can render correct view without hydration flicker.
+  useEffect(() => {
+    setViewCookie(viewMode)
+  }, [setViewCookie, viewMode])
 
   const onSelect = useCallback(() => {
     if (!embla) return
@@ -46,6 +128,13 @@ export default function ProductsCarousel({
     // When switching away from the carousel view, Embla should not try to update state.
     if (viewMode !== 'carousel') return
 
+    // If we have a restored index, jump there before syncing state.
+    if (typeof initialCarouselIndexRef.current === 'number') {
+      const idx = Math.max(0, Math.min(initialCarouselIndexRef.current, products.length - 1))
+      embla.scrollTo(idx, true)
+      initialCarouselIndexRef.current = null
+    }
+
     embla.on('select', onSelect)
     embla.on('reInit', onSelect)
     onSelect()
@@ -53,7 +142,13 @@ export default function ProductsCarousel({
       embla.off('select', onSelect)
       embla.off('reInit', onSelect)
     }
-  }, [embla, onSelect, viewMode])
+  }, [embla, initialCarouselIndexRef, onSelect, products.length, viewMode])
+
+  // Persist state when key UI state changes.
+  useEffect(() => {
+    if (!didRestoreRef.current) return
+    persistState()
+  }, [persistState, selectedIndex, viewMode])
 
   const scrollPrev = () => embla?.scrollPrev()
   const scrollNext = () => embla?.scrollNext()
@@ -66,6 +161,11 @@ export default function ProductsCarousel({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.25 }}
+      ref={rootScrollRef}
+      onScroll={() => {
+        // Persist scroll position (mainly for cards view)
+        if (viewMode === 'cards') persistState()
+      }}
       className="relative w-full h-screen overflow-y-auto overscroll-contain bg-digitalby flex flex-col px-4 sm:px-6 py-8 sm:py-12"
     >
       {/* Header */}
@@ -88,12 +188,18 @@ export default function ProductsCarousel({
           </p>
         </div>
         <div className="flex items-center justify-end gap-3">
-          {/* View toggle: Carousel ↔ List */}
+          {/* View toggle: Slider ↔ Cards (kept next to Close as requested) */}
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => {
-              setViewMode((m) => (m === 'carousel' ? 'cards' : 'carousel'))
+              setViewMode((m) => {
+                const next = m === 'carousel' ? 'cards' : 'carousel'
+                // write cookie immediately to avoid race when navigating
+                setViewCookie(next)
+                return next
+              })
+
               // If we return to carousel, ensure Embla state is re-synced.
               requestAnimationFrame(() => {
                 requestAnimationFrame(() => {
@@ -104,14 +210,11 @@ export default function ProductsCarousel({
                 })
               })
             }}
-            className="h-11 px-4 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/10 text-white transition-all duration-300 backdrop-blur-sm inline-flex items-center gap-2"
-            aria-label={viewMode === 'carousel' ? 'Switch to card view' : 'Switch to carousel view'}
+            className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-white/10 hover:bg-white/20 border border-white/10 text-white transition-all duration-300 backdrop-blur-sm inline-flex items-center justify-center"
+            aria-label={viewMode === 'carousel' ? 'Switch to card view' : 'Switch to slider view'}
             type="button"
           >
-            {viewMode === 'carousel' ? <LayoutGrid size={18} /> : <List size={18} />}
-            <span className="hidden sm:inline text-sm font-bold">
-              {viewMode === 'carousel' ? 'Card view' : 'Slider view'}
-            </span>
+            {viewMode === 'carousel' ? <LayoutGrid size={16} /> : <List size={16} />}
           </motion.button>
 
           <motion.button
@@ -146,7 +249,10 @@ export default function ProductsCarousel({
                         animate={{ scale: isActive ? 1 : 0.96, opacity: isActive ? 1 : 0.65 }}
                         transition={{ type: 'spring', stiffness: 260, damping: 28 }}
                         whileTap={{ scale: 0.98 }}
-                        onClick={() => onSelectProduct(product)}
+                        onClick={() => {
+                          persistState({ selectedIndex })
+                          onSelectProduct(product)
+                        }}
                         className="w-full h-[380px] sm:h-[380px] rounded-[28px] overflow-hidden group cursor-pointer relative border border-white/10 bg-white/5 shadow-2xl shadow-black/25 [@media(orientation:portrait)_and_(min-width:768px)]:h-[440px]"
                         type="button"
                       >
@@ -277,7 +383,11 @@ export default function ProductsCarousel({
                 key={p.id}
                 type="button"
                 whileTap={{ scale: 0.99 }}
-                onClick={() => onSelectProduct(p)}
+                onClick={() => {
+                  // capture state before navigation (covers touch + mouse)
+                  persistState({ selectedIndex })
+                  onSelectProduct(p)
+                }}
                 className="w-full rounded-3xl border border-white/10 bg-white/5 hover:bg-white/10 transition p-4 sm:p-5 text-left"
               >
                 <div className="flex items-start justify-between gap-3">

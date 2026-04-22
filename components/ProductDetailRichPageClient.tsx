@@ -12,9 +12,10 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useProducts } from '@/hooks/useProducts'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import {
   ArrowLeft,
+  ArrowUp,
   ChevronDown,
   ChevronRight,
   ExternalLink,
@@ -49,6 +50,7 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
   const { state, productById } = useProducts()
 
   const [activeSection, setActiveSection] = useState<string>('overview')
+  const [embeddedMobileScrollMode, setEmbeddedMobileScrollMode] = useState(false)
   const embeddedTabsWrapRef = useRef<HTMLDivElement | null>(null)
   const embeddedTabsMeasureRef = useRef<HTMLDivElement | null>(null)
   const tocRef = useRef<HTMLDivElement | null>(null)
@@ -56,8 +58,39 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
   const [embeddedTabsCondensed, setEmbeddedTabsCondensed] = useState(false)
   const [embeddedTabsMaxPrimary, setEmbeddedTabsMaxPrimary] = useState<number>(3)
 
+  const embeddedSectionStorageKey = useMemo(() => {
+    return `digitalby:productDetailActiveSection:v1:${productId}`
+  }, [productId])
+
   // IMPORTANT: do not early-return before all hooks have been called.
   const product = state.status === 'ready' ? productById?.(productId) : undefined
+
+  // Only enable the "continuous scroll" tabs behavior on mobile + tablet portrait.
+  // Desktop / tablet landscape should keep the original "single section" experience.
+  useEffect(() => {
+    if (!embedded) {
+      setEmbeddedMobileScrollMode(false)
+      return
+    }
+
+    const update = () => {
+      const w = window.innerWidth
+      const isPortrait =
+        window.matchMedia?.('(orientation: portrait)')?.matches ?? window.innerHeight >= window.innerWidth
+      const isSmallEnough = w <= 1024
+      setEmbeddedMobileScrollMode(Boolean(isPortrait && isSmallEnough))
+    }
+
+    update()
+    window.addEventListener('resize', update)
+    window.addEventListener('orientationchange', update)
+    return () => {
+      window.removeEventListener('resize', update)
+      window.removeEventListener('orientationchange', update)
+    }
+  }, [embedded])
+
+  const embeddedUseContinuousScroll = embedded && embeddedMobileScrollMode
 
   const hostnameFor = (url: string) => {
     try {
@@ -150,13 +183,46 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
   const idPrefix = embedded ? `product-${productId}-details-` : ''
   const sectionId = (id: string) => `${idPrefix}${id}`
   // Embedded mode has a sticky tab bar, so we need slightly more scroll-margin.
-  const sectionScrollMt = embedded ? 'scroll-mt-28' : 'scroll-mt-28'
+  // Also add a little top padding so section headings don't feel glued to the sticky tabs.
+  const sectionScrollMt = embedded ? 'scroll-mt-36 pt-3' : 'scroll-mt-28'
 
-  // When embedded, ensure the first section is considered active initially
-  // (or use an initial deep-linked section).
+  // When embedded, restore the last selected section for this product (session-only)
+  // so the user returns to the same tab after leaving details.
+  // If a deep-link section is provided, it wins.
   useEffect(() => {
-    setActiveSection(initialSectionId ?? 'overview')
-  }, [initialSectionId, productId])
+    if (!embedded) {
+      setActiveSection(initialSectionId ?? 'overview')
+      return
+    }
+
+    if (initialSectionId) {
+      setActiveSection(initialSectionId)
+      return
+    }
+
+    try {
+      const saved = window.sessionStorage.getItem(embeddedSectionStorageKey)
+      const allowed = new Set(tocSections.map(s => s.id))
+      if (saved && allowed.has(saved)) {
+        setActiveSection(saved)
+        return
+      }
+    } catch {
+      // ignore
+    }
+
+    setActiveSection('overview')
+  }, [embedded, embeddedSectionStorageKey, initialSectionId, productId, tocSections])
+
+  // Persist embedded active section whenever it changes.
+  useEffect(() => {
+    if (!embedded) return
+    try {
+      window.sessionStorage.setItem(embeddedSectionStorageKey, activeSection)
+    } catch {
+      // ignore
+    }
+  }, [activeSection, embedded, embeddedSectionStorageKey])
 
   useEffect(() => {
     // In embedded mode we render one section at a time (classic tabs),
@@ -189,7 +255,47 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
     return () => observer.disconnect()
   }, [embedded, idPrefix, state.status, tocSections])
 
-  const scrollToSection = useCallback((id: string) => {
+  const getEmbeddedScrollContainer = useCallback((el?: HTMLElement | null) => {
+    return (
+      (el?.closest?.('[data-scroll-container="product-detail-modal"]') as HTMLElement | null) ??
+      (document.querySelector('[data-scroll-container="product-detail-modal"]') as HTMLElement | null)
+    )
+  }, [])
+
+  const scrollEmbeddedToTop = useCallback(() => {
+    const container = getEmbeddedScrollContainer(null)
+    if (!container) return
+    container.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [getEmbeddedScrollContainer])
+
+  const [showBackToTop, setShowBackToTop] = useState(false)
+
+  // Show the mobile "back to top" only after user scrolls a bit.
+  useEffect(() => {
+    if (!embeddedUseContinuousScroll) {
+      setShowBackToTop(false)
+      return
+    }
+
+    const container = getEmbeddedScrollContainer(null)
+    if (!container) return
+
+    const onScroll = () => {
+      setShowBackToTop(container.scrollTop > 240)
+    }
+    onScroll()
+    container.addEventListener('scroll', onScroll, { passive: true })
+    return () => container.removeEventListener('scroll', onScroll)
+  }, [embeddedUseContinuousScroll, getEmbeddedScrollContainer])
+
+  const scrollToSection = useCallback((
+    id: string,
+    opts?: {
+      behavior?: ScrollBehavior
+      /** Avoid re-scrolling when we're already basically at the target (prevents jitter). */
+      onlyIfFar?: boolean
+    }
+  ) => {
     const el = document.getElementById(sectionId(id))
     if (!el) return
 
@@ -197,19 +303,35 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
     // Scrolling the container directly is more reliable than relying on `scrollIntoView`
     // (which can occasionally land a section under the sticky sub-nav).
     if (embedded) {
-      const container = el.closest('[data-scroll-container="product-detail-modal"]') as HTMLElement | null
+      const container = getEmbeddedScrollContainer(el)
       if (container) {
         const containerRect = container.getBoundingClientRect()
         const elRect = el.getBoundingClientRect()
-        const stickyOffset = 96 // sticky embedded tabs height + spacing
+        // Keep the section a bit LOWER (more breathing room below the sticky tabs).
+        // This also helps avoid the feeling that the section is being shoved under the nav.
+        const stickyOffset = 128
         const nextTop = container.scrollTop + (elRect.top - containerRect.top) - stickyOffset
-        container.scrollTo({ top: Math.max(0, nextTop), behavior: 'smooth' })
+
+        const targetTop = Math.max(0, nextTop)
+        if (opts?.onlyIfFar && Math.abs(container.scrollTop - targetTop) < 8) return
+
+        container.scrollTo({ top: targetTop, behavior: opts?.behavior ?? 'smooth' })
         return
       }
     }
 
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }, [embedded, sectionId])
+    el.scrollIntoView({ behavior: opts?.behavior ?? 'smooth', block: 'start' })
+  }, [embedded, getEmbeddedScrollContainer, sectionId])
+
+  const handleEmbeddedTabSelect = useCallback(
+    (nextId: string) => {
+      setActiveSection(nextId)
+      if (embeddedUseContinuousScroll) {
+        scrollToSection(nextId, { behavior: 'smooth', onlyIfFar: true })
+      }
+    },
+    [embeddedUseContinuousScroll, scrollToSection]
+  )
 
   // Embedded sticky tabs: subtle “condense” animation once the user scrolls down.
   useEffect(() => {
@@ -339,12 +461,12 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
 
   const shouldRenderSection = useCallback(
     (id: string) => {
-      // Non-embedded: brochure flow (all sections present)
       if (!embedded) return true
-      // Embedded: classic tabs (only active section is present)
+      if (embeddedUseContinuousScroll) return true
+      // Desktop / tablet landscape: keep original behavior (only active section mounted)
       return activeSection === id
     },
-    [activeSection, embedded]
+    [activeSection, embedded, embeddedUseContinuousScroll]
   )
 
   if (state.status === 'loading') {
@@ -420,6 +542,7 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
                     .filter(
                       (c): c is NonNullable<typeof c> =>
                         Boolean(c?.url) &&
+                        Boolean(c?.label) &&
                         !isDownloadLabel(c.label) &&
                         !isSmartAppsUrl(c.url) &&
                         !isSmartIsProductUrl(c.url)
@@ -537,14 +660,14 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
             {embedded ? (
               <div
                 className={
-                  'sticky top-0 z-30 -mx-2 sm:-mx-3 md:-mx-4 px-2 sm:px-3 md:px-4 border-b border-white/10 bg-digitalby/65 backdrop-blur-xl transition-all ' +
+                  'sticky top-3 sm:top-4 z-30 -mx-2 sm:-mx-3 md:-mx-4 px-2 sm:px-3 md:px-4 border-b border-white/10 bg-digitalby/65 backdrop-blur-xl transition-all ' +
                   (embeddedTabsCondensed ? 'pt-1 pb-2 shadow-lg shadow-black/20' : 'pt-2 pb-3')
                 }
               >
                 <Tabs
                   value={activeSection}
                   onValueChange={(v) => {
-                    setActiveSection(v)
+                    handleEmbeddedTabSelect(v)
                   }}
                 >
                   <div ref={embeddedTabsWrapRef} className="w-full">
@@ -553,6 +676,12 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
                       <TabsTrigger
                         key={s.id}
                         value={s.id}
+                        onPointerDown={() => {
+                          // Support tapping the active tab: still scroll to that section (mobile portrait only).
+                          if (embeddedUseContinuousScroll) {
+                            scrollToSection(s.id, { behavior: 'smooth', onlyIfFar: true })
+                          }
+                        }}
                         className="flex-none relative h-9 px-3 rounded-xl text-[11px] sm:text-sm font-bold text-slate-200/80 hover:text-white hover:bg-white/10
                           data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow
                           after:absolute after:left-3 after:right-3 after:-bottom-1 after:h-[2px] after:rounded-full after:bg-primary after:opacity-0
@@ -593,7 +722,7 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
                                 (t.id === activeSection ? 'bg-white/10 text-white' : 'text-slate-200')
                               }
                               onSelect={() => {
-                                setActiveSection(t.id)
+                                handleEmbeddedTabSelect(t.id)
                               }}
                             >
                               {t.label}
@@ -634,15 +763,9 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
             ) : null}
 
             {embedded ? (
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.div
-                  key={activeSection}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.18, ease: 'easeOut' }}
-                >
-                  {shouldRenderSection('overview') ? (
+              <>
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.18, ease: 'easeOut' }}>
+                    {shouldRenderSection('overview') ? (
                     <section id={sectionId('overview')} className={sectionScrollMt}>
                       <motion.div
                         initial={{ opacity: 0, y: 16 }}
@@ -674,6 +797,7 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
                               .filter(
                                 (c): c is NonNullable<typeof c> =>
                                   Boolean(c?.url) &&
+                                  Boolean(c?.label) &&
                                   !isDownloadLabel(c.label) &&
                                   !isSmartAppsUrl(c.url) &&
                                   !isSmartIsProductUrl(c.url)
@@ -699,7 +823,7 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
                         )}
                       </motion.div>
                     </section>
-                  ) : null}
+                    ) : null}
 
                   {shouldRenderSection('value') && (product.highlights?.length || product.stats?.length || product.valueProposition?.length) ? (
                     <section id={sectionId('value')} className={sectionScrollMt}>
@@ -926,7 +1050,18 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
                     </section>
                   ) : null}
                 </motion.div>
-              </AnimatePresence>
+
+                {embeddedUseContinuousScroll && showBackToTop ? (
+                  <button
+                    type="button"
+                    onClick={scrollEmbeddedToTop}
+                    className="fixed bottom-5 left-5 z-40 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 backdrop-blur text-white inline-flex items-center justify-center shadow-lg"
+                    aria-label="Back to top"
+                  >
+                    <ArrowUp size={18} />
+                  </button>
+                ) : null}
+              </>
             ) : null}
 
             {!embedded ? (
@@ -977,6 +1112,7 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
                             .filter(
                               (c): c is NonNullable<typeof c> =>
                                 Boolean(c?.url) &&
+                                Boolean(c?.label) &&
                                 !isDownloadLabel(c.label) &&
                                 !isSmartAppsUrl(c.url) &&
                                 !isSmartIsProductUrl(c.url)
