@@ -7,7 +7,6 @@ import './globals.css'
 
 const geist = Geist({ subsets: ["latin"], variable: '--font-sans' });
 const geistMono = Geist_Mono({ subsets: ["latin"], variable: '--font-mono' });
-
 export const metadata: Metadata = {
   title: 'Smart IS - Warehouse Solutions & Product Showcase',
   description: 'Discover Smart IS innovative warehouse management solutions including MOCA Client, AUTEST, Smart DevOps, and 12+ products for supply chain transformation.',
@@ -54,7 +53,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="overflow-hidden" suppressHydrationWarning>
       <body
-        className={`${geist.variable} ${geistMono.variable} font-sans antialiased overflow-hidden`}
+        className="font-sans antialiased overflow-hidden"
         suppressHydrationWarning
       >
         <ColorThemeBootstrap />

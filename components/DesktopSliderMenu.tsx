@@ -34,7 +34,7 @@ export default function DesktopSliderMenu({ className }: { className?: string })
             </SheetTitle>
           </SheetHeader>
 
-          <nav className="p-4">
+          <nav className="p-4 flex-1 overflow-y-auto">
             <div className="space-y-2">
               {NAV_ITEMS.map((item) => {
                 const Icon = item.icon

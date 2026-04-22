@@ -1,4 +1,3 @@
-'use client'
 
 import BottomLeftControls from '@/components/BottomLeftControls'
 import LoadingScreen from '@/components/LoadingScreen'
@@ -12,6 +11,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useProducts } from '@/hooks/useProducts'
+import { useUiPreferences } from '@/hooks/useUiPreferences'
 import { motion } from 'framer-motion'
 import {
   ArrowLeft,
@@ -48,6 +48,7 @@ type TocSection = {
 export default function ProductDetailRichPageClient({ productId, embedded, onBack, initialSectionId }: Props) {
   const router = useRouter()
   const { state, productById } = useProducts()
+  const { prefs } = useUiPreferences()
 
   const [activeSection, setActiveSection] = useState<string>('overview')
   const [embeddedMobileScrollMode, setEmbeddedMobileScrollMode] = useState(false)
@@ -57,6 +58,7 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
   const didAutoScrollRef = useRef<Record<string, boolean>>({})
   const [embeddedTabsCondensed, setEmbeddedTabsCondensed] = useState(false)
   const [embeddedTabsMaxPrimary, setEmbeddedTabsMaxPrimary] = useState<number>(3)
+  const [showLayoutToast, setShowLayoutToast] = useState(false)
 
   const embeddedSectionStorageKey = useMemo(() => {
     return `digitalby:productDetailActiveSection:v1:${productId}`
@@ -91,6 +93,21 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
   }, [embedded])
 
   const embeddedUseContinuousScroll = embedded && embeddedMobileScrollMode
+
+  const embeddedUseBottomTabs = Boolean(embeddedUseContinuousScroll && prefs.productTabsBottomOnMobile)
+
+  // Keep the pill size stable (no visual jump when the sticky bar toggles condensed/not).
+  // Slightly smaller than before so long labels (e.g. “Use Cases”) don’t feel oversized.
+  const tabPillSizeClass = 'h-10 px-3.5 text-[13px]'
+
+  // Quick visual hint when the user toggles the layout.
+  useEffect(() => {
+    if (!embedded) return
+
+    setShowLayoutToast(true)
+    const t = window.setTimeout(() => setShowLayoutToast(false), 900)
+    return () => window.clearTimeout(t)
+  }, [embedded, embeddedUseBottomTabs])
 
   const hostnameFor = (url: string) => {
     try {
@@ -182,9 +199,13 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
   // contain other sections with the same ids.
   const idPrefix = embedded ? `product-${productId}-details-` : ''
   const sectionId = (id: string) => `${idPrefix}${id}`
-  // Embedded mode has a sticky tab bar, so we need slightly more scroll-margin.
-  // Also add a little top padding so section headings don't feel glued to the sticky tabs.
-  const sectionScrollMt = embedded ? 'scroll-mt-36 pt-3' : 'scroll-mt-28'
+  // Embedded mode has a sticky tab bar, so we need more scroll-margin.
+  // If tabs are at the bottom, we can use a smaller top margin (and add bottom padding).
+  const sectionScrollMt = embedded
+    ? embeddedUseBottomTabs
+      ? 'scroll-mt-20 pb-24'
+      : 'scroll-mt-36 pt-3'
+    : 'scroll-mt-28'
 
   // When embedded, restore the last selected section for this product (session-only)
   // so the user returns to the same tab after leaving details.
@@ -398,7 +419,8 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
     if (!wrap || !measureRow) return
 
     const measure = () => {
-      const containerWidth = wrap.getBoundingClientRect().width
+      const listEl = wrap.querySelector<HTMLElement>('[data-slot="tabs-list"]')
+      const containerWidth = (listEl ?? wrap).getBoundingClientRect().width
       if (!containerWidth || Number.isNaN(containerWidth)) return
 
       const ordered = [...tocSections].sort((a, b) => tabPriority(a.id) - tabPriority(b.id))
@@ -408,9 +430,11 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
       const moreNode = measureRow.querySelector<HTMLElement>('[data-measure="more"]')
       if (nodes.length !== ordered.length || !moreNode) return
 
-      const gap = 4 // gap-1
-      const listPad = 8 // p-1
-      const available = Math.max(0, containerWidth - listPad * 2)
+      const style = window.getComputedStyle(listEl ?? wrap)
+      const gap = Number.parseFloat(style.columnGap || '0') || 4
+      const padL = Number.parseFloat(style.paddingLeft || '0') || 0
+      const padR = Number.parseFloat(style.paddingRight || '0') || 0
+      const available = Math.max(0, containerWidth - padL - padR)
 
       let used = 0
       let count = 0
@@ -439,7 +463,7 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
     const ro = new ResizeObserver(() => requestAnimationFrame(measure))
     ro.observe(wrap)
     return () => ro.disconnect()
-  }, [embedded, tabPriority, tocSections])
+  }, [embedded, tabPillSizeClass, tabPriority, tocSections])
 
   const { primaryTabs, moreTabs } = useMemo(() => {
     if (!embedded) return { primaryTabs: tocSections, moreTabs: [] as TocSection[] }
@@ -541,8 +565,9 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
                   {[product.cta.primary, product.cta.secondary]
                     .filter(
                       (c): c is NonNullable<typeof c> =>
-                        Boolean(c?.url) &&
-                        Boolean(c?.label) &&
+                        c != null &&
+                        typeof c.url === 'string' &&
+                        typeof c.label === 'string' &&
                         !isDownloadLabel(c.label) &&
                         !isSmartAppsUrl(c.url) &&
                         !isSmartIsProductUrl(c.url)
@@ -620,6 +645,11 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
               'mx-auto max-w-6xl px-6 pb-20 -mt-10 pt-6 relative z-10'
         }
       >
+        {embedded && showLayoutToast ? (
+          <div className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[60] px-4 py-2 rounded-full bg-black/55 border border-white/10 backdrop-blur text-xs text-white">
+            Updating layout…
+          </div>
+        ) : null}
         <div className={embedded ? 'grid grid-cols-1 gap-10' : 'grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-10'}>
           {/* TOC (page mode only) */}
           {!embedded ? (
@@ -660,8 +690,11 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
             {embedded ? (
               <div
                 className={
-                  'sticky top-3 sm:top-4 z-30 -mx-2 sm:-mx-3 md:-mx-4 px-2 sm:px-3 md:px-4 border-b border-white/10 bg-digitalby/65 backdrop-blur-xl transition-all ' +
-                  (embeddedTabsCondensed ? 'pt-1 pb-2 shadow-lg shadow-black/20' : 'pt-2 pb-3')
+                  (embeddedUseBottomTabs
+                    ? 'fixed bottom-0 left-0 right-0 z-30 px-2 sm:px-3 md:px-4 pb-[env(safe-area-inset-bottom)] border-t border-white/10 bg-digitalby/65 backdrop-blur-xl transition-all '
+                    : 'sticky top-3 sm:top-4 z-30 -mx-2 sm:-mx-3 md:-mx-4 px-2 sm:px-3 md:px-4 border-b border-white/10 bg-digitalby/65 backdrop-blur-xl transition-all ') +
+                  // Keep height stable; only add shadow when scrolled.
+                  ('pt-2 pb-3 ' + (embeddedTabsCondensed ? 'shadow-lg shadow-black/20' : ''))
                 }
               >
                 <Tabs
@@ -671,8 +704,16 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
                   }}
                 >
                   <div ref={embeddedTabsWrapRef} className="w-full">
-                    <TabsList className="w-full max-w-full h-auto bg-white/5 border border-white/10 rounded-2xl p-1 gap-1 flex items-center justify-start overflow-hidden">
-                    {primaryTabs.map((s) => (
+                    <TabsList
+                      className={
+                        // NOTE: allow overflow-visible so the active pill shadow and rounded corners
+                        // don't get clipped on the right edge (especially the “More” pill).
+                        'w-full max-w-full h-auto bg-white/5 border border-white/10 rounded-2xl gap-1 flex items-center justify-start overflow-visible ' +
+                        // padding: keep extra right padding at all sizes to avoid last-pixel clipping.
+                        'p-1 pr-2 sm:p-1.5 sm:pr-3'
+                      }
+                    >
+                      {primaryTabs.map((s) => (
                       <TabsTrigger
                         key={s.id}
                         value={s.id}
@@ -682,29 +723,34 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
                             scrollToSection(s.id, { behavior: 'smooth', onlyIfFar: true })
                           }
                         }}
-                        className="flex-none relative h-9 px-3 rounded-xl text-[11px] sm:text-sm font-bold text-slate-200/80 hover:text-white hover:bg-white/10
-                          data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow
-                          after:absolute after:left-3 after:right-3 after:-bottom-1 after:h-[2px] after:rounded-full after:bg-primary after:opacity-0
-                          data-[state=active]:after:opacity-100 after:transition-opacity"
+                        className={
+                          'flex-none relative rounded-xl font-bold text-slate-200/80 hover:text-white hover:bg-white/10 ' +
+                          tabPillSizeClass +
+                          ' data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow ' +
+                          'after:absolute after:left-3 after:right-3 after:-bottom-1 after:h-[2px] after:rounded-full after:bg-primary after:opacity-0 ' +
+                          'data-[state=active]:after:opacity-100 after:transition-opacity'
+                        }
                       >
                         {s.label}
                       </TabsTrigger>
-                    ))}
+                      ))}
 
-                    {moreTabs.length ? (
+                      {moreTabs.length ? (
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <button
                             type="button"
                             className={
-                              'flex-none relative h-9 px-3 rounded-xl text-[11px] sm:text-sm font-bold transition inline-flex items-center gap-2 ' +
+                              'flex-none relative rounded-xl font-bold transition inline-flex items-center gap-2 border border-transparent ' +
+                              tabPillSizeClass +
+                              ' ' +
                               (activeMoreTab
                                 ? 'bg-white text-slate-900 shadow'
                                 : 'text-slate-200/80 hover:text-white hover:bg-white/10')
                             }
                             aria-label="More sections"
                           >
-                            <span className="truncate max-w-[96px]">
+                            <span className="truncate max-w-[120px]">
                               {activeMoreTab ? activeMoreTab.label : 'More'}
                             </span>
                             <ChevronDown size={14} className={activeMoreTab ? 'text-slate-900' : 'text-slate-300'} />
@@ -730,7 +776,7 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
                           ))}
                         </DropdownMenuContent>
                       </DropdownMenu>
-                    ) : null}
+                      ) : null}
                     </TabsList>
                   </div>
                 </Tabs>
@@ -748,12 +794,21 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
                         <div
                           key={`measure-${s.id}`}
                           data-measure="tab"
-                          className="h-9 px-3 rounded-xl text-[11px] sm:text-sm font-bold whitespace-nowrap"
+                          className={
+                            'flex-none inline-flex items-center justify-center rounded-xl font-bold whitespace-nowrap ' +
+                            tabPillSizeClass
+                          }
                         >
                           {s.label}
                         </div>
                       ))}
-                    <div data-measure="more" className="h-9 px-3 rounded-xl text-[11px] sm:text-sm font-bold inline-flex items-center gap-2 whitespace-nowrap">
+                    <div
+                      data-measure="more"
+                      className={
+                        'flex-none inline-flex items-center gap-2 rounded-xl font-bold whitespace-nowrap border border-transparent ' +
+                        tabPillSizeClass
+                      }
+                    >
                       <span>More</span>
                       <ChevronDown size={14} />
                     </div>
@@ -796,8 +851,9 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
                             {[product.cta.primary, product.cta.secondary]
                               .filter(
                                 (c): c is NonNullable<typeof c> =>
-                                  Boolean(c?.url) &&
-                                  Boolean(c?.label) &&
+                                  c != null &&
+                                  typeof c.url === 'string' &&
+                                  typeof c.label === 'string' &&
                                   !isDownloadLabel(c.label) &&
                                   !isSmartAppsUrl(c.url) &&
                                   !isSmartIsProductUrl(c.url)
@@ -1051,11 +1107,12 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
                   ) : null}
                 </motion.div>
 
-                {embeddedUseContinuousScroll && showBackToTop ? (
+                {embeddedUseContinuousScroll && showBackToTop && !embeddedUseBottomTabs ? (
                   <button
                     type="button"
                     onClick={scrollEmbeddedToTop}
-                    className="fixed bottom-5 left-5 z-40 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 backdrop-blur text-white inline-flex items-center justify-center shadow-lg"
+                    className="fixed left-5 z-40 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 backdrop-blur text-white inline-flex items-center justify-center shadow-lg"
+                    style={{ bottom: '1.25rem' }}
                     aria-label="Back to top"
                   >
                     <ArrowUp size={18} />
@@ -1111,8 +1168,9 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
                           {[product.cta.primary, product.cta.secondary]
                             .filter(
                               (c): c is NonNullable<typeof c> =>
-                                Boolean(c?.url) &&
-                                Boolean(c?.label) &&
+                                c != null &&
+                                typeof c.url === 'string' &&
+                                typeof c.label === 'string' &&
                                 !isDownloadLabel(c.label) &&
                                 !isSmartAppsUrl(c.url) &&
                                 !isSmartIsProductUrl(c.url)

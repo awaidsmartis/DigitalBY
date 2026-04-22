@@ -6,7 +6,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Switch } from '@/components/ui/switch'
 import { useColorTheme, type ColorThemeId } from '@/hooks/useColorTheme';
+import { useUiPreferences } from '@/hooks/useUiPreferences'
 import { Paintbrush } from 'lucide-react';
 
 const THEMES: { id: ColorThemeId; name: string; hint: string }[] = [
@@ -18,6 +20,7 @@ const THEMES: { id: ColorThemeId; name: string; hint: string }[] = [
 
 export default function ColorThemeSwitcher() {
   const { theme, setTheme, isReady } = useColorTheme()
+  const { prefs, actions } = useUiPreferences()
 
   // Avoid hydration mismatch (localStorage)
   if (!isReady) return null
@@ -65,6 +68,36 @@ export default function ColorThemeSwitcher() {
             <span className="ml-auto text-xs text-slate-500">{t.hint}</span>
           </DropdownMenuItem>
         ))}
+
+        <DropdownMenuSeparator className="bg-white/10" />
+
+        <DropdownMenuLabel className="text-slate-300">Layout</DropdownMenuLabel>
+        <DropdownMenuItem
+          // Keep menu open; switch itself handles the change.
+          onSelect={(e) => e.preventDefault()}
+          className="focus:bg-transparent focus:text-white"
+        >
+          <div className="w-full flex items-center justify-between gap-3">
+            <div className="min-w-0">
+              <div className="text-sm font-semibold text-slate-200">Bottom tabs on mobile</div>
+              <div className="text-xs text-slate-500">Move product-detail section tabs to the bottom (portrait)</div>
+            </div>
+            <div className="flex items-center gap-2">
+              <Switch
+                checked={prefs.productTabsBottomOnMobile}
+                onCheckedChange={(v) => actions.setProductTabsBottomOnMobile(Boolean(v))}
+                aria-label="Toggle bottom tabs on mobile"
+                className={
+                  // Dark dropdown background needs a darker unchecked track.
+                  // Also ensure the thumb stays visible.
+                  'border border-white/10 ' +
+                  'data-[state=unchecked]:bg-white/10 data-[state=checked]:bg-primary/90 ' +
+                  '[&_[data-slot=switch-thumb]]:bg-white [&_[data-slot=switch-thumb]]:shadow-sm'
+                }
+              />
+            </div>
+          </div>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )

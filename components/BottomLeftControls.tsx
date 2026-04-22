@@ -6,7 +6,7 @@ import EdgeSwipeMenu from '@/components/EdgeSwipeMenu'
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 
-export default function BottomLeftControls() {
+export default function BottomLeftControls({ bottomOffsetPx = 0 }: { bottomOffsetPx?: number } = {}) {
   // Radix UI components (Sheet/DropdownMenu) can cause hydration mismatch warnings
   // when server-rendered. Render these controls only after mount.
   const [mounted, setMounted] = useState(false)
@@ -20,7 +20,10 @@ export default function BottomLeftControls() {
   return createPortal(
     <>
       {/* Bottom-left: navigation controls */}
-      <div className="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-40 flex items-center gap-2">
+      <div
+        className="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-40 flex items-center gap-2"
+        style={bottomOffsetPx ? { bottom: `calc(1rem + ${bottomOffsetPx}px)` } : undefined}
+      >
         <EdgeSwipeMenu />
         <DesktopSliderMenu />
         {/* On desktop we keep theme in the left cluster */}
@@ -30,7 +33,10 @@ export default function BottomLeftControls() {
       </div>
 
       {/* Bottom-right: theme control (portrait/tablet + mobile) */}
-      <div className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 lg:hidden">
+      <div
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 lg:hidden"
+        style={bottomOffsetPx ? { bottom: `calc(1rem + ${bottomOffsetPx}px)` } : undefined}
+      >
         <ColorThemeSwitcher />
       </div>
     </>,

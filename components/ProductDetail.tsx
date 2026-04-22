@@ -14,6 +14,7 @@ import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import BottomLeftControls from './BottomLeftControls'
+import { useUiPreferences } from '@/hooks/useUiPreferences'
 
 const ProductDetailRichPageClient = dynamic(() => import('./ProductDetailRichPageClient'), {
   loading: () => (
@@ -49,8 +50,35 @@ export default function ProductDetail({
   initialShowRichDetails,
   showNavigationArrows = true,
 }: ProductDetailProps) {
+  const { prefs } = useUiPreferences()
   const [product, setProduct] = useState(initialProduct)
   const [direction, setDirection] = useState(0)
+
+  // Only treat this as “mobile bottom tabs mode” in portrait (mobile + tablet portrait).
+  // This matches ProductDetailRichPageClient’s embedded continuous-scroll mode.
+  const [mobilePortraitMode, setMobilePortraitMode] = useState(false)
+
+  useEffect(() => {
+    const update = () => {
+      const w = window.innerWidth
+      const isPortrait =
+        window.matchMedia?.('(orientation: portrait)')?.matches ?? window.innerHeight >= window.innerWidth
+      const isSmallEnough = w <= 1024
+      setMobilePortraitMode(Boolean(isPortrait && isSmallEnough))
+    }
+
+    update()
+    window.addEventListener('resize', update)
+    window.addEventListener('orientationchange', update)
+    return () => {
+      window.removeEventListener('resize', update)
+      window.removeEventListener('orientationchange', update)
+    }
+  }, [])
+
+  const bottomTabsOnMobile = Boolean(prefs.productTabsBottomOnMobile && mobilePortraitMode)
+  // Approx height of the bottom tabs bar + outer spacing.
+  const bottomUiOffsetPx = bottomTabsOnMobile ? 104 : 0
 
   const [selectedMediaIndex, setSelectedMediaIndex] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
@@ -190,7 +218,7 @@ export default function ProductDetail({
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
         className="fixed inset-0 bg-digitalby z-50"
       >
-        <BottomLeftControls />
+        <BottomLeftControls bottomOffsetPx={bottomUiOffsetPx} />
 
         {/* Lightbox media slider (images + videos) */}
         <AnimatePresence>
@@ -511,7 +539,10 @@ export default function ProductDetail({
           </div>
 
           {/* Mobile/Tablet portrait: fixed product index on the bottom-right (kept clear of theme button) */}
-          <div className="fixed bottom-4 right-20 sm:bottom-6 sm:right-24 z-40 lg:hidden text-xs text-white/80 bg-black/40 border border-white/10 backdrop-blur px-3 py-1.5 rounded-full">
+          <div
+            className="fixed right-20 sm:right-24 z-40 lg:hidden text-xs text-white/80 bg-black/40 border border-white/10 backdrop-blur px-3 py-1.5 rounded-full"
+            style={{ bottom: bottomTabsOnMobile ? 'calc(1rem + 104px)' : '1rem' }}
+          >
             {currentIndex + 1} of {allProducts.length}
           </div>
         </div>
