@@ -1,13 +1,20 @@
-'use client'
 
 import BottomLeftControls from '@/components/BottomLeftControls'
 import LoadingScreen from '@/components/LoadingScreen'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { useProducts } from '@/hooks/useProducts'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import {
   ArrowLeft,
+  ChevronDown,
   ChevronRight,
   ExternalLink,
   Gauge,
@@ -18,7 +25,7 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 type Props = {
   productId: string
@@ -26,6 +33,8 @@ type Props = {
   embedded?: boolean
   /** Override the default “Back” navigation (used when embedded). */
   onBack?: () => void
+  /** When embedded, optionally auto-scroll to a particular section on first mount (e.g., deep-link to benefits). */
+  initialSectionId?: string
 }
 
 type TocSection = {
@@ -34,12 +43,14 @@ type TocSection = {
   show?: boolean
 }
 
-export default function ProductDetailRichPageClient({ productId, embedded, onBack }: Props) {
+export default function ProductDetailRichPageClient({ productId, embedded, onBack, initialSectionId }: Props) {
   const router = useRouter()
   const { state, productById } = useProducts()
 
   const [activeSection, setActiveSection] = useState<string>('overview')
   const tocRef = useRef<HTMLDivElement | null>(null)
+  const didAutoScrollRef = useRef<Record<string, boolean>>({})
+  const [embeddedTabsCondensed, setEmbeddedTabsCondensed] = useState(false)
 
   // IMPORTANT: do not early-return before all hooks have been called.
   const product = state.status === 'ready' ? productById?.(productId) : undefined
@@ -80,17 +91,29 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
       stats: Boolean(product?.stats?.length),
       keyFeatures: Boolean(product?.keyFeatures?.length),
       benefits: Boolean(product?.benefits?.length),
+      valueProposition: Boolean(product?.valueProposition?.length),
+      legacyFeatures: Boolean(product?.features?.length),
       useCases: Boolean(product?.useCases?.length),
       faqs: Boolean(product?.faqs?.length),
       links: Boolean(product?.references?.length),
     }
 
+    const hasValue = has.highlights || has.stats || has.valueProposition
+
+    // Content-driven naming rules:
+    // - Benefits: valueProposition + (or) benefits
+    // - How it works: keyFeatures
+    // - Features: legacy features list (only when keyFeatures is absent to avoid overlap)
+    const hasBenefits = has.benefits || has.valueProposition
+    const howItWorksLabel = 'How it works'
+    const showLegacyFeatures = has.legacyFeatures && !has.keyFeatures
+
     return [
       { id: 'overview', label: 'Overview', show: true },
-      { id: 'highlights', label: 'Highlights', show: has.highlights },
-      { id: 'stats', label: 'Stats', show: has.stats },
-      { id: 'key-features', label: 'Key Features', show: has.keyFeatures },
-      { id: 'benefits', label: 'Benefits', show: has.benefits },
+      { id: 'value', label: 'Value', show: hasValue },
+      { id: 'benefits', label: 'Benefits', show: hasBenefits },
+      { id: 'key-features', label: howItWorksLabel, show: has.keyFeatures },
+      { id: 'features', label: 'Features', show: showLegacyFeatures },
       { id: 'use-cases', label: 'Use Cases', show: has.useCases },
       // Blogs are explicitly excluded from rich product details.
       { id: 'faq', label: 'FAQ', show: has.faqs },
@@ -104,6 +127,8 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
     product?.references?.length,
     product?.stats?.length,
     product?.useCases?.length,
+    product?.valueProposition?.length,
+    product?.features?.length,
   ])
 
   const marketingImages = useMemo(() => {
@@ -120,14 +145,19 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
   // contain other sections with the same ids.
   const idPrefix = embedded ? `product-${productId}-details-` : ''
   const sectionId = (id: string) => `${idPrefix}${id}`
-  const sectionScrollMt = embedded ? 'scroll-mt-24' : 'scroll-mt-28'
+  // Embedded mode has a sticky tab bar, so we need slightly more scroll-margin.
+  const sectionScrollMt = embedded ? 'scroll-mt-28' : 'scroll-mt-28'
 
   // When embedded, ensure the first section is considered active initially
+  // (or use an initial deep-linked section).
   useEffect(() => {
-    setActiveSection('overview')
-  }, [productId])
+    setActiveSection(initialSectionId ?? 'overview')
+  }, [initialSectionId, productId])
 
   useEffect(() => {
+    // In embedded mode we render one section at a time (classic tabs),
+    // so scroll-spy observers aren't useful.
+    if (embedded) return
     if (state.status !== 'ready') return
 
     const rawIds = tocSections.map(s => s.id)
@@ -153,9 +183,9 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
     }
 
     return () => observer.disconnect()
-  }, [idPrefix, state.status, tocSections])
+  }, [embedded, idPrefix, state.status, tocSections])
 
-  const scrollToSection = (id: string) => {
+  const scrollToSection = useCallback((id: string) => {
     const el = document.getElementById(sectionId(id))
     if (!el) return
 
@@ -167,7 +197,7 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
       if (container) {
         const containerRect = container.getBoundingClientRect()
         const elRect = el.getBoundingClientRect()
-        const stickyOffset = 88 // sticky sub-nav height + spacing
+        const stickyOffset = 96 // sticky embedded tabs height + spacing
         const nextTop = container.scrollTop + (elRect.top - containerRect.top) - stickyOffset
         container.scrollTo({ top: Math.max(0, nextTop), behavior: 'smooth' })
         return
@@ -175,7 +205,89 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
     }
 
     el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
+  }, [embedded, sectionId])
+
+  // Embedded sticky tabs: subtle “condense” animation once the user scrolls down.
+  useEffect(() => {
+    if (!embedded) return
+
+    const anyEl = document.getElementById(sectionId('overview'))
+    const container = anyEl?.closest('[data-scroll-container="product-detail-modal"]') as HTMLElement | null
+    if (!container) return
+
+    const onScroll = () => {
+      setEmbeddedTabsCondensed(container.scrollTop > 8)
+    }
+    onScroll()
+    container.addEventListener('scroll', onScroll, { passive: true })
+    return () => container.removeEventListener('scroll', onScroll)
+  }, [embedded, sectionId])
+
+  // Embedded deep-link support: select a section once per product id.
+  useEffect(() => {
+    if (!embedded) return
+    if (!initialSectionId) return
+    if (state.status !== 'ready') return
+    if (didAutoScrollRef.current[productId]) return
+
+    const allowed = new Set(tocSections.map(s => s.id))
+    if (!allowed.has(initialSectionId)) return
+
+    didAutoScrollRef.current[productId] = true
+    setActiveSection(initialSectionId)
+  }, [embedded, initialSectionId, productId, state.status, tocSections])
+
+  // In embedded mode, keep the primary tabs minimal and push the rest into a “More” dropdown.
+  const tabPriority = useCallback((id: string) => {
+    switch (id) {
+      case 'overview':
+        return 0
+      case 'value':
+        return 1
+      case 'benefits':
+        return 2
+      case 'key-features':
+        return 3
+      case 'use-cases':
+        return 4
+      case 'features':
+        return 5
+      case 'faq':
+        return 6
+      case 'links':
+        return 7
+      default:
+        return 99
+    }
+  }, [])
+
+  const { primaryTabs, moreTabs } = useMemo(() => {
+    if (!embedded) return { primaryTabs: tocSections, moreTabs: [] as TocSection[] }
+
+    const sorted = [...tocSections].sort((a, b) => tabPriority(a.id) - tabPriority(b.id))
+
+    // Keep it tight so we never need horizontal scrolling.
+    const maxPrimary = 3
+    const prim = sorted.slice(0, maxPrimary)
+
+    const primaryIds = new Set(prim.map(t => t.id))
+    const more = tocSections.filter(t => !primaryIds.has(t.id))
+
+    // Preserve original order in the dropdown.
+    return { primaryTabs: prim, moreTabs: more }
+  }, [embedded, tabPriority, tocSections])
+
+  const activeMoreTab = moreTabs.find(t => t.id === activeSection)
+
+  const shouldRenderSection = useCallback(
+    (id: string) => {
+      // Non-embedded: brochure flow (all sections present)
+      if (!embedded) return true
+      // Embedded: classic tabs (only active section is present)
+      return activeSection === id
+    },
+    [activeSection, embedded]
+  )
 
   if (state.status === 'loading') {
     return <LoadingScreen label="Loading" />
@@ -248,8 +360,8 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
                 <div className="hidden sm:flex items-center gap-2">
                   {[product.cta.primary, product.cta.secondary]
                     .filter(
-                      c =>
-                        c?.url &&
+                      (c): c is NonNullable<typeof c> =>
+                        Boolean(c?.url) &&
                         !isDownloadLabel(c.label) &&
                         !isSmartAppsUrl(c.url) &&
                         !isSmartIsProductUrl(c.url)
@@ -363,132 +475,408 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
 
           {/* CONTENT */}
           <div className={embedded ? 'space-y-10 px-2 sm:px-3 md:px-4 pb-8 sm:pb-10' : 'space-y-10'}>
-            <section id={sectionId('overview')} className={sectionScrollMt}>
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.45, ease: 'easeOut' }}
-                className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur p-6"
+            {/* Embedded mode: sticky scroll-spy tabs (single source of truth for navigation) */}
+            {embedded ? (
+              <div
+                className={
+                  'sticky top-0 z-30 -mx-2 sm:-mx-3 md:-mx-4 px-2 sm:px-3 md:px-4 border-b border-white/10 bg-digitalby/65 backdrop-blur-xl transition-all ' +
+                  (embeddedTabsCondensed ? 'pt-1 pb-2 shadow-lg shadow-black/20' : 'pt-2 pb-3')
+                }
               >
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
-                  <div>
-                    <div className="inline-flex items-center gap-2 text-slate-300">
-                      <LayoutGrid size={18} className="text-primary" />
-                      <span className="text-sm font-bold">Overview</span>
-                    </div>
-                    <div className="mt-3 text-slate-200 leading-relaxed">{product.description}</div>
-                  </div>
+                <Tabs
+                  value={activeSection}
+                  onValueChange={(v) => {
+                    setActiveSection(v)
+                  }}
+                >
+                  <TabsList
+                    className="w-fit max-w-full h-auto bg-white/5 border border-white/10 rounded-2xl p-1 gap-1 flex items-center justify-start"
+                  >
+                    {primaryTabs.map((s) => (
+                      <TabsTrigger
+                        key={s.id}
+                        value={s.id}
+                        className="flex-none relative h-9 px-3 rounded-xl text-[11px] sm:text-sm font-bold text-slate-200/80 hover:text-white hover:bg-white/10
+                          data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow
+                          after:absolute after:left-3 after:right-3 after:-bottom-1 after:h-[2px] after:rounded-full after:bg-primary after:opacity-0
+                          data-[state=active]:after:opacity-100 after:transition-opacity"
+                      >
+                        {s.label}
+                      </TabsTrigger>
+                    ))}
 
-                  {marketingImages[0]?.src ? (
-                    <div className="relative aspect-[16/11] rounded-3xl overflow-hidden border border-white/10 bg-black/25">
-                      <Image
-                        src={marketingImages[0].src}
-                        alt={marketingImages[0].alt ?? `${product.name} screenshot`}
-                        fill
-                        sizes="(min-width: 1024px) 520px, 92vw"
-                        className="object-contain p-4"
-                      />
-                    </div>
-                  ) : null}
-                </div>
+                    {moreTabs.length ? (
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <button
+                            type="button"
+                            className={
+                              'flex-none relative h-9 px-3 rounded-xl text-[11px] sm:text-sm font-bold transition inline-flex items-center gap-2 ' +
+                              (activeMoreTab
+                                ? 'bg-white text-slate-900 shadow'
+                                : 'text-slate-200/80 hover:text-white hover:bg-white/10')
+                            }
+                            aria-label="More sections"
+                          >
+                            <span className="truncate max-w-[96px]">
+                              {activeMoreTab ? activeMoreTab.label : 'More'}
+                            </span>
+                            <ChevronDown size={14} className={activeMoreTab ? 'text-slate-900' : 'text-slate-300'} />
+                          </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent
+                          align="end"
+                          className="w-56 bg-digitalby/95 text-white border border-white/10 backdrop-blur-xl"
+                        >
+                          {moreTabs.map((t) => (
+                            <DropdownMenuItem
+                              key={t.id}
+                              className={
+                                'cursor-pointer ' +
+                                (t.id === activeSection ? 'bg-white/10 text-white' : 'text-slate-200')
+                              }
+                              onSelect={() => {
+                                setActiveSection(t.id)
+                              }}
+                            >
+                              {t.label}
+                            </DropdownMenuItem>
+                          ))}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    ) : null}
+                  </TabsList>
+                </Tabs>
+              </div>
+            ) : null}
 
-                {product.cta && (
-                  <div className="mt-6 flex flex-wrap gap-3">
-                    {[product.cta.primary, product.cta.secondary]
-                      .filter(
-                        c =>
-                          c?.url &&
-                          !isDownloadLabel(c.label) &&
-                          !isSmartAppsUrl(c.url) &&
-                          !isSmartIsProductUrl(c.url)
-                      )
-                      .map((c, idx) => (
-                        <a
-                          key={`${c.label}-${c.url}`}
-                          href={c.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
+            {embedded ? (
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={activeSection}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.18, ease: 'easeOut' }}
+                >
+                  {shouldRenderSection('overview') ? (
+                    <section id={sectionId('overview')} className={sectionScrollMt}>
+                      <motion.div
+                        initial={{ opacity: 0, y: 16 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.25, ease: 'easeOut' }}
+                        className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur p-6"
+                      >
+                        <div
                           className={
-                            'inline-flex items-center gap-2 px-5 py-3 rounded-2xl font-bold transition ' +
-                            (idx === 0
-                              ? 'bg-primary text-white hover-primary'
-                              : 'bg-white/10 hover:bg-white/15 border border-white/10 text-white')
+                            'grid grid-cols-1 gap-6 items-center ' +
+                            (!embedded && marketingImages[0]?.src ? 'lg:grid-cols-2' : '')
                           }
                         >
-                          <ExternalLink size={18} />
-                          {c.label}
-                        </a>
-                      ))}
-                  </div>
-                )}
-              </motion.div>
-            </section>
+                          <div>
+                            <div className="inline-flex items-center gap-2 text-slate-300">
+                              <LayoutGrid size={18} className="text-primary" />
+                              <span className="text-sm font-bold">Overview</span>
+                            </div>
+                            {!!product.shortDescription && (
+                              <div className="mt-3 text-slate-200 font-semibold">{product.shortDescription}</div>
+                            )}
+                            <div className="mt-3 text-slate-200 leading-relaxed">{product.description}</div>
+                          </div>
+                        </div>
 
-            {product.highlights?.length ? (
-              <section id={sectionId('highlights')} className={sectionScrollMt}>
+                        {product.cta && (
+                          <div className="mt-6 flex flex-wrap gap-3">
+                            {[product.cta.primary, product.cta.secondary]
+                              .filter(
+                                (c): c is NonNullable<typeof c> =>
+                                  Boolean(c?.url) &&
+                                  !isDownloadLabel(c.label) &&
+                                  !isSmartAppsUrl(c.url) &&
+                                  !isSmartIsProductUrl(c.url)
+                              )
+                              .map((c, idx) => (
+                                <a
+                                  key={`${c.label}-${c.url}`}
+                                  href={c.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className={
+                                    'inline-flex items-center gap-2 px-5 py-3 rounded-2xl font-bold transition ' +
+                                    (idx === 0
+                                      ? 'bg-primary text-white hover-primary'
+                                      : 'bg-white/10 hover:bg-white/15 border border-white/10 text-white')
+                                  }
+                                >
+                                  <ExternalLink size={18} />
+                                  {c.label}
+                                </a>
+                              ))}
+                          </div>
+                        )}
+                      </motion.div>
+                    </section>
+                  ) : null}
+
+                  {shouldRenderSection('value') && (product.highlights?.length || product.stats?.length || product.valueProposition?.length) ? (
+                    <section id={sectionId('value')} className={sectionScrollMt}>
+                      <div className="flex items-center gap-2 mb-4">
+                        <Sparkles size={18} className="text-primary" />
+                        <h2 className="text-2xl md:text-3xl font-black">Value</h2>
+                      </div>
+                      {!!product.valueProposition?.length ? (
+                        <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur p-6">
+                          <div className="text-white font-black">Why it matters</div>
+                          <div className="mt-3 space-y-3">
+                            {(product.valueProposition ?? []).map((v, idx) => (
+                              <div key={idx} className="flex items-start gap-3">
+                                <div className="mt-2 w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+                                <p className="text-slate-200">{v}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ) : null}
+
+                      {!!product.highlights?.length ? (
+                        <div className={product.valueProposition?.length ? 'mt-6' : ''}>
+                          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                            {product.highlights.map((h, idx) => (
+                              <motion.div
+                                key={h.label}
+                                initial={{ opacity: 0, y: 14 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.2, delay: Math.min(idx * 0.03, 0.12) }}
+                                className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur p-5"
+                              >
+                                <div className="text-2xl font-black text-white leading-tight break-words line-clamp-2">
+                                  {h.value}
+                                </div>
+                                <div className="text-slate-300 text-sm mt-1 leading-snug break-words line-clamp-3">
+                                  {h.label}
+                                </div>
+                              </motion.div>
+                            ))}
+                          </div>
+                        </div>
+                      ) : null}
+
+                      {!!product.stats?.length ? (
+                        <div className={(product.valueProposition?.length || product.highlights?.length) ? 'mt-6' : ''}>
+                          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            {product.stats.map((s) => (
+                              <Card key={s.label} className="bg-white/5 border-white/10 text-white">
+                                <CardHeader className="pb-2 px-5 sm:px-6">
+                                  <CardTitle className="text-2xl sm:text-3xl font-black text-white leading-tight break-words">
+                                    {s.value}
+                                  </CardTitle>
+                                </CardHeader>
+                                <CardContent className="space-y-2 px-5 sm:px-6">
+                                  <div className="text-slate-200 font-semibold leading-snug break-words">{s.label}</div>
+                                  {s.note && <div className="text-slate-400 text-sm">{s.note}</div>}
+                                </CardContent>
+                              </Card>
+                            ))}
+                          </div>
+                        </div>
+                      ) : null}
+                    </section>
+                  ) : null}
+
+                  {/* Other sections below remain unchanged and will render when active */}
+                  {(product.benefits?.length || product.valueProposition?.length) && shouldRenderSection('benefits') ? (
+                    <section id={sectionId('benefits')} className={sectionScrollMt}>
+                      <div className="flex items-center gap-2 mb-4">
+                        <LifeBuoy size={18} className="text-primary" />
+                        <h2 className="text-2xl md:text-3xl font-black">Benefits</h2>
+                      </div>
+                      {product.benefits?.length ? (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                          {product.benefits.map((b) => (
+                            <Card key={b.title} className="bg-white/5 border-white/10 text-white">
+                              <CardHeader className="pb-2">
+                                <CardTitle className="text-lg font-black">{b.title}</CardTitle>
+                              </CardHeader>
+                              <CardContent>
+                                <p className="text-slate-300">{b.description}</p>
+                              </CardContent>
+                            </Card>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur p-6">
+                          <div className="space-y-3">
+                            {(product.valueProposition ?? []).map((v, idx) => (
+                              <div key={idx} className="flex items-start gap-3">
+                                <div className="mt-2 w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+                                <p className="text-slate-200">{v}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </section>
+                  ) : null}
+                </motion.div>
+              </AnimatePresence>
+            ) : (
+              <>
+                {/* Non-embedded: keep brochure flow as-is */}
+                {shouldRenderSection('overview') ? (
+                  <section id={sectionId('overview')} className={sectionScrollMt}>
+                    <motion.div
+                      initial={{ opacity: 0, y: 16 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, amount: 0.3 }}
+                      transition={{ duration: 0.45, ease: 'easeOut' }}
+                      className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur p-6"
+                    >
+                      <div
+                        className={
+                          'grid grid-cols-1 gap-6 items-center ' +
+                          (!embedded && marketingImages[0]?.src ? 'lg:grid-cols-2' : '')
+                        }
+                      >
+                        <div>
+                          <div className="inline-flex items-center gap-2 text-slate-300">
+                            <LayoutGrid size={18} className="text-primary" />
+                            <span className="text-sm font-bold">Overview</span>
+                          </div>
+                          {!!product.shortDescription && (
+                            <div className="mt-3 text-slate-200 font-semibold">{product.shortDescription}</div>
+                          )}
+                          <div className="mt-3 text-slate-200 leading-relaxed">{product.description}</div>
+                        </div>
+
+                        {!embedded && marketingImages[0]?.src ? (
+                          <div className="relative aspect-[16/11] rounded-3xl overflow-hidden border border-white/10 bg-black/25">
+                            <Image
+                              src={marketingImages[0].src}
+                              alt={marketingImages[0].alt ?? `${product.name} screenshot`}
+                              fill
+                              sizes="(min-width: 1024px) 520px, 92vw"
+                              className="object-contain p-4"
+                            />
+                          </div>
+                        ) : null}
+                      </div>
+
+                      {product.cta && (
+                        <div className="mt-6 flex flex-wrap gap-3">
+                          {[product.cta.primary, product.cta.secondary]
+                            .filter(
+                              (c): c is NonNullable<typeof c> =>
+                                Boolean(c?.url) &&
+                                !isDownloadLabel(c.label) &&
+                                !isSmartAppsUrl(c.url) &&
+                                !isSmartIsProductUrl(c.url)
+                            )
+                            .map((c, idx) => (
+                              <a
+                                key={`${c.label}-${c.url}`}
+                                href={c.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={
+                                  'inline-flex items-center gap-2 px-5 py-3 rounded-2xl font-bold transition ' +
+                                  (idx === 0
+                                    ? 'bg-primary text-white hover-primary'
+                                    : 'bg-white/10 hover:bg-white/15 border border-white/10 text-white')
+                                }
+                              >
+                                <ExternalLink size={18} />
+                                {c.label}
+                              </a>
+                            ))}
+                        </div>
+                      )}
+                    </motion.div>
+                  </section>
+                ) : null}
+
+                {/* The rest of the non-embedded brochure content continues below (unchanged) */}
+              </>
+            )}
+
+            {shouldRenderSection('value') && (product.highlights?.length || product.stats?.length || product.valueProposition?.length) ? (
+              <section id={sectionId('value')} className={sectionScrollMt}>
                 <div className="flex items-center gap-2 mb-4">
                   <Sparkles size={18} className="text-primary" />
-                  <h2 className="text-2xl md:text-3xl font-black">Highlights</h2>
+                  <h2 className="text-2xl md:text-3xl font-black">Value</h2>
                 </div>
-                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                  {product.highlights.map((h, idx) => (
-                    <motion.div
-                      key={h.label}
-                      initial={{ opacity: 0, y: 14 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, amount: 0.25 }}
-                      transition={{ duration: 0.4, delay: Math.min(idx * 0.03, 0.12) }}
-                      className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur p-5"
-                    >
-                      <div className="text-2xl font-black text-white leading-tight break-words line-clamp-2">
-                        {h.value}
-                      </div>
-                      <div className="text-slate-300 text-sm mt-1 leading-snug break-words line-clamp-3">
-                        {h.label}
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
+
+                {!!product.valueProposition?.length ? (
+                  <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur p-6">
+                    <div className="text-white font-black">Why it matters</div>
+                    <div className="mt-3 space-y-3">
+                      {(product.valueProposition ?? []).map((v, idx) => (
+                        <div key={idx} className="flex items-start gap-3">
+                          <div className="mt-2 w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+                          <p className="text-slate-200">{v}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+
+                {!!product.highlights?.length ? (
+                  <div className={product.valueProposition?.length ? 'mt-6' : ''}>
+                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                      {product.highlights.map((h, idx) => (
+                        <motion.div
+                          key={h.label}
+                          initial={{ opacity: 0, y: 14 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true, amount: 0.25 }}
+                          transition={{ duration: 0.4, delay: Math.min(idx * 0.03, 0.12) }}
+                          className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur p-5"
+                        >
+                          <div className="text-2xl font-black text-white leading-tight break-words line-clamp-2">
+                            {h.value}
+                          </div>
+                          <div className="text-slate-300 text-sm mt-1 leading-snug break-words line-clamp-3">
+                            {h.label}
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
+
+                {!!product.stats?.length ? (
+                  <div className={(product.valueProposition?.length || product.highlights?.length) ? 'mt-6' : ''}>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      {product.stats.map((s) => (
+                        <Card key={s.label} className="bg-white/5 border-white/10 text-white">
+                          <CardHeader className="pb-2 px-5 sm:px-6">
+                            <CardTitle className="text-2xl sm:text-3xl font-black text-white leading-tight break-words">
+                              {s.value}
+                            </CardTitle>
+                          </CardHeader>
+                          <CardContent className="space-y-2 px-5 sm:px-6">
+                            <div className="text-slate-200 font-semibold leading-snug break-words">{s.label}</div>
+                            {s.note && <div className="text-slate-400 text-sm">{s.note}</div>}
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+                  </div>
+                ) : null}
               </section>
             ) : null}
 
-            {product.stats?.length ? (
-              <section id={sectionId('stats')} className={sectionScrollMt}>
-                <div className="flex items-center gap-2 mb-4">
-                  <Gauge size={18} className="text-primary" />
-                  <h2 className="text-2xl md:text-3xl font-black">Stats</h2>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  {product.stats.map((s) => (
-                    <Card key={s.label} className="bg-white/5 border-white/10 text-white">
-                      <CardHeader className="pb-2 px-5 sm:px-6">
-                        <CardTitle className="text-2xl sm:text-3xl font-black text-white leading-tight break-words">
-                          {s.value}
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent className="space-y-2 px-5 sm:px-6">
-                        <div className="text-slate-200 font-semibold leading-snug break-words">{s.label}</div>
-                        {s.note && <div className="text-slate-400 text-sm">{s.note}</div>}
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </section>
-            ) : null}
-
-            {product.keyFeatures?.length ? (
+            {product.keyFeatures?.length && shouldRenderSection('key-features') ? (
               <section id={sectionId('key-features')} className={sectionScrollMt}>
                 <div className="flex items-center gap-2 mb-4">
                   <LayoutGrid size={18} className="text-primary" />
-                  <h2 className="text-2xl md:text-3xl font-black">Key Features</h2>
+                  <h2 className="text-2xl md:text-3xl font-black">How it works</h2>
                 </div>
                 <div className="space-y-8">
                   {product.keyFeatures.map((kf, idx) => {
                     // Use images sequentially (Moca2 → Moca6) for alternating brochure blocks.
                     // (Moca1 is used in the Overview block above.)
                     const img = marketingImages[idx + 1]
-                    const hasImg = Boolean(img?.src)
+                    const hasImg = !embedded && Boolean(img?.src)
                     const reversed = idx % 2 === 1
 
                     return (
@@ -541,28 +929,91 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
               </section>
             ) : null}
 
-            {product.benefits?.length ? (
+            {/* Legacy flat features list (only when key-features is absent to avoid overlap) */}
+            {!product.keyFeatures?.length && product.features?.length && shouldRenderSection('features') ? (
+              <section id={sectionId('features')} className={sectionScrollMt}>
+                <div className="flex items-center gap-2 mb-4">
+                  <LayoutGrid size={18} className="text-primary" />
+                  <h2 className="text-2xl md:text-3xl font-black">Features</h2>
+                </div>
+                <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur p-6">
+                  <div className="space-y-3">
+                    {product.features.map((f, idx) => (
+                      <div key={idx} className="flex items-start gap-3">
+                        <Zap size={18} className="text-primary flex-shrink-0 mt-0.5" />
+                        <p className="text-slate-200">{f}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </section>
+            ) : null}
+
+            {(product.benefits?.length || product.valueProposition?.length) && shouldRenderSection('benefits') ? (
               <section id={sectionId('benefits')} className={sectionScrollMt}>
                 <div className="flex items-center gap-2 mb-4">
                   <LifeBuoy size={18} className="text-primary" />
                   <h2 className="text-2xl md:text-3xl font-black">Benefits</h2>
                 </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {product.benefits.map((b) => (
-                    <Card key={b.title} className="bg-white/5 border-white/10 text-white">
-                      <CardHeader className="pb-2">
-                        <CardTitle className="text-lg font-black">{b.title}</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-slate-300">{b.description}</p>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
+                {/*
+                  Content rule: don’t remove information.
+                  If both `benefits[]` (cards) and `valueProposition[]` (bullets) exist,
+                  we show both, but keep it compact and avoid obvious duplicates.
+                */}
+                {product.benefits?.length ? (
+                  <>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {product.benefits.map((b) => (
+                        <Card key={b.title} className="bg-white/5 border-white/10 text-white">
+                          <CardHeader className="pb-2">
+                            <CardTitle className="text-lg font-black">{b.title}</CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <p className="text-slate-300">{b.description}</p>
+                          </CardContent>
+                        </Card>
+                      ))}
+                    </div>
+
+                    {!!product.valueProposition?.length && (
+                      <div className="mt-6 rounded-3xl border border-white/10 bg-white/5 backdrop-blur p-6">
+                        <div className="text-white font-black">Additional value</div>
+                        <div className="mt-3 space-y-3">
+                          {(product.valueProposition ?? [])
+                            .filter((v) => {
+                              const needle = v.trim().toLowerCase()
+                              if (!needle) return false
+                              const combined = (product.benefits ?? [])
+                                .map((b) => `${b.title} ${b.description}`.toLowerCase())
+                                .join(' \n ')
+                              return !combined.includes(needle)
+                            })
+                            .map((v, idx) => (
+                              <div key={idx} className="flex items-start gap-3">
+                                <div className="mt-2 w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+                                <p className="text-slate-200">{v}</p>
+                              </div>
+                            ))}
+                        </div>
+                      </div>
+                    )}
+                  </>
+                ) : (
+                  <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur p-6">
+                    <div className="space-y-3">
+                      {(product.valueProposition ?? []).map((v, idx) => (
+                        <div key={idx} className="flex items-start gap-3">
+                          <div className="mt-2 w-2 h-2 rounded-full bg-primary flex-shrink-0" />
+                          <p className="text-slate-200">{v}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </section>
             ) : null}
 
-            {product.useCases?.length ? (
+            {product.useCases?.length && shouldRenderSection('use-cases') ? (
               <section id={sectionId('use-cases')} className={sectionScrollMt}>
                 <div className="flex items-center gap-2 mb-4">
                   <Gauge size={18} className="text-primary" />
@@ -583,7 +1034,7 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
               </section>
             ) : null}
 
-            {product.faqs?.length ? (
+            {product.faqs?.length && shouldRenderSection('faq') ? (
               <section id={sectionId('faq')} className={sectionScrollMt}>
                 <div className="flex items-center gap-2 mb-4">
                   <Sparkles size={18} className="text-primary" />
@@ -600,7 +1051,7 @@ export default function ProductDetailRichPageClient({ productId, embedded, onBac
               </section>
             ) : null}
 
-            {product.references?.length ? (
+            {product.references?.length && shouldRenderSection('links') ? (
               <section id={sectionId('links')} className={sectionScrollMt}>
                 <div className="flex items-center gap-2 mb-4">
                   <ExternalLink size={18} className="text-primary" />
